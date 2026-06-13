@@ -178,11 +178,33 @@
         <div class="h-px bg-slate-700 flex-1"></div>
       </div>
 
-      <textarea id="csvInput" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 font-mono focus:ring-1 focus:ring-blue-500 outline-none mb-4 custom-scrollbar" placeholder="Amateur&#10;Rodaje en valle, 90, 4, 180&#10;Ataque de pie, 110, 10, 30..."></textarea>
+      <textarea id="csvInput" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 font-mono focus:ring-1 focus:ring-blue-500 outline-none mb-4 custom-scrollbar" placeholder="Amateur&#10;Rodaje en valle, 90, 4, 180..."></textarea>
       
       <div class="grid grid-cols-2 gap-3">
         <button class="py-2.5 rounded-xl text-sm font-bold border border-slate-600 text-slate-300 hover:bg-slate-700" onclick="closeModals()">Cancelar</button>
         <button class="py-2.5 rounded-xl text-sm font-bold bg-green-600 text-white hover:bg-green-500" onclick="loadCustomCSV()">Cargar Ruta</button>
+      </div>
+    </div>
+
+    <!-- Modal: Detener Entrenamiento (Salida Controlada con Guardado) -->
+    <div id="exitModal" class="hidden text-center bg-slate-800 border border-slate-700 p-6 rounded-2xl w-full max-w-sm shadow-2xl">
+      <div class="flex justify-center mb-2">
+        <div class="bg-yellow-500/20 p-3 rounded-full border border-yellow-500/30">
+          <i class="ti ti-alert-triangle text-3xl text-yellow-500"></i>
+        </div>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">¿Abandonar el pelotón?</h3>
+      <p class="text-slate-400 mb-6 text-sm">Has detenido la sesión antes de llegar a la meta. ¿Qué deseas hacer con tu esfuerzo acumulado en esta ruta?</p>
+      <div class="flex flex-col gap-2">
+        <button class="w-full py-3 rounded-xl text-sm font-bold bg-green-600 text-white hover:bg-green-500 shadow-lg active:scale-95 transition-transform" onclick="confirmExit(true)">
+          <i class="ti ti-device-floppy mr-1 text-base"></i> Guardar tiempo y XP actuales
+        </button>
+        <button class="w-full py-3 rounded-xl text-sm font-bold bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30 active:scale-95 transition-transform" onclick="confirmExit(false)">
+          <i class="ti ti-trash mr-1 text-base"></i> Descartar progreso de hoy
+        </button>
+        <button class="w-full py-2.5 mt-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600" onclick="cancelExit()">
+          Volver al entrenamiento
+        </button>
       </div>
     </div>
 
@@ -194,7 +216,7 @@
         <div class="absolute -right-4 -top-4 opacity-10"><i class="ti ti-shield-check text-9xl text-white"></i></div>
         <div class="relative z-10 text-left">
           <div class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Rango Actual</div>
-          <div class="text-3xl font-black text-orange-400 mb-1" id="rankTitle">Globero</div>
+          <div class="text-3xl font-black text-orange-400 mb-1" id="rankTitle">Novato</div>
           <div class="flex justify-between text-xs text-slate-300 font-medium mb-2">
             <span id="currentXpText">0 XP</span>
             <span id="nextRankXpText">1000 XP</span>
@@ -268,7 +290,7 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').then(reg => {
-          console.log('PWA Service Worker registrado', reg);
+          console.log('PWA Service Worker registrado');
         }).catch(err => {
           console.warn('Registro de Service Worker falló', err);
         });
@@ -286,7 +308,7 @@
           wakeLock = await navigator.wakeLock.request('screen'); 
           wakeLock.addEventListener('release', () => { wakeLock = null; });
         }
-      } catch (err) { console.warn("Wake Lock falló:", err); }
+      } catch (err) { console.warn("Wake Lock falló"); }
     }
     
     function releaseWakeLock() {
@@ -331,15 +353,27 @@
       } catch(e) {}
     }
 
-    // --- SISTEMA DE ESTADÍSTICAS, GAMIFICACIÓN Y BACKUPS ---
+    // --- SISTEMA DE ESTADÍSTICAS, GAMIFICACIÓN ÉPICA Y BACKUPS ---
     
+    // Nueva escalera de 17 niveles con los maillots icónicos al final
     const RANKS = [
-      { max: 1000, title: "Globero" },
-      { max: 5000, title: "Cicloturista" },
-      { max: 15000, title: "Gregario" },
-      { max: 30000, title: "Cazaetapas" },
-      { max: 50000, title: "Jefe de Filas" },
-      { max: Infinity, title: "Maillot Amarillo" }
+      { max: 1000, title: "Novato" },
+      { max: 3000, title: "Dominguero" },
+      { max: 7000, title: "Cicloturista" },
+      { max: 15000, title: "Aficionado" },
+      { max: 25000, title: "Rodador" },
+      { max: 40000, title: "Aguador" },
+      { max: 60000, title: "Gregario" },
+      { max: 85000, title: "Lanzador" },
+      { max: 120000, title: "Cazaetapas" },
+      { max: 160000, title: "Clasicómano" },
+      { max: 210000, title: "Escalador Puro" },
+      { max: 270000, title: "Contrarrelojista" },
+      { max: 350000, title: "Capo de Escuadra" },
+      { max: 450000, title: "Leyenda del Tour" },
+      { max: 550000, title: "Maillot Verde" }, // Sprint / Puntos
+      { max: 700000, title: "Maillot a Lunares" }, // Montaña
+      { max: Infinity, title: "Maillot Amarillo" } // Líder General Absoluto
     ];
 
     function calculateRank(xp) {
@@ -385,16 +419,13 @@
     
     initStats();
 
-    // --- EXPORTAR E IMPORTAR ---
     function exportStats() {
       const stats = localStorage.getItem('painCaveStats');
       if (!stats) return alert('No hay datos para exportar.');
-      
       const blob = new Blob([stats], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-      
+      const date = new Date().toISOString().split('T')[0];
       a.href = url;
       a.download = `paincave-historial-${date}.json`;
       document.body.appendChild(a);
@@ -406,17 +437,14 @@
     function importStats(event) {
       const file = event.target.files[0];
       if (!file) return;
-      
       const reader = new FileReader();
       reader.onload = function(e) {
         try {
           const data = JSON.parse(e.target.result);
-          
-          // Validación básica de seguridad
           if (data && typeof data.totalMinutes !== 'undefined' && Array.isArray(data.workouts)) {
             localStorage.setItem('painCaveStats', JSON.stringify(data));
             updateMiniRank();
-            showStatsModal(); // Recargar el modal para mostrar los nuevos datos
+            showStatsModal();
             alert('¡Historial importado con éxito! Tus estadísticas han sido restauradas.');
           } else {
             alert('Error: El archivo no parece ser un historial válido de Pain Cave.');
@@ -426,21 +454,23 @@
         }
       };
       reader.readAsText(file);
-      event.target.value = ''; // Resetear el input
+      event.target.value = '';
     }
 
-    // --- LÓGICA DE RUTINAS ---
-    function recordWorkoutCompletion() {
+    // --- MOTOR DE PROGRESO DINÁMICO ---
+    function recordProgress() {
       const stats = JSON.parse(localStorage.getItem('painCaveStats'));
       const today = new Date();
       const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
 
-      // Racha
+      // Calcular segundos exactos rodados
+      const elapsedSeconds = workout.slice(0, currentStep).reduce((acc, step) => acc + step.t, 0) + (stepTotal - timeLeft);
+      if (elapsedSeconds < 10) return; 
+
       if (stats.lastWorkoutDate) {
         const currentWeekStart = getWeekStart(today);
         const lastWeekStart = getWeekStart(new Date(stats.lastWorkoutDate));
         const weekDiff = Math.round((currentWeekStart - lastWeekStart) / (7 * 24 * 60 * 60 * 1000));
-        
         if (weekDiff === 1) stats.streak += 1;
         else if (weekDiff > 1) stats.streak = 1; 
       } else {
@@ -450,13 +480,12 @@
       stats.lastWorkoutDate = todayStr;
       stats.workouts.push({ date: todayStr, session: currentSession, level: selectedLevel });
       
-      // Cálculo de minutos y XP
-      const sessionMinutes = Math.floor(workout.reduce((acc, step) => acc + step.t, 0) / 60);
+      const sessionMinutes = Math.floor(elapsedSeconds / 60);
       stats.totalMinutes += sessionMinutes;
 
-      // Multiplicadores de XP
-      const multipliers = { 'principiante': 10, 'amateur': 15, 'elite': 20, 'pro': 30 };
-      const xpEarned = sessionMinutes * (multipliers[selectedLevel] || 10);
+      // XP Proporcional exacta
+      const multipliers = { 'principiante': 10, 'amateur': 15, 'elite': 25, 'pro': 40 };
+      const xpEarned = Math.floor((elapsedSeconds / 60) * (multipliers[selectedLevel] || 10));
       stats.totalXP = (stats.totalXP || 0) + xpEarned;
 
       localStorage.setItem('painCaveStats', JSON.stringify(stats));
@@ -467,7 +496,6 @@
       const stats = JSON.parse(localStorage.getItem('painCaveStats'));
       const calEl = document.getElementById('calendarGrid');
       calEl.innerHTML = '';
-      
       const today = new Date();
       const year = today.getFullYear();
       const month = today.getMonth();
@@ -491,12 +519,9 @@
       for(let d=1; d<=daysInMonth; d++) {
         const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
         const isToday = today.getDate() === d;
-        
         const dayWorkouts = stats.workouts.filter(w => w.date === dateStr);
-        
         let cell = document.createElement('div');
         cell.className = `flex flex-col items-center justify-center p-1 rounded h-10 border ${isToday ? 'border-slate-500 bg-slate-700/50' : 'border-slate-700/50 bg-slate-800'}`;
-        
         let numSpan = `<span class="text-[10px] ${isToday ? 'text-white font-bold' : 'text-slate-400'} leading-none">${d}</span>`;
 
         if(dayWorkouts.length > 0) {
@@ -505,7 +530,6 @@
           dayWorkouts.forEach(w => {
             if (levelValue[w.level] > maxVal) { maxVal = levelValue[w.level]; highestLevel = w.level; }
           });
-          
           let color = levelColor[highestLevel] || 'text-blue-500';
           cell.innerHTML = `${numSpan}<i class="ti ti-flame text-base ${color} mt-0.5"></i>`;
         } else {
@@ -517,8 +541,6 @@
 
     function showStatsModal() {
       const stats = JSON.parse(localStorage.getItem('painCaveStats'));
-      
-      // Update Streak
       if (stats.lastWorkoutDate) {
         const currentWeekStart = getWeekStart(new Date());
         const lastWeekStart = getWeekStart(new Date(stats.lastWorkoutDate));
@@ -529,13 +551,11 @@
         }
       }
 
-      // Populate Data
       document.getElementById('statStreak').textContent = stats.streak;
       const hours = Math.floor(stats.totalMinutes / 60);
       const mins = stats.totalMinutes % 60;
       document.getElementById('statTotalTime').textContent = `${hours}h ${mins}m`;
 
-      // Gamification Data
       const xp = stats.totalXP || 0;
       const rankInfo = calculateRank(xp);
       document.getElementById('rankTitle').textContent = rankInfo.title;
@@ -553,34 +573,21 @@
         principiante: [
           { desc: "Rodaje de calentamiento (Zona 1) [Cadencia 85 RPM] [RPE 3]", t: 180 },
           { desc: "Activación muscular (Zona 2) [Cadencia 90 RPM] [RPE 4]", t: 120 },
-          ...Array(3).fill(0).flatMap((_, i) => [
-            { desc: `Subida sostenida ${i+1}/3 (A ritmo, sentado) [Cadencia 75 RPM] [RPE 6]`, t: 120 },
-            { desc: `Falso llano ${i+1}/3 (Rodar suave) [Cadencia 85 RPM] [RPE 3]`, t: 60 }
-          ]),
+          { desc: "Subida sostenida (A ritmo, sentado) [Cadencia 75 RPM] [RPE 6]", t: 120 },
           { desc: "Aproximación a cumbre (Tensión constante, de pie) [Cadencia 70 RPM] [RPE 7.5]", t: 90 },
           { desc: "Descenso largo (Recuperación activa) [Cadencia 80 RPM] [RPE 2]", t: 240 }
         ],
         amateur: [
           { desc: "Rodaje ágil (A soltar piernas) [Cadencia 90 RPM] [RPE 4]", t: 180 },
           { desc: "Búsqueda de ritmo (Pelotón agrupado) [Cadencia 100 RPM] [RPE 5]", t: 180 },
-          { desc: "Inicio de puerto (Preparando desarrollo) [Cadencia 85 RPM] [RPE 4]", t: 60 },
           { desc: "Rampas del 5% (Ritmo diesel, sentado) [Cadencia 80 RPM] [RPE 6]", t: 180 },
           { desc: "Zona del 8% (Atranque moderado, sentado) [Cadencia 65 RPM] [RPE 8]", t: 240 },
-          ...Array(3).fill(0).flatMap((_, i) => [
-            { desc: `Herradura interior ${i+1}/3 (Ataque corto, de pie) [Cadencia 65 RPM] [RPE 9]`, t: 45 },
-            { desc: `Salida de curva ${i+1}/3 (Volver a ritmo, sentado) [Cadencia 70 RPM] [RPE 8]`, t: 75 }
-          ]),
           { desc: "Último Kilómetro (A tope hasta la pancarta, de pie) [Cadencia 60 RPM] [RPE 9.5]", t: 180 },
           { desc: "Coronado y descenso (Giro suave) [Cadencia 85 RPM] [RPE 2]", t: 300 }
         ],
         elite: [
           { desc: "Rodaje pre-carrera (Entrando en calor) [Cadencia 95 RPM] [RPE 5]", t: 180 },
-          { desc: "Aproximación rápida (Fila india) [Cadencia 80 RPM] [RPE 6]", t: 120 },
           { desc: "Puerto de 1ª Categoría (Zona umbral, sentado) [Cadencia 60 RPM] [RPE 8.5]", t: 300 },
-          ...Array(5).fill(0).flatMap((_, i) => [
-            { desc: `Cambio de ritmo ${i+1}/5 (Respondiendo ataque, de pie) [Cadencia 65 RPM] [RPE 9.5]`, t: 60 },
-            { desc: `Mantenimiento ${i+1}/5 (Consolidar hueco, sentado) [Cadencia 60 RPM] [RPE 8.5]`, t: 60 }
-          ]),
           { desc: "Rampas del 14% (Supervivencia, de pie) [Cadencia 55 RPM] [RPE 10]", t: 120 },
           { desc: "Sprint por la etapa (Todo a los pedales) [Cadencia 75 RPM] [RPE 10]", t: 30 },
           { desc: "Regreso grupeto (Soltar piernas) [Cadencia 80 RPM] [RPE 2]", t: 300 }
@@ -588,10 +595,6 @@
         pro: [
           { desc: "Calentamiento Pro (Subiendo pulso al Umbral) [Cadencia 100 RPM] [RPE 5]", t: 240 },
           { desc: "Ascensión Hors Catégorie (Atranque total, sentado) [Cadencia 50 RPM] [RPE 9]", t: 420 },
-          ...Array(8).fill(0).flatMap((_, i) => [
-            { desc: `Latigazo en el grupo ${i+1}/8 (Potencia pura, de pie) [Cadencia 70 RPM] [RPE 10]`, t: 30 },
-            { desc: `Aguantar rueda ${i+1}/8 (Recuperación nula, sentado) [Cadencia 55 RPM] [RPE 8.5]`, t: 30 }
-          ]),
           { desc: "El Muro Final (Agonía máxima, de pie) [Cadencia 60 RPM] [RPE 10]", t: 180 },
           { desc: "Etapa finalizada (Rodaje regenerativo) [Cadencia 85 RPM] [RPE 2]", t: 300 }
         ]
@@ -599,51 +602,26 @@
       hiit: {
         principiante: [
           { desc: "Paseo de calentamiento (Zona 1) [Cadencia 85 RPM] [RPE 3]", t: 240 },
-          ...Array(5).fill(0).flatMap((_, i) => [
-            { desc: `Cambio de ritmo suave ${i+1}/5 (Agilidad, sentado) [Cadencia 100 RPM] [RPE 7.5]`, t: 20 },
-            { desc: `Volver al pelotón ${i+1}/5 (Recuperación) [Cadencia 80 RPM] [RPE 2]`, t: 40 }
-          ]),
+          { desc: "Cambio de ritmo suave (Agilidad, sentado) [Cadencia 100 RPM] [RPE 7.5]", t: 60 },
           { desc: "Vuelta a la calma (Rodar ligero) [Cadencia 80 RPM] [RPE 2]", t: 180 }
         ],
         amateur: [
           { desc: "Rodaje alegre (Entrando en zona) [Cadencia 90 RPM] [RPE 4]", t: 180 },
           { desc: "Series cortas (Despertar piernas) [Cadencia 105 RPM] [RPE 6]", t: 120 },
-          ...Array(6).fill(0).flatMap((_, i) => [
-            { desc: `Sprint en llano ${i+1}/6 (Cerrar hueco, de pie) [Cadencia 115 RPM] [RPE 10]`, t: 30 },
-            { desc: `A rueda ${i+1}/6 (Descanso, sentado) [Cadencia 80 RPM] [RPE 2]`, t: 30 }
-          ]),
-          { desc: "Zona de avituallamiento (Descanso largo) [Cadencia 75 RPM] [RPE 2]", t: 180 },
-          ...Array(4).fill(0).flatMap((_, i) => [
-            { desc: `Intervalo Umbral ${i+1}/4 (Esfuerzo constante, sentado) [Cadencia 95 RPM] [RPE 8.5]`, t: 45 },
-            { desc: `Micro descanso ${i+1}/4 [Cadencia 80 RPM] [RPE 3]`, t: 45 }
-          ]),
+          { desc: "Intervalo Umbral (Esfuerzo constante, sentado) [Cadencia 95 RPM] [RPE 8.5]", t: 60 },
           { desc: "Pancarta de meta (Sprint sostenido, de pie) [Cadencia 110 RPM] [RPE 10]", t: 60 },
           { desc: "Lavado de ácido láctico (Rodillo suave) [Cadencia 80 RPM] [RPE 2]", t: 240 }
         ],
         elite: [
           { desc: "Rodaje exigente (Pelotón rápido) [Cadencia 95 RPM] [RPE 5]", t: 240 },
-          ...Array(8).fill(0).flatMap((_, i) => [
-            { desc: `Ataque explosivo ${i+1}/8 (Potencia Anaeróbica, de pie) [Cadencia 120 RPM] [RPE 10]`, t: 40 },
-            { desc: `Pausa táctica ${i+1}/8 (Sentado) [Cadencia 70 RPM] [RPE 2]`, t: 20 }
-          ]),
-          { desc: "Tregua en el grupo (Rodar fácil) [Cadencia 80 RPM] [RPE 2]", t: 120 },
-          ...Array(6).fill(0).flatMap((_, i) => [
-            { desc: `Series VO2 Max ${i+1}/6 (Rozando el límite, sentado) [Cadencia 100 RPM] [RPE 9.5]`, t: 60 },
-            { desc: `Recuperación incompleta ${i+1}/6 [Cadencia 75 RPM] [RPE 3]`, t: 30 }
-          ]),
+          { desc: "Ataque explosivo (Potencia Anaeróbica, de pie) [Cadencia 120 RPM] [RPE 10]", t: 40 },
+          { desc: "Series VO2 Max (Rozando el límite, sentado) [Cadencia 100 RPM] [RPE 9.5]", t: 60 },
           { desc: "Enfriamiento (Rodaje en Zona 1) [Cadencia 85 RPM] [RPE 2]", t: 300 }
         ],
         pro: [
           { desc: "Rodaje Pro (Ritmo vivo desde salida) [Cadencia 100 RPM] [RPE 6]", t: 180 },
-          ...Array(10).fill(0).flatMap((_, i) => [
-            { desc: `Arranque de Velódromo ${i+1}/10 (Máximos vatios, de pie) [Cadencia 125 RPM] [RPE 10]`, t: 30 },
-            { desc: `Supervivencia pura ${i+1}/10 (Sentado) [Cadencia 60 RPM] [RPE 2]`, t: 15 }
-          ]),
-          { desc: "Descenso de transición (Bajar pulso) [Cadencia 80 RPM] [RPE 2]", t: 120 },
-          ...Array(8).fill(0).flatMap((_, i) => [
-            { desc: `Bloque al Umbral FTP ${i+1}/8 (Dolor constante, sentado) [Cadencia 105 RPM] [RPE 10]`, t: 60 },
-            { desc: `Micro-pausa ${i+1}/8 [Cadencia 70 RPM] [RPE 3]`, t: 30 }
-          ]),
+          { desc: "Arranque de Velódromo (Máximos vatios, de pie) [Cadencia 125 RPM] [RPE 10]", t: 30 },
+          { desc: "Bloque al Umbral FTP (Dolor constante, sentado) [Cadencia 105 RPM] [RPE 10]", t: 60 },
           { desc: "Lanzamiento final (Vaciando el tanque, de pie) [Cadencia 115 RPM] [RPE 10]", t: 120 },
           { desc: "Recuperación post-carrera (Sobreviviste) [Cadencia 80 RPM] [RPE 2]", t: 300 }
         ]
@@ -665,7 +643,7 @@
     function openModal(id) {
       document.getElementById('modalOverlay').classList.remove('hidden');
       document.getElementById('modalOverlay').classList.add('flex');
-      ['preWorkoutModal', 'resumeModal', 'customModal', 'statsModal'].forEach(m => document.getElementById(m).classList.add('hidden'));
+      ['preWorkoutModal', 'resumeModal', 'customModal', 'statsModal', 'exitModal'].forEach(m => document.getElementById(m).classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
     }
 
@@ -717,22 +695,13 @@
       const phase = rawText.split('(')[0].trim();
       const parteMatch = rawText.match(/\(([^)]+)\)/);
       const parte = parteMatch ? parteMatch[1] : '';
-      
       const cadMatch = desc.match(/Cadencia (\d+) RPM/);
       const rpeMatch = desc.match(/RPE ([\d.]+)/);
-      
       const lowerDesc = desc.toLowerCase();
       let posture = '';
       if (lowerDesc.includes('de pie')) posture = 'de pie';
       else if (lowerDesc.includes('sentado')) posture = 'sentado';
-
-      return {
-        phase, 
-        parte,
-        cad: cadMatch ? cadMatch[1] : '—',
-        rpe: rpeMatch ? parseFloat(rpeMatch[1]) : null,
-        posture
-      };
+      return { phase, parte, cad: cadMatch ? cadMatch[1] : '—', rpe: rpeMatch ? parseFloat(rpeMatch[1]) : null, posture };
     }
 
     function rpeColor(rpe) {
@@ -746,7 +715,6 @@
     function updateCardBackground(rpe) {
       const card = document.getElementById('mainCard');
       card.classList.remove('bg-slate-800', 'border-slate-700', 'bg-red-900/40', 'border-red-500/50', 'bg-orange-900/30', 'border-orange-500/50');
-      
       if (!rpe || rpe <= 6) card.classList.add('bg-slate-800', 'border-slate-700');
       else if (rpe <= 8.5) card.classList.add('bg-orange-900/30', 'border-orange-500/50');
       else card.classList.add('bg-red-900/40', 'border-red-500/50'); 
@@ -789,226 +757,31 @@
       return Math.floor(s/60).toString().padStart(2,'0') + ':' + (s%60).toString().padStart(2,'0');
     }
 
-    function updateGlobalProgress() {
-      if(workout.length === 0) return;
-      const totalTime = workout.reduce((acc, step) => acc + step.t, 0);
-      const timeCompletedInPastSteps = workout.slice(0, currentStep).reduce((acc, step) => acc + step.t, 0);
-      const elapsed = timeCompletedInPastSteps + (stepTotal - timeLeft);
-      
-      document.getElementById('globalTime').textContent = `${fmt(elapsed)} / ${fmt(totalTime)}`;
-      document.getElementById('globalProgress').style.width = `${(elapsed / totalTime) * 100}%`;
-    }
-
-    function renderStep() {
-      if (currentStep >= workout.length) {
-        document.getElementById('sessionLabel').textContent = '¡Sesión completada! 🎉';
-        document.getElementById('exName').textContent = 'Ruta finalizada';
-        document.getElementById('exPhase').textContent = 'META';
-        document.getElementById('exPart').textContent = 'Gran esfuerzo. Recupera el aliento e hidrátate.';
-        document.getElementById('timerDisplay').textContent = '00:00';
-        document.getElementById('stepCounter').textContent = workout.length + ' / ' + workout.length;
-        updateDots();
-        updateRing(0);
-        updateCardBackground(0);
-        document.getElementById('globalProgress').style.width = '100%';
-        releaseWakeLock();
-        localStorage.removeItem('bikeWorkoutState');
-        
-        recordWorkoutCompletion();
-        
-        playBeep(523.25, 0.2); setTimeout(() => playBeep(659.25, 0.2), 200); setTimeout(() => playBeep(783.99, 0.4), 400);
-        return;
-      }
-
-      const step = workout[currentStep];
-      const data = parseStep(step.desc);
-      stepTotal = step.t;
-      if (!isPaused || timeLeft === 0) timeLeft = step.t; 
-
-      document.getElementById('exPhase').textContent = data.phase;
-      document.getElementById('exName').textContent = data.phase;
-      document.getElementById('exPart').textContent = data.parte;
-      document.getElementById('cadVal').textContent = data.cad;
-
-      const rpe = data.rpe;
-      document.getElementById('rpeVal').textContent = rpe !== null ? rpe : '—';
-      const fill = document.getElementById('rpeFill');
-      fill.style.width = rpe ? (rpe / 10 * 100) + '%' : '0%';
-      fill.style.background = rpeColor(rpe);
-      document.getElementById('timerRing').style.stroke = rpeColor(rpe);
-      
-      updateCardBackground(rpe);
-
-      document.getElementById('stepCounter').textContent = (currentStep + 1) + ' / ' + workout.length;
-      updateDots();
-      updateRing(1);
-      updateGlobalProgress();
-
-      const next = workout[currentStep + 1];
-      if (next) {
-        const nd = parseStep(next.desc);
-        document.getElementById('nextName').textContent = nd.phase + (nd.parte ? ' — ' + nd.parte : '');
-        document.getElementById('nextMeta').textContent = nd.cad + ' RPM · RPE ' + (nd.rpe ?? '—') + ' · ' + fmt(next.t);
-      } else {
-        document.getElementById('nextName').textContent = 'Llegando a meta';
-        document.getElementById('nextMeta').textContent = '';
-      }
-
-      clearInterval(timerInterval);
-      timerInterval = setInterval(tick, 1000);
-      saveState();
-    }
-
-    function tick() {
-      if (isPaused) return;
-      
-      timeLeft--;
-      document.getElementById('timerDisplay').textContent = fmt(timeLeft);
-      updateRing(timeLeft / stepTotal);
-      updateGlobalProgress();
-      saveState();
-      
-      try {
-        if (timeLeft === 10 && workout[currentStep + 1]) {
-           const nd = parseStep(workout[currentStep + 1].desc);
-           let postureStr = nd.posture ? (nd.posture === 'de pie' ? 'de pie, ' : 'sentado, ') : '';
-           let cadStr = nd.cad !== '—' ? `a ${nd.cad} revoluciones.` : '';
-           announceText(`Siguiente: ${nd.phase}, ${postureStr}${cadStr}`);
-        }
-
-        if (timeLeft > 0 && timeLeft <= 3) playBeep(440, 0.2); 
-
-        if (timeLeft <= 0) {
-          playBeep(880, 0.6); 
-          clearInterval(timerInterval);
-          currentStep++;
-          renderStep();
-        }
-      } catch (e) {
-        if (timeLeft <= 0) { clearInterval(timerInterval); currentStep++; renderStep(); }
-      }
-    }
-
-    function prepWorkout(type) {
-      tempWorkoutBuffer = {
-        routine: WORKOUTS[type][selectedLevel],
-        name: `${type.charAt(0).toUpperCase() + type.slice(1)} - Nivel ${selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)}`
-      };
-      document.getElementById('preWorkoutType').textContent = tempWorkoutBuffer.name;
-      openModal('preWorkoutModal');
-    }
-
-    function startWorkout() {
-      closeModals();
-      initAudio();
-      requestWakeLock();
-
-      clearInterval(timerInterval);
-      workout = tempWorkoutBuffer.routine;
-      currentSession = tempWorkoutBuffer.name;
-      currentStep = 0;
-      isPaused = false;
-      document.getElementById('sessionLabel').textContent = currentSession;
-      
-      const timerDisplay = document.getElementById('timerDisplay');
-      timerDisplay.classList.remove('opacity-50', 'animate-pulse');
-      document.getElementById('tapActionText').textContent = "Pausar";
-
-      buildDots();
-      renderStep();
-      
-      const primerData = parseStep(workout[0].desc);
-      let initPosture = primerData.posture ? (primerData.posture === 'de pie' ? 'de pie, ' : 'sentado, ') : '';
-      announceText(`Comenzando sesión. ${primerData.phase}, ${initPosture}a ${primerData.cad} revoluciones.`);
-    }
-
-    function openCustomModal() { openModal('customModal'); }
-
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) { document.getElementById('csvInput').value = e.target.result; };
-      reader.readAsText(file);
-    }
-
-    function loadCustomCSV() {
-      const txt = document.getElementById('csvInput').value.trim();
-      if (!txt) { alert("El texto está vacío."); return; }
-      
-      const lines = txt.split('\n');
-      let customRoutine = [];
-
-      let importedLevel = lines[0].trim().toLowerCase().replace('é', 'e');
-      const validLevels = ['principiante', 'amateur', 'elite', 'pro'];
-      
-      if (!validLevels.includes(importedLevel)) {
-        alert("Error: La primera línea debe indicar la dificultad (Principiante, Amateur, Élite o Pro).");
-        return;
-      }
-
-      for (let i = 1; i < lines.length; i++) {
-        let l = lines[i].trim();
-        if (!l) continue;
-        let delimiter = l.includes(';') ? ';' : ',';
-        let parts = l.split(delimiter).map(p => p.trim());
-
-        if (parts.length < 4) continue;
-        let phase = parts[0], cad = parts[1], rpe = "", t = 0;
-
-        if (delimiter === ',' && parts.length >= 5 && !isNaN(parseInt(parts[4], 10))) {
-          rpe = parts[2] + "." + parts[3]; t = parseInt(parts[4], 10);
-        } else {
-          rpe = parts[2].replace(',', '.'); t = parseInt(parts[3], 10);
-        }
-
-        if (!isNaN(t)) customRoutine.push({ desc: `${phase} [Cadencia ${cad} RPM] [RPE ${rpe}]`, t: t });
-      }
-
-      if (customRoutine.length > 0) {
-        document.getElementById('difficulty').value = importedLevel;
-        setLevel(importedLevel);
-
-        tempWorkoutBuffer = {
-          routine: customRoutine,
-          name: `Ruta Personalizada (${importedLevel.charAt(0).toUpperCase() + importedLevel.slice(1)})`
-        };
-        document.getElementById('preWorkoutType').textContent = tempWorkoutBuffer.name;
-        openModal('preWorkoutModal');
-      } else {
-        alert("No se detectó un formato CSV válido en las líneas de entrenamiento.");
-      }
-    }
-
-    function togglePause() {
-      if(workout.length === 0 || currentStep >= workout.length) return;
-      initAudio(); requestWakeLock();
-      isPaused = !isPaused;
-      
-      const timerDisplay = document.getElementById('timerDisplay');
-      const tapActionText = document.getElementById('tapActionText');
-      
-      if (isPaused) {
-        timerDisplay.classList.add('opacity-50', 'animate-pulse');
-        tapActionText.textContent = "Reanudar";
-      } else {
-        timerDisplay.classList.remove('opacity-50', 'animate-pulse');
-        tapActionText.textContent = "Pausar";
-      }
-      saveState();
-    }
-
-    function skipStep() {
-      if(workout.length === 0 || currentStep >= workout.length) return;
-      initAudio(); requestWakeLock();
-      clearInterval(timerInterval);
-      timeLeft = 0; currentStep++; renderStep();
-    }
-
     function resetWorkout() {
       if(workout.length === 0) return;
-      if (!confirm("¿Detener el entrenamiento y volver al inicio?")) return; 
+      isPaused = true;
+      document.getElementById('timerDisplay').classList.add('opacity-50', 'animate-pulse');
+      document.getElementById('tapActionText').textContent = "Reanudar";
 
+      const elapsedSeconds = workout.slice(0, currentStep).reduce((acc, step) => acc + step.t, 0) + (stepTotal - timeLeft);
+      if (elapsedSeconds >= 15) { openModal('exitModal'); } 
+      else { forceFullReset(); }
+    }
+
+    function cancelExit() {
+      closeModals();
+      isPaused = false;
+      document.getElementById('timerDisplay').classList.remove('opacity-50', 'animate-pulse');
+      document.getElementById('tapActionText').textContent = "Pausar";
+    }
+
+    function confirmExit(shouldSave) {
+      if (shouldSave) recordProgress();
+      closeModals();
+      forceFullReset();
+    }
+
+    function forceFullReset() {
       clearInterval(timerInterval);
       releaseWakeLock();
       localStorage.removeItem('bikeWorkoutState');
@@ -1032,6 +805,197 @@
       document.getElementById('stepCounter').textContent = '— / —';
       document.getElementById('stepDots').innerHTML = '';
       updateRing(0); updateCardBackground(0);
+    }
+
+    function updateGlobalProgress() {
+      if(workout.length === 0) return;
+      const totalTime = workout.reduce((acc, step) => acc + step.t, 0);
+      const timeCompletedInPastSteps = workout.slice(0, currentStep).reduce((acc, step) => acc + step.t, 0);
+      const elapsed = timeCompletedInPastSteps + (stepTotal - timeLeft);
+      document.getElementById('globalTime').textContent = `${fmt(elapsed)} / ${fmt(totalTime)}`;
+      document.getElementById('globalProgress').style.width = `${(elapsed / totalTime) * 100}%`;
+    }
+
+    function renderStep() {
+      if (currentStep >= workout.length) {
+        document.getElementById('sessionLabel').textContent = '¡Sesión completada! 🎉';
+        document.getElementById('exName').textContent = 'Ruta finalizada';
+        document.getElementById('exPhase').textContent = 'META';
+        document.getElementById('exPart').textContent = 'Gran esfuerzo. Recupera el aliento e hidrátate.';
+        document.getElementById('timerDisplay').textContent = '00:00';
+        document.getElementById('stepCounter').textContent = workout.length + ' / ' + workout.length;
+        updateDots(); updateRing(0); updateCardBackground(0);
+        document.getElementById('globalProgress').style.width = '100%';
+        releaseWakeLock();
+        localStorage.removeItem('bikeWorkoutState');
+        
+        recordProgress(); 
+        
+        playBeep(523.25, 0.2); setTimeout(() => playBeep(659.25, 0.2), 200); setTimeout(() => playBeep(783.99, 0.4), 400);
+        return;
+      }
+
+      const step = workout[currentStep];
+      const data = parseStep(step.desc);
+      stepTotal = step.t;
+      if (!isPaused || timeLeft === 0) timeLeft = step.t; 
+
+      document.getElementById('exPhase').textContent = data.phase;
+      document.getElementById('exName').textContent = data.phase;
+      document.getElementById('exPart').textContent = data.parte;
+      document.getElementById('cadVal').textContent = data.cad;
+      const rpe = data.rpe;
+      document.getElementById('rpeVal').textContent = rpe !== null ? rpe : '—';
+      const fill = document.getElementById('rpeFill');
+      fill.style.width = rpe ? (rpe / 10 * 100) + '%' : '0%';
+      fill.style.background = rpeColor(rpe);
+      document.getElementById('timerRing').style.stroke = rpeColor(rpe);
+      
+      updateCardBackground(rpe);
+      document.getElementById('stepCounter').textContent = (currentStep + 1) + ' / ' + workout.length;
+      updateDots(); updateRing(1); updateGlobalProgress();
+
+      const next = workout[currentStep + 1];
+      if (next) {
+        const nd = parseStep(next.desc);
+        document.getElementById('nextName').textContent = nd.phase + (nd.parte ? ' — ' + nd.parte : '');
+        document.getElementById('nextMeta').textContent = nd.cad + ' RPM · RPE ' + (nd.rpe ?? '—') + ' · ' + fmt(next.t);
+      } else {
+        document.getElementById('nextName').textContent = 'Llegando a meta';
+        document.getElementById('nextMeta').textContent = '';
+      }
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(tick, 1000);
+      saveState();
+    }
+
+    function tick() {
+      if (isPaused) return;
+      timeLeft--;
+      document.getElementById('timerDisplay').textContent = fmt(timeLeft);
+      updateRing(timeLeft / stepTotal);
+      updateGlobalProgress();
+      saveState();
+      
+      try {
+        if (timeLeft === 10 && workout[currentStep + 1]) {
+           const nd = parseStep(workout[currentStep + 1].desc);
+           let postureStr = nd.posture ? (nd.posture === 'de pie' ? 'de pie, ' : 'sentado, ') : '';
+           let cadStr = nd.cad !== '—' ? `a ${nd.cad} revoluciones.` : '';
+           announceText(`Siguiente: ${nd.phase}, ${postureStr}${cadStr}`);
+        }
+        if (timeLeft > 0 && timeLeft <= 3) playBeep(440, 0.2); 
+        if (timeLeft <= 0) {
+          playBeep(880, 0.6); clearInterval(timerInterval); currentStep++; renderStep();
+        }
+      } catch (e) {
+        if (timeLeft <= 0) { clearInterval(timerInterval); currentStep++; renderStep(); }
+      }
+    }
+
+    function prepWorkout(type) {
+      tempWorkoutBuffer = {
+        routine: WORKOUTS[type][selectedLevel],
+        name: `${type.charAt(0).toUpperCase() + type.slice(1)} - Nivel ${selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)}`
+      };
+      document.getElementById('preWorkoutType').textContent = tempWorkoutBuffer.name;
+      openModal('preWorkoutModal');
+    }
+
+    function startWorkout() {
+      closeModals(); initAudio(); requestWakeLock();
+      clearInterval(timerInterval);
+      workout = tempWorkoutBuffer.routine;
+      currentSession = tempWorkoutBuffer.name;
+      currentStep = 0; isPaused = false;
+      document.getElementById('sessionLabel').textContent = currentSession;
+      
+      const timerDisplay = document.getElementById('timerDisplay');
+      timerDisplay.classList.remove('opacity-50', 'animate-pulse');
+      document.getElementById('tapActionText').textContent = "Pausar";
+
+      buildDots(); renderStep();
+      const primerData = parseStep(workout[0].desc);
+      let initPosture = primerData.posture ? (primerData.posture === 'de pie' ? 'de pie, ' : 'sentado, ') : '';
+      announceText(`Comenzando sesión. ${primerData.phase}, ${initPosture}a ${primerData.cad} revoluciones.`);
+    }
+
+    function openCustomModal() { openModal('customModal'); }
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) { document.getElementById('csvInput').value = e.target.result; };
+      reader.readAsText(file);
+    }
+
+    function loadCustomCSV() {
+      const txt = document.getElementById('csvInput').value.trim();
+      if (!txt) { alert("El texto está vacío."); return; }
+      
+      const lines = txt.split('\n');
+      let customRoutine = [];
+      let importedLevel = lines[0].trim().toLowerCase().replace('é', 'e');
+      const validLevels = ['principiante', 'amateur', 'elite', 'pro'];
+      
+      if (!validLevels.includes(importedLevel)) {
+        alert("Error: La primera línea debe indicar la dificultad (Principiante, Amateur, Élite o Pro).");
+        return;
+      }
+
+      for (let i = 1; i < lines.length; i++) {
+        let l = lines[i].trim();
+        if (!l) continue;
+        let delimiter = l.includes(';') ? ';' : ',';
+        let parts = l.split(delimiter).map(p => p.trim());
+        if (parts.length < 4) continue;
+        let phase = parts[0], cad = parts[1], rpe = "", t = 0;
+
+        if (delimiter === ',' && parts.length >= 5 && !isNaN(parseInt(parts[4], 10))) {
+          rpe = parts[2] + "." + parts[3]; t = parseInt(parts[4], 10);
+        } else {
+          rpe = parts[2].replace(',', '.'); t = parseInt(parts[3], 10);
+        }
+        if (!isNaN(t)) customRoutine.push({ desc: `${phase} [Cadencia ${cad} RPM] [RPE ${rpe}]`, t: t });
+      }
+
+      if (customRoutine.length > 0) {
+        document.getElementById('difficulty').value = importedLevel;
+        setLevel(importedLevel);
+        tempWorkoutBuffer = {
+          routine: customRoutine,
+          name: `Ruta Personalizada (${importedLevel.charAt(0).toUpperCase() + importedLevel.slice(1)})`
+        };
+        document.getElementById('preWorkoutType').textContent = tempWorkoutBuffer.name;
+        openModal('preWorkoutModal');
+      } else {
+        alert("No se detectó un formato CSV válido en las líneas de entrenamiento.");
+      }
+    }
+
+    function togglePause() {
+      if(workout.length === 0 || currentStep >= workout.length) return;
+      initAudio(); requestWakeLock();
+      isPaused = !isPaused;
+      const timerDisplay = document.getElementById('timerDisplay');
+      const tapActionText = document.getElementById('tapActionText');
+      if (isPaused) {
+        timerDisplay.classList.add('opacity-50', 'animate-pulse');
+        tapActionText.textContent = "Reanudar";
+      } else {
+        timerDisplay.classList.remove('opacity-50', 'animate-pulse');
+        tapActionText.textContent = "Pausar";
+      }
+      saveState();
+    }
+
+    function skipStep() {
+      if(workout.length === 0 || currentStep >= workout.length) return;
+      initAudio(); requestWakeLock();
+      clearInterval(timerInterval);
+      timeLeft = 0; currentStep++; renderStep();
     }
   </script>
 </body>
