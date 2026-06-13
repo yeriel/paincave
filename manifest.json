@@ -1,0 +1,16 @@
+{
+  "name": "Pain Cave Pro",
+  "short_name": "Pain Cave",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "description": "Entrenador personal de ciclismo indoor",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/11011/11011200.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
