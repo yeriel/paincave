@@ -17,19 +17,15 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-blue-500/30">
 
-  <h2 class="sr-only">Entrenador de ciclismo indoor</h2>
-
   <div class="max-w-[480px] mx-auto px-4 py-6 relative">
     
     <div class="flex justify-between items-center mb-4">
-      <div class="text-xs uppercase tracking-[0.08em] text-slate-400 font-bold" id="sessionLabel">
-        Selecciona una rutina
-      </div>
+      <div class="text-xs uppercase tracking-[0.08em] text-slate-400 font-bold" id="sessionLabel">Selecciona una rutina</div>
       <div class="flex items-center gap-2">
         <button onclick="toggleHRM()" id="btnBluetooth" class="text-slate-400 hover:text-blue-400 transition-colors p-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Conectar Pulsómetro">
           <i class="ti ti-bluetooth text-xl"></i>
         </button>
-        <button onclick="showStatsModal()" class="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors px-3 py-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Ver mi historial">
+        <button onclick="showStatsModal()" class="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors px-3 py-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm">
           <span id="miniRankText" class="text-[10px] uppercase font-bold text-orange-400">Novato</span>
           <i class="ti ti-shield-chevron text-xl"></i>
         </button>
@@ -46,19 +42,17 @@
       </div>
     </div>
 
-    <div class="text-center mb-6 cursor-pointer group relative" onclick="togglePause()" title="Toca para pausar/reanudar">
-      <div class="relative inline-flex items-center justify-center w-[200px] h-[200px] mx-auto mb-2 transition-transform active:scale-95">
+    <div class="text-center mb-6 cursor-pointer group relative" onclick="togglePause()">
+      <div class="relative inline-flex items-center justify-center w-[200px] h-[200px] mx-auto mb-2 active:scale-95 transition-transform">
         <svg class="absolute top-0 left-0 -rotate-90" width="200" height="200" viewBox="0 0 200 200">
           <circle class="fill-none stroke-slate-800 stroke-[10px]" cx="100" cy="100" r="90"/>
-          <circle class="fill-none stroke-[10px] transition-all duration-[900ms] ease-linear" stroke-linecap="round" id="timerRing" cx="100" cy="100" r="90"
-            stroke="#378ADD" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
+          <circle class="fill-none stroke-[10px] transition-all duration-[900ms] ease-linear" stroke-linecap="round" id="timerRing" cx="100" cy="100" r="90" stroke="#1D9E75" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
         </svg>
         <div class="text-5xl font-bold font-mono text-white leading-none tracking-tight" id="timerDisplay">00:00</div>
       </div>
       <div class="text-[10px] uppercase tracking-widest text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity absolute w-full -bottom-2 text-center">
         Toca para <span id="tapActionText">Pausar</span>
       </div>
-
       <div class="flex items-center justify-center gap-2 mt-4">
         <span class="text-[13px] text-slate-500 font-mono" id="stepCounter">— / —</span>
         <div id="stepDots" class="flex gap-[5px] items-center"></div>
@@ -67,7 +61,7 @@
 
     <div id="mainCard" class="bg-slate-800 border border-slate-700 rounded-2xl p-4 md:p-5 mb-4 shadow-lg transition-colors duration-500">
       <div class="text-[11px] uppercase tracking-[0.08em] text-slate-400 mb-1 font-semibold" id="exPhase">—</div>
-      <div class="text-xl md:text-2xl font-bold text-white mb-2 leading-tight" id="exName">Esperando al ciclista...</div>
+      <div class="text-xl md:text-2xl font-bold text-white mb-2 leading-tight" id="exName">Esperando ciclista...</div>
       <div class="text-sm text-slate-400 mb-5" id="exPart">Súbete a la bici y elige una ruta</div>
       
       <div class="grid grid-cols-3 gap-2 md:gap-3">
@@ -77,14 +71,14 @@
           <div class="text-[9px] md:text-xs text-slate-500 font-medium mt-1">RPM</div>
         </div>
         
-        <div class="bg-slate-900/50 rounded-xl p-2 md:p-3 text-center border border-slate-700/50 cursor-pointer active:scale-95 transition-transform flex flex-col justify-center group" onclick="toggleHRM()" title="Toca para conectar banda HR">
+        <div class="bg-slate-900/50 rounded-xl p-2 md:p-3 text-center border border-slate-700/50 cursor-pointer active:scale-95 transition-transform flex flex-col justify-center group" onclick="toggleHRM()">
           <div class="text-[9px] md:text-[11px] uppercase tracking-[0.06em] text-slate-400 mb-1 group-hover:text-blue-400 transition-colors">Pulso</div>
           <div class="text-2xl md:text-4xl font-bold text-white font-mono flex items-center justify-center gap-1">
             <span id="bpmVal">—</span>
           </div>
           <div class="text-[9px] md:text-xs text-slate-500 font-medium mt-1 flex items-center justify-center gap-1">
             <i class="ti ti-heart-filled text-rose-500 hidden" id="hrIcon"></i>
-            <span id="bpmLabel">Toca para HR</span>
+            <span id="bpmLabel">Conectar</span>
           </div>
         </div>
 
@@ -126,24 +120,22 @@
 
     <div class="grid grid-cols-2 gap-3 mb-3">
       <button class="py-3 rounded-xl text-sm font-bold cursor-pointer border-2 border-blue-600/30 text-blue-400 bg-blue-900/10 hover:bg-blue-900/30 transition-colors flex items-center justify-center gap-2 active:scale-95" onclick="prepWorkout('escalada')">
-        <i class="ti ti-mountain text-xl" aria-hidden="true"></i> ESCALADA
+        <i class="ti ti-mountain text-xl"></i> ESCALADA
       </button>
       <button class="py-3 rounded-xl text-sm font-bold cursor-pointer border-2 border-orange-600/30 text-orange-400 bg-orange-900/10 hover:bg-orange-900/30 transition-colors flex items-center justify-center gap-2 active:scale-95" onclick="prepWorkout('hiit')">
-        <i class="ti ti-bolt text-xl" aria-hidden="true"></i> HIIT
+        <i class="ti ti-bolt text-xl"></i> HIIT
       </button>
     </div>
-    
     <div class="grid grid-cols-2 gap-3 mb-3">
       <button class="py-2.5 rounded-xl text-sm font-medium cursor-pointer border border-slate-700 text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors flex items-center justify-center gap-1.5 active:scale-95" onclick="skipStep()">
-        <i class="ti ti-player-track-next text-lg" aria-hidden="true"></i> Saltar Fase
+        <i class="ti ti-player-track-next text-lg"></i> Saltar Fase
       </button>
       <button class="py-2.5 rounded-xl text-sm font-medium cursor-pointer border border-red-900/50 text-red-400 bg-slate-800 hover:bg-red-900/20 transition-colors flex items-center justify-center gap-1.5 active:scale-95" onclick="resetWorkout()">
-        <i class="ti ti-square text-lg" aria-hidden="true"></i> Detener
+        <i class="ti ti-square text-lg"></i> Detener
       </button>
     </div>
-
     <button class="w-full py-3 rounded-xl text-sm font-semibold cursor-pointer border border-dashed border-slate-600 text-slate-400 bg-transparent hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 active:scale-95" onclick="openCustomModal()">
-      <i class="ti ti-file-upload text-lg" aria-hidden="true"></i> Importar Rutina CSV
+      <i class="ti ti-file-upload text-lg"></i> Importar Rutina CSV
     </button>
   </div>
 
@@ -152,16 +144,14 @@
     <div id="preWorkoutModal" class="hidden text-center w-full max-w-sm">
       <i class="ti ti-headphones text-6xl text-slate-400 mb-4 inline-block"></i>
       <h3 class="text-2xl font-bold text-white mb-2">Sube el volumen</h3>
-      <p class="text-slate-400 mb-8 text-sm">El audio y la pantalla se mantendrán activos durante tu sesión de <span id="preWorkoutType" class="text-white font-bold"></span>.</p>
-      <button class="w-full py-4 rounded-xl text-lg font-bold cursor-pointer border-0 text-white bg-blue-600 hover:bg-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all active:scale-95" onclick="startWorkout()">
-        COMENZAR RUTA
-      </button>
+      <p class="text-slate-400 mb-8 text-sm">El audio se mantendrá activo en <span id="preWorkoutType" class="text-white font-bold"></span>.</p>
+      <button class="w-full py-4 rounded-xl text-lg font-bold border-0 text-white bg-blue-600 hover:bg-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all active:scale-95" onclick="startWorkout()">COMENZAR RUTA</button>
       <button class="mt-4 text-sm text-slate-500 hover:text-slate-300 underline" onclick="closeModals()">Cancelar</button>
     </div>
 
     <div id="resumeModal" class="hidden text-center bg-slate-800 border border-slate-700 p-6 rounded-2xl w-full max-w-sm shadow-2xl">
-      <h3 class="text-xl font-bold text-white mb-2">Entrenamiento en pausa</h3>
-      <p class="text-slate-400 mb-6 text-sm">El navegador se recargó, pero guardamos tu progreso en el pelotón. ¿Deseas continuar?</p>
+      <h3 class="text-xl font-bold text-white mb-2">Sesión en pausa</h3>
+      <p class="text-slate-400 mb-6 text-sm">Guardamos tu progreso en el pelotón. ¿Deseas continuar?</p>
       <div class="grid grid-cols-2 gap-3">
         <button class="py-3 rounded-xl text-sm font-bold border border-slate-600 text-slate-300 hover:bg-slate-700" onclick="discardSavedState()">Abandonar</button>
         <button class="py-3 rounded-xl text-sm font-bold bg-blue-600 text-white hover:bg-blue-500 shadow-lg" onclick="resumeSavedState()">Reanudar</button>
@@ -170,21 +160,13 @@
 
     <div id="customModal" class="hidden text-left bg-slate-800 border border-slate-700 p-5 rounded-2xl w-full max-w-sm shadow-2xl">
       <h3 class="text-lg font-bold text-white mb-1">Importar Rutina (CSV)</h3>
-      <p class="text-slate-400 mb-3 text-xs">Línea 1: Dificultad (Ej: Amateur)<br>Línea 2+: Nombre de Fase, Cadencia, RPE, Segundos</p>
-      
-      <label class="block w-full py-2 mb-3 text-center rounded-xl text-sm font-bold bg-slate-700 text-white cursor-pointer hover:bg-slate-600 transition-colors border border-dashed border-slate-500">
+      <p class="text-slate-400 mb-3 text-xs">Línea 1: Dificultad (Ej: Amateur)<br>Línea 2+: Fase, Cadencia, RPE, Segundos</p>
+      <label class="block w-full py-2 mb-3 text-center rounded-xl text-sm font-bold bg-slate-700 text-white cursor-pointer hover:bg-slate-600 border border-dashed border-slate-500">
         <i class="ti ti-upload mr-1"></i> Subir archivo .csv
         <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleFileUpload(event)">
       </label>
-
-      <div class="flex items-center gap-2 mb-3">
-        <div class="h-px bg-slate-700 flex-1"></div>
-        <span class="text-[10px] uppercase text-slate-500 font-bold">o pega el texto</span>
-        <div class="h-px bg-slate-700 flex-1"></div>
-      </div>
-
-      <textarea id="csvInput" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 font-mono focus:ring-1 focus:ring-blue-500 outline-none mb-4 custom-scrollbar" placeholder="Amateur&#10;Rodaje en valle, 90, 4, 180..."></textarea>
-      
+      <div class="flex items-center gap-2 mb-3"><div class="h-px bg-slate-700 flex-1"></div><span class="text-[10px] uppercase text-slate-500 font-bold">o pega el texto</span><div class="h-px bg-slate-700 flex-1"></div></div>
+      <textarea id="csvInput" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 font-mono focus:ring-1 focus:ring-blue-500 outline-none mb-4 custom-scrollbar" placeholder="Amateur&#10;Rodaje, 90, 4, 180..."></textarea>
       <div class="grid grid-cols-2 gap-3">
         <button class="py-2.5 rounded-xl text-sm font-bold border border-slate-600 text-slate-300 hover:bg-slate-700" onclick="closeModals()">Cancelar</button>
         <button class="py-2.5 rounded-xl text-sm font-bold bg-green-600 text-white hover:bg-green-500" onclick="loadCustomCSV()">Cargar Ruta</button>
@@ -192,23 +174,13 @@
     </div>
 
     <div id="exitModal" class="hidden text-center bg-slate-800 border border-slate-700 p-6 rounded-2xl w-full max-w-sm shadow-2xl">
-      <div class="flex justify-center mb-2">
-        <div class="bg-yellow-500/20 p-3 rounded-full border border-yellow-500/30">
-          <i class="ti ti-alert-triangle text-3xl text-yellow-500"></i>
-        </div>
-      </div>
-      <h3 class="text-xl font-bold text-white mb-2">¿Abandonar el pelotón?</h3>
-      <p class="text-slate-400 mb-6 text-sm">Has detenido la sesión antes de llegar a la meta. ¿Qué deseas hacer con tu esfuerzo acumulado en esta ruta?</p>
+      <div class="flex justify-center mb-2"><div class="bg-yellow-500/20 p-3 rounded-full border border-yellow-500/30"><i class="ti ti-alert-triangle text-3xl text-yellow-500"></i></div></div>
+      <h3 class="text-xl font-bold text-white mb-2">¿Abandonar ruta?</h3>
+      <p class="text-slate-400 mb-6 text-sm">Has detenido la sesión. ¿Deseas guardar la experiencia (XP) ganada hasta ahora?</p>
       <div class="flex flex-col gap-2">
-        <button class="w-full py-3 rounded-xl text-sm font-bold bg-green-600 text-white hover:bg-green-500 shadow-lg active:scale-95 transition-transform" onclick="confirmExit(true)">
-          <i class="ti ti-device-floppy mr-1 text-base"></i> Guardar tiempo y XP actuales
-        </button>
-        <button class="w-full py-3 rounded-xl text-sm font-bold bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30 active:scale-95 transition-transform" onclick="confirmExit(false)">
-          <i class="ti ti-trash mr-1 text-base"></i> Descartar progreso de hoy
-        </button>
-        <button class="w-full py-2.5 mt-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600" onclick="cancelExit()">
-          Volver al entrenamiento
-        </button>
+        <button class="w-full py-3 rounded-xl text-sm font-bold bg-green-600 text-white hover:bg-green-500 shadow-lg" onclick="confirmExit(true)">Guardar XP actual</button>
+        <button class="w-full py-3 rounded-xl text-sm font-bold bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30" onclick="confirmExit(false)">Descartar progreso</button>
+        <button class="w-full py-2.5 mt-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600" onclick="cancelExit()">Volver al entrenamiento</button>
       </div>
     </div>
 
@@ -226,899 +198,307 @@
           <div class="h-2 w-full bg-slate-700 rounded-full overflow-hidden">
             <div id="rankProgressBar" class="h-full bg-gradient-to-r from-orange-500 to-yellow-400 transition-all duration-1000" style="width: 0%"></div>
           </div>
-          <div class="text-[9px] text-slate-400 mt-2 italic">Gana XP pedaleando. Mayor nivel = más XP/seg.</div>
         </div>
+      </div>
+
+      <div class="bg-slate-900 rounded-xl p-4 border border-slate-700 mb-4 text-left">
+        <div class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-2 flex items-center gap-1">
+          <i class="ti ti-heart-rate-monitor text-sm text-blue-400"></i> Mi Perfil Fisiológico
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <label for="maxHrInput" class="text-xs text-slate-300 font-medium leading-tight">Frecuencia Cardíaca Máx:</label>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <input type="number" id="maxHrInput" onchange="saveMaxHR(this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-lg text-center font-mono font-bold text-white text-sm py-1.5 focus:ring-1 focus:ring-blue-500 outline-none" min="100" max="240" placeholder="190">
+            <span class="text-[10px] text-slate-500 font-bold font-mono">BPM</span>
+          </div>
+        </div>
+        <p class="text-[9px] text-slate-500 mt-2 leading-tight">Si conectas un pulsómetro Bluetooth, usaremos este valor para pintar tu esfuerzo (Z1 a Z5) en tiempo real.</p>
       </div>
 
       <div class="grid grid-cols-2 gap-2 mb-4">
         <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
           <div class="text-[10px] uppercase text-slate-500 font-bold mb-1">Racha Semanal</div>
           <div class="text-2xl font-black text-blue-400" id="statStreak">0</div>
-          <div class="text-[9px] text-slate-500 uppercase mt-0.5">Semanas activas</div>
         </div>
         <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
           <div class="text-[10px] uppercase text-slate-500 font-bold mb-1">Tiempo Total</div>
           <div class="text-2xl font-black text-white" id="statTotalTime">0h 0m</div>
-          <div class="text-[9px] text-slate-500 uppercase mt-0.5">Sobre el sillín</div>
         </div>
       </div>
 
       <div class="bg-slate-900 rounded-xl p-4 border border-slate-700 mb-4">
         <div class="text-sm font-bold text-white mb-3 text-left" id="calendarMonthLabel">Mes Actual</div>
         <div class="grid grid-cols-7 gap-1 mb-2">
-          <div class="text-[9px] font-bold text-slate-500 uppercase">L</div>
-          <div class="text-[9px] font-bold text-slate-500 uppercase">M</div>
-          <div class="text-[9px] font-bold text-slate-500 uppercase">X</div>
-          <div class="text-[9px] font-bold text-slate-500 uppercase">J</div>
-          <div class="text-[9px] font-bold text-slate-500 uppercase">V</div>
-          <div class="text-[9px] font-bold text-slate-500 uppercase">S</div>
+          <div class="text-[9px] font-bold text-slate-500 uppercase">L</div><div class="text-[9px] font-bold text-slate-500 uppercase">M</div>
+          <div class="text-[9px] font-bold text-slate-500 uppercase">X</div><div class="text-[9px] font-bold text-slate-500 uppercase">J</div>
+          <div class="text-[9px] font-bold text-slate-500 uppercase">V</div><div class="text-[9px] font-bold text-slate-500 uppercase">S</div>
           <div class="text-[9px] font-bold text-slate-500 uppercase">D</div>
         </div>
         <div id="calendarGrid" class="grid grid-cols-7 gap-1"></div>
-        <div class="flex justify-center gap-3 mt-3 pt-3 border-t border-slate-700/50">
-          <div class="flex items-center gap-1 text-[9px] text-slate-400"><i class="ti ti-flame text-green-500"></i> Princ.</div>
-          <div class="flex items-center gap-1 text-[9px] text-slate-400"><i class="ti ti-flame text-blue-500"></i> Ama.</div>
-          <div class="flex items-center gap-1 text-[9px] text-slate-400"><i class="ti ti-flame text-orange-500"></i> Élite</div>
-          <div class="flex items-center gap-1 text-[9px] text-slate-400"><i class="ti ti-flame text-red-500"></i> Pro</div>
-        </div>
       </div>
 
       <div class="flex gap-2 mb-4">
-        <button class="flex-1 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300 hover:text-white hover:bg-slate-600 transition-colors flex items-center justify-center gap-1 border border-slate-600" onclick="exportStats()">
+        <button class="flex-1 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300 hover:text-white hover:bg-slate-600 flex items-center justify-center gap-1 border border-slate-600" onclick="exportStats()">
           <i class="ti ti-download text-lg"></i> Exportar
         </button>
-        <label class="flex-1 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300 hover:text-white hover:bg-slate-600 transition-colors flex items-center justify-center gap-1 cursor-pointer border border-slate-600">
+        <label class="flex-1 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300 hover:text-white hover:bg-slate-600 flex items-center justify-center gap-1 cursor-pointer border border-slate-600">
           <i class="ti ti-upload text-lg"></i> Importar
           <input type="file" class="hidden" accept=".json" onchange="importStats(event)">
         </label>
       </div>
 
-      <button class="w-full py-3 rounded-xl text-sm font-bold bg-slate-700 text-white hover:bg-slate-600 transition-colors" onclick="closeModals()">Volver a la cueva</button>
+      <button class="w-full py-3 rounded-xl text-sm font-bold bg-slate-700 text-white hover:bg-slate-600" onclick="closeModals()">Volver a la cueva</button>
     </div>
-
   </div>
 
   <style>
     .custom-scrollbar::-webkit-scrollbar { width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 20px; }
-    
-    /* Animación del corazón latiendo */
-    @keyframes heartBeat {
-      0% { transform: scale(1); }
-      14% { transform: scale(1.3); }
-      28% { transform: scale(1); }
-      42% { transform: scale(1.3); }
-      70% { transform: scale(1); }
-    }
-    .animate-heart-beat {
-      animation: heartBeat 1.2s infinite;
-    }
+    @keyframes heartBeat { 0% { transform: scale(1); } 14% { transform: scale(1.3); } 28% { transform: scale(1); } 42% { transform: scale(1.3); } 70% { transform: scale(1); } }
+    .animate-heart-beat { animation: heartBeat 1.2s infinite; }
   </style>
 
   <script>
-    // --- REGISTRO DEL SERVICE WORKER PARA PWA ---
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(reg => {
-          console.log('PWA Service Worker registrado');
-        }).catch(err => {
-          console.warn('Registro de Service Worker falló', err);
-        });
-      });
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
     }
 
-    // --- BLUETOOTH HEART RATE MONITOR (NUEVO) ---
-    let bleDevice = null;
-    let bleServer = null;
-    let hrCharacteristic = null;
+    let wakeLock = null; let audioCtx = null;
+    async function requestWakeLock() { try { if ('wakeLock' in navigator && !wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => wakeLock = null); } } catch (e) {} }
+    function releaseWakeLock() { if (wakeLock) { wakeLock.release().catch(()=>{}); wakeLock = null; } }
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !isPaused && workout.length > 0) requestWakeLock(); });
 
+    function initAudio() { try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch(e) {} }
+    function playBeep(freq, duration) { try { if(!audioCtx)return; if(audioCtx.state==='suspended')audioCtx.resume(); const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.frequency.value=freq; osc.type='sine'; osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime+duration); osc.stop(audioCtx.currentTime+duration); } catch(e) {} }
+    function announceText(text) { try { if (document.getElementById('voiceToggle').checked && 'speechSynthesis' in window) { window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(text); msg.lang = 'es-ES'; msg.rate = 1.1; window.speechSynthesis.speak(msg); } } catch(e) {} }
+
+    // --- BLUETOOTH HRM ---
+    let bleDevice = null; let bleServer = null; let hrCharacteristic = null; let isHRMConnected = false;
     async function toggleHRM() {
-      if (bleDevice && bleDevice.gatt.connected) {
-        bleDevice.gatt.disconnect();
-        return;
-      }
-
+      if (bleDevice && bleDevice.gatt.connected) { bleDevice.gatt.disconnect(); return; }
       try {
-        if (!navigator.bluetooth) {
-          alert("Tu navegador no soporta Bluetooth Web. Usa Chrome o Vivaldi en Android/PC.");
-          return;
-        }
-
+        if (!navigator.bluetooth) { alert("Bluetooth Web no soportado aquí."); return; }
         document.getElementById('bpmLabel').textContent = "Buscando...";
-        document.getElementById('btnBluetooth').classList.add('text-blue-400', 'animate-pulse');
-
-        bleDevice = await navigator.bluetooth.requestDevice({
-          filters: [{ services: ['heart_rate'] }],
-          optionalServices: ['heart_rate']
-        });
-
+        bleDevice = await navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] });
         bleDevice.addEventListener('gattserverdisconnected', onHRMDisconnected);
-
         document.getElementById('bpmLabel').textContent = "Conectando...";
         bleServer = await bleDevice.gatt.connect();
-
         const service = await bleServer.getPrimaryService('heart_rate');
         hrCharacteristic = await service.getCharacteristic('heart_rate_measurement');
-        
         await hrCharacteristic.startNotifications();
         hrCharacteristic.addEventListener('characteristicvaluechanged', handleHRMeasurement);
-
+        isHRMConnected = true;
         document.getElementById('bpmLabel').textContent = "BPM";
-        document.getElementById('hrIcon').classList.remove('hidden');
-        document.getElementById('hrIcon').classList.add('animate-heart-beat');
-        document.getElementById('btnBluetooth').classList.remove('animate-pulse', 'text-slate-400');
-        document.getElementById('btnBluetooth').classList.add('text-blue-500');
-        
-      } catch (error) {
-        console.error(error);
-        document.getElementById('bpmLabel').textContent = "Toca para HR";
-        document.getElementById('btnBluetooth').classList.remove('animate-pulse', 'text-blue-400', 'text-blue-500');
-        document.getElementById('btnBluetooth').classList.add('text-slate-400');
-        if(error.name !== "NotFoundError") {
-          alert("Error de conexión: " + error.message);
-        }
+        document.getElementById('hrIcon').classList.remove('hidden'); document.getElementById('hrIcon').classList.add('animate-heart-beat');
+        document.getElementById('btnBluetooth').classList.replace('text-slate-400', 'text-blue-500');
+      } catch (e) {
+        document.getElementById('bpmLabel').textContent = "Conectar";
+        if(e.name !== "NotFoundError") alert("Error Bluetooth: " + e.message);
       }
     }
-
-    function handleHRMeasurement(event) {
-      const value = event.target.value;
-      const flags = value.getUint8(0);
-      const format = flags & 0x01;
-      let bpm;
-      if (format === 0) {
-        bpm = value.getUint8(1);
-      } else {
-        bpm = value.getUint16(1, true); 
-      }
+    function handleHRMeasurement(e) {
+      const val = e.target.value; const bpm = (val.getUint8(0) & 0x01) === 0 ? val.getUint8(1) : val.getUint16(1, true);
       document.getElementById('bpmVal').textContent = bpm;
-      
-      // Colorear el texto de BPM según el esfuerzo (Zonas estimadas simples)
-      const bpmEl = document.getElementById('bpmVal');
-      if(bpm < 120) bpmEl.className = "text-2xl md:text-4xl font-bold text-white font-mono";
-      else if(bpm < 150) bpmEl.className = "text-2xl md:text-4xl font-bold text-green-400 font-mono";
-      else if(bpm < 170) bpmEl.className = "text-2xl md:text-4xl font-bold text-yellow-400 font-mono";
-      else if(bpm < 185) bpmEl.className = "text-2xl md:text-4xl font-bold text-orange-400 font-mono";
-      else bpmEl.className = "text-2xl md:text-4xl font-bold text-red-500 font-mono";
+      if (workout.length > 0 && currentStep < workout.length) updateInterfaceColors(bpm);
     }
-
     function onHRMDisconnected() {
-      document.getElementById('bpmVal').textContent = "—";
-      document.getElementById('bpmVal').className = "text-2xl md:text-4xl font-bold text-white font-mono";
-      document.getElementById('bpmLabel').textContent = "Desconectado";
-      document.getElementById('hrIcon').classList.add('hidden');
-      document.getElementById('hrIcon').classList.remove('animate-heart-beat');
-      document.getElementById('btnBluetooth').classList.remove('animate-pulse', 'text-blue-500');
-      document.getElementById('btnBluetooth').classList.add('text-slate-400');
-      bleDevice = null;
-      bleServer = null;
+      isHRMConnected = false; document.getElementById('bpmVal').textContent = "—"; document.getElementById('bpmLabel').textContent = "Desconectado";
+      document.getElementById('hrIcon').classList.add('hidden'); document.getElementById('hrIcon').classList.remove('animate-heart-beat');
+      document.getElementById('btnBluetooth').classList.replace('text-blue-500', 'text-slate-400');
+      bleDevice = null; bleServer = null;
+      if (workout.length > 0 && currentStep < workout.length) updateInterfaceColors(null, parseStep(workout[currentStep].desc).rpe);
     }
 
-
-    // --- APIs BASE ---
-    let wakeLock = null;
-    let audioCtx = null;
-
-    async function requestWakeLock() {
-      try { 
-        if ('wakeLock' in navigator) {
-          if (wakeLock !== null) return; 
-          wakeLock = await navigator.wakeLock.request('screen'); 
-          wakeLock.addEventListener('release', () => { wakeLock = null; });
-        }
-      } catch (err) { console.warn("Wake Lock falló"); }
+    // --- FC MAX & COLORES HÍBRIDOS ---
+    function saveMaxHR(val) {
+      let num = parseInt(val);
+      if (isNaN(num) || num < 100 || num > 240) { alert("Introduce FC Máxima válida (100 - 240)"); document.getElementById('maxHrInput').value = localStorage.getItem('painCaveMaxHR') || 190; return; }
+      localStorage.setItem('painCaveMaxHR', num);
     }
-    
-    function releaseWakeLock() {
-      if (wakeLock !== null) { wakeLock.release().catch(()=>{}); wakeLock = null; }
-    }
-    
-    document.addEventListener('visibilitychange', async () => {
-      if (document.visibilityState === 'visible' && !isPaused && workout.length > 0) requestWakeLock();
-    });
-
-    function initAudio() {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-      } catch(e) {}
+    function updateInterfaceColors(bpm, fallbackRpe) {
+      let color = '#1D9E75'; const card = document.getElementById('mainCard');
+      card.className = "rounded-2xl p-4 md:p-5 mb-4 shadow-lg transition-colors duration-500";
+      if (isHRMConnected && bpm) {
+        const maxHr = parseInt(localStorage.getItem('painCaveMaxHR')) || 190;
+        const pct = (bpm / maxHr) * 100;
+        if (pct < 60) { color = '#3b82f6'; card.classList.add('bg-blue-950/40', 'border', 'border-blue-500/40'); }
+        else if (pct < 70) { color = '#10b981'; card.classList.add('bg-green-600/10', 'border', 'border-green-500/40'); }
+        else if (pct < 80) { color = '#eab308'; card.classList.add('bg-yellow-600/10', 'border', 'border-yellow-500/40'); }
+        else if (pct < 90) { color = '#f97316'; card.classList.add('bg-orange-900/30', 'border', 'border-orange-500/50'); }
+        else { color = '#ef4444'; card.classList.add('bg-red-900/40', 'border', 'border-red-500/50'); }
+      } else {
+        const rpe = fallbackRpe;
+        if (!rpe || rpe <= 4) { color = '#34D399'; card.classList.add('bg-slate-800', 'border', 'border-slate-700'); }
+        else if (rpe <= 6) { color = '#FBBF24'; card.classList.add('bg-slate-800', 'border', 'border-slate-700'); }
+        else if (rpe <= 8.5) { color = '#F97316'; card.classList.add('bg-orange-900/30', 'border', 'border-orange-500/50'); }
+        else { color = '#EF4444'; card.classList.add('bg-red-900/40', 'border', 'border-red-500/50'); }
+      }
+      document.getElementById('timerRing').style.stroke = color;
     }
 
-    function playBeep(freq, duration) {
-      try {
-        if (!audioCtx) return;
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.frequency.value = freq;
-        osc.type = 'sine';
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-        osc.stop(audioCtx.currentTime + duration);
-      } catch(e) {}
-    }
-
-    function announceText(text) {
-      try {
-        if (document.getElementById('voiceToggle').checked && 'speechSynthesis' in window) {
-          window.speechSynthesis.cancel(); 
-          const msg = new SpeechSynthesisUtterance(text);
-          msg.lang = 'es-ES'; msg.rate = 1.1; 
-          window.speechSynthesis.speak(msg);
-        }
-      } catch(e) {}
-    }
-
-    // --- SISTEMA DE ESTADÍSTICAS, GAMIFICACIÓN ÉPICA Y BACKUPS ---
+    // --- GAMIFICACIÓN ---
     const RANKS = [
-      { max: 1000, title: "Novato" },
-      { max: 3000, title: "Dominguero" },
-      { max: 7000, title: "Cicloturista" },
-      { max: 15000, title: "Aficionado" },
-      { max: 25000, title: "Rodador" },
-      { max: 40000, title: "Aguador" },
-      { max: 60000, title: "Gregario" },
-      { max: 85000, title: "Lanzador" },
-      { max: 120000, title: "Cazaetapas" },
-      { max: 160000, title: "Clasicómano" },
-      { max: 210000, title: "Escalador Puro" },
-      { max: 270000, title: "Contrarrelojista" },
-      { max: 350000, title: "Capo de Escuadra" },
-      { max: 450000, title: "Leyenda del Tour" },
-      { max: 550000, title: "Maillot Verde" }, 
-      { max: 700000, title: "Maillot a Lunares" }, 
-      { max: Infinity, title: "Maillot Amarillo" } 
+      { max: 1000, title: "Novato" }, { max: 3000, title: "Dominguero" }, { max: 7000, title: "Cicloturista" },
+      { max: 15000, title: "Aficionado" }, { max: 25000, title: "Rodador" }, { max: 40000, title: "Aguador" },
+      { max: 60000, title: "Gregario" }, { max: 85000, title: "Lanzador" }, { max: 120000, title: "Cazaetapas" },
+      { max: 160000, title: "Clasicómano" }, { max: 210000, title: "Escalador Puro" }, { max: 270000, title: "Contrarrelojista" },
+      { max: 350000, title: "Capo de Escuadra" }, { max: 450000, title: "Leyenda del Tour" },
+      { max: 550000, title: "Maillot Verde" }, { max: 700000, title: "Maillot a Lunares" }, { max: Infinity, title: "Maillot Amarillo" }
     ];
-
     function calculateRank(xp) {
-      let currentRank = RANKS[0];
-      let prevMax = 0;
-      for (let i = 0; i < RANKS.length; i++) {
-        if (xp < RANKS[i].max) {
-          currentRank = RANKS[i];
-          break;
-        }
-        prevMax = RANKS[i].max;
-      }
-      let progress = 100;
-      if (currentRank.max !== Infinity) {
-        progress = ((xp - prevMax) / (currentRank.max - prevMax)) * 100;
-      }
-      return { title: currentRank.title, nextGoal: currentRank.max, progress: Math.min(Math.max(progress, 0), 100) };
+      let r = RANKS[0]; let prev = 0;
+      for (let i = 0; i < RANKS.length; i++) { if (xp < RANKS[i].max) { r = RANKS[i]; break; } prev = RANKS[i].max; }
+      let p = r.max === Infinity ? 100 : ((xp - prev) / (r.max - prev)) * 100;
+      return { title: r.title, next: r.max, progress: Math.min(Math.max(p, 0), 100) };
     }
-
-    function getWeekStart(dateStr) {
-      const d = dateStr ? new Date(dateStr) : new Date();
-      d.setHours(0,0,0,0);
-      const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1); 
-      return new Date(d.setDate(diff)).getTime();
-    }
-
-    function initStats() {
-      if (!localStorage.getItem('painCaveStats')) {
-        localStorage.setItem('painCaveStats', JSON.stringify({
-          workouts: [], streak: 0, lastWorkoutDate: null, totalMinutes: 0, totalXP: 0
-        }));
-      }
-      updateMiniRank();
-    }
-    
-    function updateMiniRank() {
-      const stats = JSON.parse(localStorage.getItem('painCaveStats'));
-      const rankInfo = calculateRank(stats.totalXP || 0);
-      document.getElementById('miniRankText').textContent = rankInfo.title;
-    }
-    
+    function initStats() { if (!localStorage.getItem('painCaveStats')) localStorage.setItem('painCaveStats', JSON.stringify({workouts:[], streak:0, lastWorkoutDate:null, totalMinutes:0, totalXP:0})); updateMiniRank(); }
+    function updateMiniRank() { const xp = JSON.parse(localStorage.getItem('painCaveStats')).totalXP || 0; document.getElementById('miniRankText').textContent = calculateRank(xp).title; }
     initStats();
 
     function exportStats() {
-      const stats = localStorage.getItem('painCaveStats');
-      if (!stats) return alert('No hay datos para exportar.');
-      const blob = new Blob([stats], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      const date = new Date().toISOString().split('T')[0];
-      a.href = url;
-      a.download = `paincave-historial-${date}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      const stats = localStorage.getItem('painCaveStats'); if (!stats) return alert('No hay datos.');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([stats], {type:'application/json'}));
+      a.download = `paincave-${new Date().toISOString().split('T')[0]}.json`; a.click();
     }
-
-    function importStats(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = JSON.parse(e.target.result);
-          if (data && typeof data.totalMinutes !== 'undefined' && Array.isArray(data.workouts)) {
-            localStorage.setItem('painCaveStats', JSON.stringify(data));
-            updateMiniRank();
-            showStatsModal();
-            alert('¡Historial importado con éxito!');
-          } else {
-            alert('Error: Archivo no válido.');
-          }
-        } catch (err) {
-          alert('Error al leer el archivo JSON.');
-        }
-      };
-      reader.readAsText(file);
-      event.target.value = '';
+    function importStats(e) {
+      const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+      r.onload = ev => { try { const d = JSON.parse(ev.target.result); if(d && Array.isArray(d.workouts)){ localStorage.setItem('painCaveStats', JSON.stringify(d)); updateMiniRank(); showStatsModal(); alert('¡Importado!'); } else alert('JSON inválido'); } catch(e){ alert('Error al leer'); } }; r.readAsText(f); e.target.value = '';
     }
-
-    // --- MOTOR DE PROGRESO DINÁMICO ---
+    function getWeekStart(d) { d.setHours(0,0,0,0); return d.setDate(d.getDate() - d.getDay() + (d.getDay()===0?-6:1)); }
     function recordProgress() {
-      const stats = JSON.parse(localStorage.getItem('painCaveStats'));
-      const today = new Date();
-      const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-
-      const elapsedSeconds = workout.slice(0, currentStep).reduce((acc, step) => acc + step.t, 0) + (stepTotal - timeLeft);
-      if (elapsedSeconds < 10) return; 
-
-      if (stats.lastWorkoutDate) {
-        const currentWeekStart = getWeekStart(today);
-        const lastWeekStart = getWeekStart(new Date(stats.lastWorkoutDate));
-        const weekDiff = Math.round((currentWeekStart - lastWeekStart) / (7 * 24 * 60 * 60 * 1000));
-        if (weekDiff === 1) stats.streak += 1;
-        else if (weekDiff > 1) stats.streak = 1; 
-      } else {
-        stats.streak = 1;
-      }
-
-      stats.lastWorkoutDate = todayStr;
-      stats.workouts.push({ date: todayStr, session: currentSession, level: selectedLevel });
-      
-      const sessionMinutes = Math.floor(elapsedSeconds / 60);
-      stats.totalMinutes += sessionMinutes;
-
-      const xpMultipliers = { 'principiante': 0.10, 'amateur': 0.11, 'elite': 0.12, 'pro': 0.13 };
-      const currentMultiplier = xpMultipliers[selectedLevel] || 0.10;
-      const xpEarned = Math.floor(elapsedSeconds * currentMultiplier);
-      
-      stats.totalXP = (stats.totalXP || 0) + xpEarned;
-
-      localStorage.setItem('painCaveStats', JSON.stringify(stats));
-      updateMiniRank();
+      const stats = JSON.parse(localStorage.getItem('painCaveStats')); const today = new Date(); const todayStr = today.toISOString().split('T')[0];
+      const elapsed = workout.slice(0, currentStep).reduce((acc, step) => acc + step.t, 0) + (stepTotal - timeLeft);
+      if (elapsed < 10) return;
+      if (stats.lastWorkoutDate) { const wd = Math.round((getWeekStart(today) - getWeekStart(new Date(stats.lastWorkoutDate))) / 604800000); stats.streak = wd === 1 ? stats.streak + 1 : (wd > 1 ? 1 : stats.streak); } else stats.streak = 1;
+      stats.lastWorkoutDate = todayStr; stats.workouts.push({ date: todayStr, session: currentSession, level: selectedLevel }); stats.totalMinutes += Math.floor(elapsed / 60);
+      const m = { 'principiante': 0.10, 'amateur': 0.11, 'elite': 0.12, 'pro': 0.13 };
+      stats.totalXP = (stats.totalXP || 0) + Math.floor(elapsed * (m[selectedLevel] || 0.10));
+      localStorage.setItem('painCaveStats', JSON.stringify(stats)); updateMiniRank();
     }
 
     function renderCalendar() {
-      const stats = JSON.parse(localStorage.getItem('painCaveStats'));
-      const calEl = document.getElementById('calendarGrid');
-      calEl.innerHTML = '';
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth();
-
-      const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-      document.getElementById('calendarMonthLabel').textContent = `${meses[month]} ${year}`;
-
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      let firstDay = new Date(year, month, 1).getDay() - 1;
-      if (firstDay === -1) firstDay = 6; 
-
-      for(let i=0; i<firstDay; i++) {
-        let empty = document.createElement('div');
-        empty.className = "p-1 rounded bg-slate-800/30 h-10";
-        calEl.appendChild(empty);
-      }
-
-      const levelValue = { 'principiante': 1, 'amateur': 2, 'elite': 3, 'pro': 4 };
-      const levelColor = { 'principiante': 'text-green-500', 'amateur': 'text-blue-500', 'elite': 'text-orange-500', 'pro': 'text-red-500' };
-
-      for(let d=1; d<=daysInMonth; d++) {
-        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const isToday = today.getDate() === d;
-        const dayWorkouts = stats.workouts.filter(w => w.date === dateStr);
-        let cell = document.createElement('div');
-        cell.className = `flex flex-col items-center justify-center p-1 rounded h-10 border ${isToday ? 'border-slate-500 bg-slate-700/50' : 'border-slate-700/50 bg-slate-800'}`;
-        let numSpan = `<span class="text-[10px] ${isToday ? 'text-white font-bold' : 'text-slate-400'} leading-none">${d}</span>`;
-
-        if(dayWorkouts.length > 0) {
-          let highestLevel = 'principiante';
-          let maxVal = 0;
-          dayWorkouts.forEach(w => {
-            if (levelValue[w.level] > maxVal) { maxVal = levelValue[w.level]; highestLevel = w.level; }
-          });
-          let color = levelColor[highestLevel] || 'text-blue-500';
-          cell.innerHTML = `${numSpan}<i class="ti ti-flame text-base ${color} mt-0.5"></i>`;
-        } else {
-          cell.innerHTML = `${numSpan}`;
-        }
-        calEl.appendChild(cell);
+      const stats = JSON.parse(localStorage.getItem('painCaveStats')); const cal = document.getElementById('calendarGrid'); cal.innerHTML = '';
+      const t = new Date(); const m = t.getMonth(); const y = t.getFullYear();
+      document.getElementById('calendarMonthLabel').textContent = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][m] + ' ' + y;
+      let fDay = new Date(y, m, 1).getDay() - 1; if(fDay===-1) fDay=6;
+      for(let i=0; i<fDay; i++) cal.innerHTML += `<div class="p-1 rounded bg-slate-800/30 h-10"></div>`;
+      const clr = { 'principiante': 'text-green-500', 'amateur': 'text-blue-500', 'elite': 'text-orange-500', 'pro': 'text-red-500' };
+      for(let d=1; d<=new Date(y, m+1, 0).getDate(); d++) {
+        const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const ws = stats.workouts.filter(w=>w.date===ds);
+        let html = `<span class="text-[10px] ${t.getDate()===d ? 'text-white font-bold' : 'text-slate-400'} leading-none">${d}</span>`;
+        if(ws.length>0) { let best='principiante'; let max=0; ws.forEach(w=>{const v={'principiante':1,'amateur':2,'elite':3,'pro':4}[w.level]; if(v>max){max=v; best=w.level;}}); html += `<i class="ti ti-flame text-base ${clr[best]} mt-0.5"></i>`; }
+        cal.innerHTML += `<div class="flex flex-col items-center justify-center p-1 rounded h-10 border ${t.getDate()===d ? 'border-slate-500 bg-slate-700/50' : 'border-slate-700/50 bg-slate-800'}">${html}</div>`;
       }
     }
-
     function showStatsModal() {
-      const stats = JSON.parse(localStorage.getItem('painCaveStats'));
-      if (stats.lastWorkoutDate) {
-        const currentWeekStart = getWeekStart(new Date());
-        const lastWeekStart = getWeekStart(new Date(stats.lastWorkoutDate));
-        const weekDiff = Math.round((currentWeekStart - lastWeekStart) / (7 * 24 * 60 * 60 * 1000));
-        if (weekDiff > 1 && stats.streak > 0) {
-          stats.streak = 0;
-          localStorage.setItem('painCaveStats', JSON.stringify(stats));
-        }
-      }
-
-      document.getElementById('statStreak').textContent = stats.streak;
-      const hours = Math.floor(stats.totalMinutes / 60);
-      const mins = stats.totalMinutes % 60;
-      document.getElementById('statTotalTime').textContent = `${hours}h ${mins}m`;
-
-      const xp = stats.totalXP || 0;
-      const rankInfo = calculateRank(xp);
-      document.getElementById('rankTitle').textContent = rankInfo.title;
-      document.getElementById('currentXpText').textContent = `${xp} XP`;
-      document.getElementById('nextRankXpText').textContent = rankInfo.nextGoal === Infinity ? "MAX" : `${rankInfo.nextGoal} XP`;
-      document.getElementById('rankProgressBar').style.width = `${rankInfo.progress}%`;
-
-      renderCalendar();
-      openModal('statsModal');
+      const stats = JSON.parse(localStorage.getItem('painCaveStats')); document.getElementById('statStreak').textContent = stats.streak || 0;
+      document.getElementById('statTotalTime').textContent = `${Math.floor(stats.totalMinutes/60)}h ${stats.totalMinutes%60}m`;
+      const rank = calculateRank(stats.totalXP || 0); document.getElementById('rankTitle').textContent = rank.title;
+      document.getElementById('currentXpText').textContent = `${stats.totalXP || 0} XP`; document.getElementById('nextRankXpText').textContent = rank.next === Infinity ? "MAX" : `${rank.next} XP`;
+      document.getElementById('rankProgressBar').style.width = `${rank.progress}%`;
+      document.getElementById('maxHrInput').value = localStorage.getItem('painCaveMaxHR') || 190;
+      renderCalendar(); openModal('statsModal');
     }
 
-    // --- BASE DE DATOS DE RUTINAS ---
+    // --- RUTINAS ESTÁNDAR ---
     const WORKOUTS = {
       escalada: {
-        principiante: [
-          { desc: "Rodaje de calentamiento (Zona 1) [Cadencia 85 RPM] [RPE 3]", t: 180 },
-          { desc: "Activación muscular (Zona 2) [Cadencia 90 RPM] [RPE 4]", t: 120 },
-          { desc: "Subida sostenida (A ritmo, sentado) [Cadencia 75 RPM] [RPE 6]", t: 120 },
-          { desc: "Falso llano (Rodar suave) [Cadencia 85 RPM] [RPE 3]", t: 60 },
-          { desc: "Subida sostenida (A ritmo, sentado) [Cadencia 75 RPM] [RPE 6]", t: 120 },
-          { desc: "Aproximación a cumbre (Tensión constante, de pie) [Cadencia 70 RPM] [RPE 7.5]", t: 90 },
-          { desc: "Descenso largo (Recuperación activa) [Cadencia 80 RPM] [RPE 2]", t: 240 }
-        ],
-        amateur: [
-          { desc: "Rodaje ágil (A soltar piernas) [Cadencia 90 RPM] [RPE 4]", t: 180 },
-          { desc: "Búsqueda de ritmo (Pelotón agrupado) [Cadencia 100 RPM] [RPE 5]", t: 180 },
-          { desc: "Inicio de puerto (Preparando desarrollo) [Cadencia 85 RPM] [RPE 4]", t: 60 },
-          { desc: "Rampas del 5% (Ritmo diesel, sentado) [Cadencia 80 RPM] [RPE 6]", t: 180 },
-          { desc: "Zona del 8% (Atranque moderado, sentado) [Cadencia 65 RPM] [RPE 8]", t: 240 },
-          { desc: "Herradura interior (Ataque corto, de pie) [Cadencia 65 RPM] [RPE 9]", t: 45 },
-          { desc: "Salida de curva (Volver a ritmo, sentado) [Cadencia 70 RPM] [RPE 8]", t: 75 },
-          { desc: "Último Kilómetro (A tope hasta la pancarta, de pie) [Cadencia 60 RPM] [RPE 9.5]", t: 180 },
-          { desc: "Coronado y descenso (Giro suave) [Cadencia 85 RPM] [RPE 2]", t: 300 }
-        ],
-        elite: [
-          { desc: "Rodaje pre-carrera (Entrando en calor) [Cadencia 95 RPM] [RPE 5]", t: 180 },
-          { desc: "Aproximación rápida (Fila india) [Cadencia 80 RPM] [RPE 6]", t: 120 },
-          { desc: "Puerto de 1ª Categoría (Zona umbral, sentado) [Cadencia 60 RPM] [RPE 8.5]", t: 300 },
-          { desc: "Cambio de ritmo (Respondiendo ataque, de pie) [Cadencia 65 RPM] [RPE 9.5]", t: 60 },
-          { desc: "Mantenimiento (Consolidar hueco, sentado) [Cadencia 60 RPM] [RPE 8.5]", t: 60 },
-          { desc: "Cambio de ritmo (Respondiendo ataque, de pie) [Cadencia 65 RPM] [RPE 9.5]", t: 60 },
-          { desc: "Rampas del 14% (Supervivencia, de pie) [Cadencia 55 RPM] [RPE 10]", t: 120 },
-          { desc: "Sprint por la etapa (Todo a los pedales) [Cadencia 75 RPM] [RPE 10]", t: 30 },
-          { desc: "Regreso grupeto (Soltar piernas) [Cadencia 80 RPM] [RPE 2]", t: 300 }
-        ],
-        pro: [
-          { desc: "Calentamiento Pro (Subiendo pulso al Umbral) [Cadencia 100 RPM] [RPE 5]", t: 240 },
-          { desc: "Ascensión Hors Catégorie (Atranque total, sentado) [Cadencia 50 RPM] [RPE 9]", t: 420 },
-          { desc: "Latigazo en el grupo (Potencia pura, de pie) [Cadencia 70 RPM] [RPE 10]", t: 30 },
-          { desc: "Aguantar rueda (Recuperación nula, sentado) [Cadencia 55 RPM] [RPE 8.5]", t: 30 },
-          { desc: "Latigazo en el grupo (Potencia pura, de pie) [Cadencia 70 RPM] [RPE 10]", t: 30 },
-          { desc: "El Muro Final (Agonía máxima, de pie) [Cadencia 60 RPM] [RPE 10]", t: 180 },
-          { desc: "Etapa finalizada (Rodaje regenerativo) [Cadencia 85 RPM] [RPE 2]", t: 300 }
-        ]
+        principiante: [{desc:"Calentamiento [Cadencia 85 RPM] [RPE 3]", t:180}, {desc:"Subida [Cadencia 75 RPM] [RPE 6]", t:120}, {desc:"Cumbre de pie [Cadencia 70 RPM] [RPE 7.5]", t:90}, {desc:"Descenso [Cadencia 80 RPM] [RPE 2]", t:240}],
+        amateur: [{desc:"Rodaje ágil [Cadencia 90 RPM] [RPE 4]", t:180}, {desc:"Rampa 5% [Cadencia 80 RPM] [RPE 6]", t:180}, {desc:"Rampa 8% [Cadencia 65 RPM] [RPE 8]", t:240}, {desc:"Ataque de pie [Cadencia 60 RPM] [RPE 9.5]", t:180}, {desc:"Descenso [Cadencia 85 RPM] [RPE 2]", t:300}],
+        elite: [{desc:"Pre-carrera [Cadencia 95 RPM] [RPE 5]", t:180}, {desc:"Puerto 1ª Cat [Cadencia 60 RPM] [RPE 8.5]", t:300}, {desc:"Rampa 14% de pie [Cadencia 55 RPM] [RPE 10]", t:120}, {desc:"Vuelta a calma [Cadencia 80 RPM] [RPE 2]", t:300}],
+        pro: [{desc:"Calentamiento Pro [Cadencia 100 RPM] [RPE 5]", t:240}, {desc:"Hors Catégorie [Cadencia 50 RPM] [RPE 9]", t:420}, {desc:"Muro Final de pie [Cadencia 60 RPM] [RPE 10]", t:180}, {desc:"Enfriamiento [Cadencia 85 RPM] [RPE 2]", t:300}]
       },
       hiit: {
-        principiante: [
-          { desc: "Paseo de calentamiento (Zona 1) [Cadencia 85 RPM] [RPE 3]", t: 240 },
-          { desc: "Cambio de ritmo suave (Agilidad, sentado) [Cadencia 100 RPM] [RPE 7.5]", t: 20 },
-          { desc: "Volver al pelotón (Recuperación) [Cadencia 80 RPM] [RPE 2]", t: 40 },
-          { desc: "Cambio de ritmo suave (Agilidad, sentado) [Cadencia 100 RPM] [RPE 7.5]", t: 20 },
-          { desc: "Volver al pelotón (Recuperación) [Cadencia 80 RPM] [RPE 2]", t: 40 },
-          { desc: "Vuelta a la calma (Rodar ligero) [Cadencia 80 RPM] [RPE 2]", t: 180 }
-        ],
-        amateur: [
-          { desc: "Rodaje alegre (Entrando en zona) [Cadencia 90 RPM] [RPE 4]", t: 180 },
-          { desc: "Series cortas (Despertar piernas) [Cadencia 105 RPM] [RPE 6]", t: 120 },
-          { desc: "Sprint en llano (Cerrar hueco, de pie) [Cadencia 115 RPM] [RPE 10]", t: 30 },
-          { desc: "A rueda (Descanso, sentado) [Cadencia 80 RPM] [RPE 2]", t: 30 },
-          { desc: "Zona de avituallamiento (Descanso largo) [Cadencia 75 RPM] [RPE 2]", t: 180 },
-          { desc: "Intervalo Umbral (Esfuerzo constante, sentado) [Cadencia 95 RPM] [RPE 8.5]", t: 45 },
-          { desc: "Micro descanso [Cadencia 80 RPM] [RPE 3]", t: 45 },
-          { desc: "Pancarta de meta (Sprint sostenido, de pie) [Cadencia 110 RPM] [RPE 10]", t: 60 },
-          { desc: "Lavado de ácido láctico (Rodillo suave) [Cadencia 80 RPM] [RPE 2]", t: 240 }
-        ],
-        elite: [
-          { desc: "Rodaje exigente (Pelotón rápido) [Cadencia 95 RPM] [RPE 5]", t: 240 },
-          { desc: "Ataque explosivo (Potencia Anaeróbica, de pie) [Cadencia 120 RPM] [RPE 10]", t: 40 },
-          { desc: "Pausa táctica (Sentado) [Cadencia 70 RPM] [RPE 2]", t: 20 },
-          { desc: "Ataque explosivo (Potencia Anaeróbica, de pie) [Cadencia 120 RPM] [RPE 10]", t: 40 },
-          { desc: "Tregua en el grupo (Rodar fácil) [Cadencia 80 RPM] [RPE 2]", t: 120 },
-          { desc: "Series VO2 Max (Rozando el límite, sentado) [Cadencia 100 RPM] [RPE 9.5]", t: 60 },
-          { desc: "Recuperación incompleta [Cadencia 75 RPM] [RPE 3]", t: 30 },
-          { desc: "Enfriamiento (Rodaje en Zona 1) [Cadencia 85 RPM] [RPE 2]", t: 300 }
-        ],
-        pro: [
-          { desc: "Rodaje Pro (Ritmo vivo desde salida) [Cadencia 100 RPM] [RPE 6]", t: 180 },
-          { desc: "Arranque de Velódromo (Máximos vatios, de pie) [Cadencia 125 RPM] [RPE 10]", t: 30 },
-          { desc: "Supervivencia pura (Sentado) [Cadencia 60 RPM] [RPE 2]", t: 15 },
-          { desc: "Arranque de Velódromo (Máximos vatios, de pie) [Cadencia 125 RPM] [RPE 10]", t: 30 },
-          { desc: "Descenso de transición (Bajar pulso) [Cadencia 80 RPM] [RPE 2]", t: 120 },
-          { desc: "Bloque al Umbral FTP (Dolor constante, sentado) [Cadencia 105 RPM] [RPE 10]", t: 60 },
-          { desc: "Micro-pausa [Cadencia 70 RPM] [RPE 3]", t: 30 },
-          { desc: "Lanzamiento final (Vaciando el tanque, de pie) [Cadencia 115 RPM] [RPE 10]", t: 120 },
-          { desc: "Recuperación post-carrera (Sobreviviste) [Cadencia 80 RPM] [RPE 2]", t: 300 }
-        ]
+        principiante: [{desc:"Calentamiento [Cadencia 85 RPM] [RPE 3]", t:240}, {desc:"Acelerón ágil [Cadencia 100 RPM] [RPE 7.5]", t:60}, {desc:"Soltar [Cadencia 80 RPM] [RPE 2]", t:180}],
+        amateur: [{desc:"Rodaje [Cadencia 90 RPM] [RPE 4]", t:180}, {desc:"Sprint de pie [Cadencia 115 RPM] [RPE 10]", t:30}, {desc:"Intervalo FTP [Cadencia 95 RPM] [RPE 8.5]", t:60}, {desc:"Lavado [Cadencia 80 RPM] [RPE 2]", t:240}],
+        elite: [{desc:"Pelotón rápido [Cadencia 95 RPM] [RPE 5]", t:240}, {desc:"Ataque explosivo [Cadencia 120 RPM] [RPE 10]", t:40}, {desc:"VO2 Max [Cadencia 100 RPM] [RPE 9.5]", t:60}, {desc:"Enfriamiento [Cadencia 85 RPM] [RPE 2]", t:300}],
+        pro: [{desc:"Rodaje vivo [Cadencia 100 RPM] [RPE 6]", t:180}, {desc:"Velódromo sprint [Cadencia 125 RPM] [RPE 10]", t:30}, {desc:"FTP Infierno [Cadencia 105 RPM] [RPE 10]", t:60}, {desc:"Recuperación [Cadencia 80 RPM] [RPE 2]", t:300}]
       }
     };
 
-    let timerInterval = null;
-    let currentStep = 0;
-    let isPaused = false;
-    let timeLeft = 0;
-    let stepTotal = 0;
-    let workout = [];
-    let currentSession = '';
-    let selectedLevel = 'amateur';
-    let tempWorkoutBuffer = null; 
+    let timerInterval=null; let currentStep=0; let isPaused=false; let timeLeft=0; let stepTotal=0; let workout=[]; let currentSession=''; let selectedLevel='amateur'; let tempWorkoutBuffer=null; const CIRC = 2 * Math.PI * 90;
 
-    const CIRC = 2 * Math.PI * 90; 
-
-    function openModal(id) {
-      document.getElementById('modalOverlay').classList.remove('hidden');
-      document.getElementById('modalOverlay').classList.add('flex');
-      ['preWorkoutModal', 'resumeModal', 'customModal', 'statsModal', 'exitModal'].forEach(m => document.getElementById(m).classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    function closeModals() {
-      document.getElementById('modalOverlay').classList.add('hidden');
-      document.getElementById('modalOverlay').classList.remove('flex');
-    }
-
-    function saveState() {
-      if (workout.length === 0 || currentStep >= workout.length) {
-        localStorage.removeItem('bikeWorkoutState');
-        return;
-      }
-      const state = { workout, currentStep, timeLeft, currentSession, isPaused: true, selectedLevel }; 
-      localStorage.setItem('bikeWorkoutState', JSON.stringify(state));
-    }
-
-    window.onload = () => {
-      const saved = localStorage.getItem('bikeWorkoutState');
-      if (saved) openModal('resumeModal');
-    };
-
-    function resumeSavedState() {
-      const state = JSON.parse(localStorage.getItem('bikeWorkoutState'));
-      workout = state.workout;
-      currentStep = state.currentStep;
-      timeLeft = state.timeLeft;
-      currentSession = state.currentSession;
-      selectedLevel = state.selectedLevel || 'amateur';
-      stepTotal = workout[currentStep].t;
-      isPaused = true; 
-
-      document.getElementById('sessionLabel').textContent = currentSession;
-      closeModals();
-      buildDots();
-      renderStep();
-      togglePause(); 
-    }
-
-    function discardSavedState() {
-      localStorage.removeItem('bikeWorkoutState');
-      closeModals();
-    }
-
+    function openModal(id) { document.getElementById('modalOverlay').classList.replace('hidden','flex'); ['preWorkoutModal','resumeModal','customModal','statsModal','exitModal'].forEach(m => document.getElementById(m).classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+    function closeModals() { document.getElementById('modalOverlay').classList.replace('flex','hidden'); }
+    function saveState() { if(workout.length===0 || currentStep>=workout.length){ localStorage.removeItem('bikeWorkoutState'); return; } localStorage.setItem('bikeWorkoutState', JSON.stringify({ workout, currentStep, timeLeft, currentSession, isPaused: true, selectedLevel })); }
+    window.onload = () => { if(localStorage.getItem('bikeWorkoutState')) openModal('resumeModal'); };
+    function resumeSavedState() { const s = JSON.parse(localStorage.getItem('bikeWorkoutState')); workout=s.workout; currentStep=s.currentStep; timeLeft=s.timeLeft; currentSession=s.currentSession; selectedLevel=s.selectedLevel||'amateur'; stepTotal=workout[currentStep].t; isPaused=true; document.getElementById('sessionLabel').textContent=currentSession; closeModals(); buildDots(); renderStep(); togglePause(); }
+    function discardSavedState() { localStorage.removeItem('bikeWorkoutState'); closeModals(); }
     function setLevel(lvl) { selectedLevel = lvl; }
 
     function parseStep(desc) {
-      const rawText = desc.split('[')[0].trim();
-      const phase = rawText.split('(')[0].trim();
-      const parteMatch = rawText.match(/\(([^)]+)\)/);
-      const parte = parteMatch ? parteMatch[1] : '';
-      const cadMatch = desc.match(/Cadencia (\d+) RPM/);
-      const rpeMatch = desc.match(/RPE ([\d.]+)/);
-      const lowerDesc = desc.toLowerCase();
-      let posture = '';
-      if (lowerDesc.includes('de pie')) posture = 'de pie';
-      else if (lowerDesc.includes('sentado')) posture = 'sentado';
-      return { phase, parte, cad: cadMatch ? cadMatch[1] : '—', rpe: rpeMatch ? parseFloat(rpeMatch[1]) : null, posture };
-    }
-
-    function rpeColor(rpe) {
-      if (!rpe) return '#1D9E75'; 
-      if (rpe <= 4) return '#34D399'; 
-      if (rpe <= 6) return '#FBBF24'; 
-      if (rpe <= 8) return '#F97316'; 
-      return '#EF4444'; 
-    }
-
-    function updateCardBackground(rpe) {
-      const card = document.getElementById('mainCard');
-      card.classList.remove('bg-slate-800', 'border-slate-700', 'bg-red-900/40', 'border-red-500/50', 'bg-orange-900/30', 'border-orange-500/50');
-      if (!rpe || rpe <= 6) card.classList.add('bg-slate-800', 'border-slate-700');
-      else if (rpe <= 8.5) card.classList.add('bg-orange-900/30', 'border-orange-500/50');
-      else card.classList.add('bg-red-900/40', 'border-red-500/50'); 
-    }
-
-    function updateRing(fraction) {
-      document.getElementById('timerRing').style.strokeDashoffset = CIRC * (1 - fraction);
+      const p = desc.split('[')[0].split('(')[0].trim(); const pm = desc.match(/\(([^)]+)\)/); const parte = pm ? pm[1] : '';
+      const cm = desc.match(/Cadencia (\d+) RPM/); const rm = desc.match(/RPE ([\d.]+)/);
+      let pos = desc.toLowerCase().includes('de pie') ? 'de pie' : (desc.toLowerCase().includes('sentado') ? 'sentado' : '');
+      return { phase:p, parte, cad: cm?cm[1]:'—', rpe: rm?parseFloat(rm[1]):null, posture:pos };
     }
 
     function buildDots() {
-      const container = document.getElementById('stepDots');
-      container.innerHTML = '';
-      const max = Math.min(workout.length, 20);
-      for (let i = 0; i < max; i++) {
-        const d = document.createElement('div');
-        d.id = 'dot-' + i;
-        container.appendChild(d);
-      }
-      if (workout.length > 20) {
-        const span = document.createElement('span');
-        span.className = 'text-[11px] text-slate-500 font-bold ml-1';
-        span.textContent = '+' + (workout.length - 20);
-        container.appendChild(span);
-      }
+      const c = document.getElementById('stepDots'); c.innerHTML=''; const max = Math.min(workout.length, 20);
+      for(let i=0; i<max; i++) { const d = document.createElement('div'); d.id='dot-'+i; c.appendChild(d); }
+      if(workout.length>20){ const s=document.createElement('span'); s.className='text-[11px] text-slate-500 font-bold ml-1'; s.textContent='+'+(workout.length-20); c.appendChild(s); }
     }
-
     function updateDots() {
-      const max = Math.min(workout.length, 20);
-      for (let i = 0; i < max; i++) {
-        const d = document.getElementById('dot-' + i);
-        if (!d) continue;
-        const baseClass = 'rounded-full transition-all duration-300 ';
-        if (i < currentStep) d.className = baseClass + 'w-[7px] h-[7px] bg-[#1D9E75]';
-        else if (i === currentStep) d.className = baseClass + 'w-[10px] h-[10px] bg-[#378ADD] shadow-[0_0_8px_#378ADD]';
-        else d.className = baseClass + 'w-[7px] h-[7px] bg-slate-700';
+      for(let i=0; i<Math.min(workout.length, 20); i++) {
+        const d=document.getElementById('dot-'+i); if(!d)continue;
+        d.className = 'rounded-full transition-all duration-300 ' + (i<currentStep ? 'w-[7px] h-[7px] bg-[#1D9E75]' : (i===currentStep ? 'w-[10px] h-[10px] bg-[#378ADD] shadow-[0_0_8px_#378ADD]' : 'w-[7px] h-[7px] bg-slate-700'));
       }
     }
-
-    function fmt(s) {
-      return Math.floor(s/60).toString().padStart(2,'0') + ':' + (s%60).toString().padStart(2,'0');
-    }
+    function fmt(s) { return Math.floor(s/60).toString().padStart(2,'0')+':'+(s%60).toString().padStart(2,'0'); }
 
     function resetWorkout() {
-      if(workout.length === 0) return;
-      isPaused = true;
-      document.getElementById('timerDisplay').classList.add('opacity-50', 'animate-pulse');
-      document.getElementById('tapActionText').textContent = "Reanudar";
-
-      const elapsedSeconds = workout.slice(0, currentStep).reduce((acc, step) => acc + step.t, 0) + (stepTotal - timeLeft);
-      if (elapsedSeconds >= 15) { openModal('exitModal'); } 
-      else { forceFullReset(); }
+      if(workout.length===0) return; isPaused=true; document.getElementById('timerDisplay').classList.add('opacity-50','animate-pulse'); document.getElementById('tapActionText').textContent="Reanudar";
+      if ((workout.slice(0, currentStep).reduce((acc, s)=>acc+s.t,0)+(stepTotal-timeLeft)) >= 15) openModal('exitModal'); else forceFullReset();
     }
-
-    function cancelExit() {
-      closeModals();
-      isPaused = false;
-      document.getElementById('timerDisplay').classList.remove('opacity-50', 'animate-pulse');
-      document.getElementById('tapActionText').textContent = "Pausar";
-    }
-
-    function confirmExit(shouldSave) {
-      if (shouldSave) recordProgress();
-      closeModals();
-      forceFullReset();
-    }
-
-    function forceFullReset() {
-      clearInterval(timerInterval);
-      releaseWakeLock();
-      localStorage.removeItem('bikeWorkoutState');
-      
-      workout = []; currentStep = 0; isPaused = false;
-      
-      document.getElementById('timerDisplay').classList.remove('opacity-50', 'animate-pulse');
-      document.getElementById('tapActionText').textContent = "Pausar";
-      document.getElementById('sessionLabel').textContent = 'Selecciona una rutina';
-      document.getElementById('timerDisplay').textContent = '00:00';
-      document.getElementById('globalTime').textContent = '00:00 / 00:00';
-      document.getElementById('globalProgress').style.width = '0%';
-      document.getElementById('exPhase').textContent = '—';
-      document.getElementById('exName').textContent = 'Esperando al ciclista...';
-      document.getElementById('exPart').textContent = 'Súbete a la bici y elige una ruta';
-      document.getElementById('cadVal').textContent = '—';
-      document.getElementById('rpeVal').textContent = '—';
-      document.getElementById('rpeFill').style.width = '0%';
-      document.getElementById('nextName').textContent = '—';
-      document.getElementById('nextMeta').textContent = '—';
-      document.getElementById('stepCounter').textContent = '— / —';
-      document.getElementById('stepDots').innerHTML = '';
-      updateRing(0); updateCardBackground(0);
-    }
+    function cancelExit() { closeModals(); isPaused=false; document.getElementById('timerDisplay').classList.remove('opacity-50','animate-pulse'); document.getElementById('tapActionText').textContent="Pausar"; }
+    function confirmExit(save) { if(save) recordProgress(); closeModals(); forceFullReset(); }
+    function forceFullReset() { clearInterval(timerInterval); releaseWakeLock(); localStorage.removeItem('bikeWorkoutState'); workout=[]; currentStep=0; isPaused=false; document.getElementById('timerDisplay').classList.remove('opacity-50','animate-pulse'); document.getElementById('tapActionText').textContent="Pausar"; document.getElementById('sessionLabel').textContent='Selecciona una rutina'; document.getElementById('timerDisplay').textContent='00:00'; document.getElementById('globalTime').textContent='00:00 / 00:00'; document.getElementById('globalProgress').style.width='0%'; document.getElementById('exPhase').textContent='—'; document.getElementById('exName').textContent='Esperando ciclista...'; document.getElementById('exPart').textContent='Súbete a la bici y elige una ruta'; document.getElementById('cadVal').textContent='—'; document.getElementById('rpeVal').textContent='—'; document.getElementById('rpeFill').style.width='0%'; document.getElementById('nextName').textContent='—'; document.getElementById('nextMeta').textContent='—'; document.getElementById('stepCounter').textContent='— / —'; document.getElementById('stepDots').innerHTML=''; updateInterfaceColors(null, 0); }
 
     function updateGlobalProgress() {
-      if(workout.length === 0) return;
-      const totalTime = workout.reduce((acc, step) => acc + step.t, 0);
-      const timeCompletedInPastSteps = workout.slice(0, currentStep).reduce((acc, step) => acc + step.t, 0);
-      const elapsed = timeCompletedInPastSteps + (stepTotal - timeLeft);
-      document.getElementById('globalTime').textContent = `${fmt(elapsed)} / ${fmt(totalTime)}`;
-      document.getElementById('globalProgress').style.width = `${(elapsed / totalTime) * 100}%`;
+      if(workout.length===0) return; const tT = workout.reduce((a, s)=>a+s.t,0); const el = workout.slice(0, currentStep).reduce((a, s)=>a+s.t,0) + (stepTotal - timeLeft);
+      document.getElementById('globalTime').textContent=`${fmt(el)} / ${fmt(tT)}`; document.getElementById('globalProgress').style.width=`${(el/tT)*100}%`;
     }
 
     function renderStep() {
       if (currentStep >= workout.length) {
-        document.getElementById('sessionLabel').textContent = '¡Sesión completada! 🎉';
-        document.getElementById('exName').textContent = 'Ruta finalizada';
-        document.getElementById('exPhase').textContent = 'META';
-        document.getElementById('exPart').textContent = 'Gran esfuerzo. Recupera el aliento e hidrátate.';
-        document.getElementById('timerDisplay').textContent = '00:00';
-        document.getElementById('stepCounter').textContent = workout.length + ' / ' + workout.length;
-        updateDots(); updateRing(0); updateCardBackground(0);
-        document.getElementById('globalProgress').style.width = '100%';
-        releaseWakeLock();
-        localStorage.removeItem('bikeWorkoutState');
-        
-        recordProgress(); 
-        
-        playBeep(523.25, 0.2); setTimeout(() => playBeep(659.25, 0.2), 200); setTimeout(() => playBeep(783.99, 0.4), 400);
-        return;
+        document.getElementById('sessionLabel').textContent='¡Completado! 🎉'; document.getElementById('exName').textContent='Finalizada'; document.getElementById('exPhase').textContent='META'; document.getElementById('exPart').textContent='Gran esfuerzo.'; document.getElementById('timerDisplay').textContent='00:00'; document.getElementById('stepCounter').textContent=workout.length+' / '+workout.length; updateDots(); document.getElementById('timerRing').style.strokeDashoffset=CIRC; updateInterfaceColors(null,0); document.getElementById('globalProgress').style.width='100%'; releaseWakeLock(); localStorage.removeItem('bikeWorkoutState'); recordProgress(); playBeep(523.25, 0.2); return;
       }
-
-      const step = workout[currentStep];
-      const data = parseStep(step.desc);
-      stepTotal = step.t;
-      if (!isPaused || timeLeft === 0) timeLeft = step.t; 
-
-      document.getElementById('exPhase').textContent = data.phase;
-      document.getElementById('exName').textContent = data.phase;
-      document.getElementById('exPart').textContent = data.parte;
-      document.getElementById('cadVal').textContent = data.cad;
-      const rpe = data.rpe;
-      document.getElementById('rpeVal').textContent = rpe !== null ? rpe : '—';
-      const fill = document.getElementById('rpeFill');
-      fill.style.width = rpe ? (rpe / 10 * 100) + '%' : '0%';
-      fill.style.background = rpeColor(rpe);
-      document.getElementById('timerRing').style.stroke = rpeColor(rpe);
+      const st = workout[currentStep]; const d = parseStep(st.desc); stepTotal=st.t; if(!isPaused || timeLeft===0) timeLeft=st.t; 
+      document.getElementById('exPhase').textContent=d.phase; document.getElementById('exName').textContent=d.phase; document.getElementById('exPart').textContent=d.parte; document.getElementById('cadVal').textContent=d.cad; document.getElementById('rpeVal').textContent=d.rpe!==null?d.rpe:'—'; document.getElementById('rpeFill').style.width=d.rpe?(d.rpe/10*100)+'%':'0%';
       
-      updateCardBackground(rpe);
-      document.getElementById('stepCounter').textContent = (currentStep + 1) + ' / ' + workout.length;
-      updateDots(); updateRing(1); updateGlobalProgress();
+      const currentBpm = isHRMConnected ? parseInt(document.getElementById('bpmVal').textContent) : null;
+      updateInterfaceColors(currentBpm, d.rpe);
 
-      const next = workout[currentStep + 1];
-      if (next) {
-        const nd = parseStep(next.desc);
-        document.getElementById('nextName').textContent = nd.phase + (nd.parte ? ' — ' + nd.parte : '');
-        document.getElementById('nextMeta').textContent = nd.cad + ' RPM · RPE ' + (nd.rpe ?? '—') + ' · ' + fmt(next.t);
-      } else {
-        document.getElementById('nextName').textContent = 'Llegando a meta';
-        document.getElementById('nextMeta').textContent = '';
-      }
-
-      clearInterval(timerInterval);
-      timerInterval = setInterval(tick, 1000);
-      saveState();
+      document.getElementById('stepCounter').textContent=(currentStep+1)+' / '+workout.length; updateDots(); document.getElementById('timerRing').style.strokeDashoffset=0; updateGlobalProgress();
+      const n = workout[currentStep+1]; if(n){ const nd=parseStep(n.desc); document.getElementById('nextName').textContent=nd.phase+(nd.parte?' — '+nd.parte:''); document.getElementById('nextMeta').textContent=nd.cad+' RPM · RPE '+(nd.rpe??'—')+' · '+fmt(n.t); } else { document.getElementById('nextName').textContent='Llegando a meta'; document.getElementById('nextMeta').textContent=''; }
+      clearInterval(timerInterval); timerInterval=setInterval(tick, 1000); saveState();
     }
 
     function tick() {
-      if (isPaused) return;
-      timeLeft--;
-      document.getElementById('timerDisplay').textContent = fmt(timeLeft);
-      updateRing(timeLeft / stepTotal);
-      updateGlobalProgress();
-      saveState();
-      
-      try {
-        if (timeLeft === 10 && workout[currentStep + 1]) {
-           const nd = parseStep(workout[currentStep + 1].desc);
-           let postureStr = nd.posture ? (nd.posture === 'de pie' ? 'de pie, ' : 'sentado, ') : '';
-           let cadStr = nd.cad !== '—' ? `a ${nd.cad} revoluciones.` : '';
-           announceText(`Siguiente: ${nd.phase}, ${postureStr}${cadStr}`);
-        }
-        if (timeLeft > 0 && timeLeft <= 3) playBeep(440, 0.2); 
-        if (timeLeft <= 0) {
-          playBeep(880, 0.6); clearInterval(timerInterval); currentStep++; renderStep();
-        }
-      } catch (e) {
-        if (timeLeft <= 0) { clearInterval(timerInterval); currentStep++; renderStep(); }
-      }
+      if(isPaused) return; timeLeft--; document.getElementById('timerDisplay').textContent=fmt(timeLeft); document.getElementById('timerRing').style.strokeDashoffset=CIRC*(1-(timeLeft/stepTotal)); updateGlobalProgress(); saveState();
+      if(timeLeft===10 && workout[currentStep+1]){ const nd=parseStep(workout[currentStep+1].desc); announceText(`Siguiente: ${nd.phase}, ${nd.posture?nd.posture+', ':''}${nd.cad!=='—'?'a '+nd.cad+' revoluciones.':''}`); }
+      if(timeLeft>0 && timeLeft<=3) playBeep(440, 0.2); if(timeLeft<=0){ playBeep(880, 0.6); clearInterval(timerInterval); currentStep++; renderStep(); }
     }
 
-    function prepWorkout(type) {
-      tempWorkoutBuffer = {
-        routine: WORKOUTS[type][selectedLevel],
-        name: `${type.charAt(0).toUpperCase() + type.slice(1)} - Nivel ${selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)}`
-      };
-      document.getElementById('preWorkoutType').textContent = tempWorkoutBuffer.name;
-      openModal('preWorkoutModal');
-    }
-
-    function startWorkout() {
-      closeModals(); initAudio(); requestWakeLock();
-      clearInterval(timerInterval);
-      workout = tempWorkoutBuffer.routine;
-      currentSession = tempWorkoutBuffer.name;
-      currentStep = 0; isPaused = false;
-      document.getElementById('sessionLabel').textContent = currentSession;
-      
-      const timerDisplay = document.getElementById('timerDisplay');
-      timerDisplay.classList.remove('opacity-50', 'animate-pulse');
-      document.getElementById('tapActionText').textContent = "Pausar";
-
-      buildDots(); renderStep();
-      const primerData = parseStep(workout[0].desc);
-      let initPosture = primerData.posture ? (primerData.posture === 'de pie' ? 'de pie, ' : 'sentado, ') : '';
-      announceText(`Comenzando sesión. ${primerData.phase}, ${initPosture}a ${primerData.cad} revoluciones.`);
-    }
-
+    function prepWorkout(type) { tempWorkoutBuffer={ routine:WORKOUTS[type][selectedLevel], name:`${type.toUpperCase()} - Nivel ${selectedLevel.toUpperCase()}` }; document.getElementById('preWorkoutType').textContent=tempWorkoutBuffer.name; openModal('preWorkoutModal'); }
+    function startWorkout() { closeModals(); initAudio(); requestWakeLock(); clearInterval(timerInterval); workout=tempWorkoutBuffer.routine; currentSession=tempWorkoutBuffer.name; currentStep=0; isPaused=false; document.getElementById('sessionLabel').textContent=currentSession; document.getElementById('timerDisplay').classList.remove('opacity-50','animate-pulse'); document.getElementById('tapActionText').textContent="Pausar"; buildDots(); renderStep(); const pD=parseStep(workout[0].desc); announceText(`Comenzando sesión. ${pD.phase}, ${pD.posture?pD.posture+', ':''}${pD.cad!=='—'?'a '+pD.cad+' revoluciones.':''}`); }
+    
     function openCustomModal() { openModal('customModal'); }
-
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) { document.getElementById('csvInput').value = e.target.result; };
-      reader.readAsText(file);
-    }
-
+    function handleFileUpload(e) { const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>document.getElementById('csvInput').value=ev.target.result; r.readAsText(f); }
     function loadCustomCSV() {
-      const txt = document.getElementById('csvInput').value.trim();
-      if (!txt) { alert("El texto está vacío."); return; }
-      
-      const lines = txt.split('\n');
-      let customRoutine = [];
-      let importedLevel = lines[0].trim().toLowerCase().replace('é', 'e');
-      const validLevels = ['principiante', 'amateur', 'elite', 'pro'];
-      
-      if (!validLevels.includes(importedLevel)) {
-        alert("Error: La primera línea debe indicar la dificultad (Principiante, Amateur, Élite o Pro).");
-        return;
+      const t=document.getElementById('csvInput').value.trim(); if(!t){ alert("Vacío."); return; } const lns=t.split('\n'); let cr=[];
+      const lvl=lns[0].trim().toLowerCase().replace('é','e'); if(!['principiante','amateur','elite','pro'].includes(lvl)){ alert("Falta el nivel (Principiante, Amateur, Élite o Pro) en la línea 1."); return; }
+      for(let i=1; i<lns.length; i++){
+        let l=lns[i].trim(); if(!l)continue; let p=l.split(l.includes(';')?';':',').map(x=>x.trim()); if(p.length<4)continue;
+        let ph=p[0], c=p[1], r=(p.length>=5&&!isNaN(parseInt(p[4])))?p[2]+'.'+p[3]:p[2].replace(',','.'), ti=parseInt(p[p.length-1]);
+        if(!isNaN(ti)) cr.push({desc:`${ph} [Cadencia ${c} RPM] [RPE ${r}]`, t:ti});
       }
-
-      for (let i = 1; i < lines.length; i++) {
-        let l = lines[i].trim();
-        if (!l) continue;
-        let delimiter = l.includes(';') ? ';' : ',';
-        let parts = l.split(delimiter).map(p => p.trim());
-        if (parts.length < 4) continue;
-        let phase = parts[0], cad = parts[1], rpe = "", t = 0;
-
-        if (delimiter === ',' && parts.length >= 5 && !isNaN(parseInt(parts[4], 10))) {
-          rpe = parts[2] + "." + parts[3]; t = parseInt(parts[4], 10);
-        } else {
-          rpe = parts[2].replace(',', '.'); t = parseInt(parts[3], 10);
-        }
-        if (!isNaN(t)) customRoutine.push({ desc: `${phase} [Cadencia ${cad} RPM] [RPE ${rpe}]`, t: t });
-      }
-
-      if (customRoutine.length > 0) {
-        document.getElementById('difficulty').value = importedLevel;
-        setLevel(importedLevel);
-        tempWorkoutBuffer = {
-          routine: customRoutine,
-          name: `Ruta Personalizada (${importedLevel.charAt(0).toUpperCase() + importedLevel.slice(1)})`
-        };
-        document.getElementById('preWorkoutType').textContent = tempWorkoutBuffer.name;
-        openModal('preWorkoutModal');
-      } else {
-        alert("No se detectó un formato CSV válido en las líneas de entrenamiento.");
-      }
+      if(cr.length>0){ document.getElementById('difficulty').value=lvl; setLevel(lvl); tempWorkoutBuffer={routine:cr, name:`Personalizada (${lvl.toUpperCase()})`}; document.getElementById('preWorkoutType').textContent=tempWorkoutBuffer.name; openModal('preWorkoutModal'); } else alert("CSV Inválido.");
     }
-
-    function togglePause() {
-      if(workout.length === 0 || currentStep >= workout.length) return;
-      initAudio(); requestWakeLock();
-      isPaused = !isPaused;
-      const timerDisplay = document.getElementById('timerDisplay');
-      const tapActionText = document.getElementById('tapActionText');
-      if (isPaused) {
-        timerDisplay.classList.add('opacity-50', 'animate-pulse');
-        tapActionText.textContent = "Reanudar";
-      } else {
-        timerDisplay.classList.remove('opacity-50', 'animate-pulse');
-        tapActionText.textContent = "Pausar";
-      }
-      saveState();
-    }
-
-    function skipStep() {
-      if(workout.length === 0 || currentStep >= workout.length) return;
-      initAudio(); requestWakeLock();
-      clearInterval(timerInterval);
-      timeLeft = 0; currentStep++; renderStep();
-    }
+    
+    function togglePause() { if(workout.length===0||currentStep>=workout.length)return; initAudio(); requestWakeLock(); isPaused=!isPaused; document.getElementById('timerDisplay').classList.toggle('opacity-50',isPaused); document.getElementById('timerDisplay').classList.toggle('animate-pulse',isPaused); document.getElementById('tapActionText').textContent=isPaused?"Reanudar":"Pausar"; saveState(); }
+    function skipStep() { if(workout.length===0||currentStep>=workout.length)return; initAudio(); requestWakeLock(); clearInterval(timerInterval); timeLeft=0; currentStep++; renderStep(); }
   </script>
 </body>
 </html>
