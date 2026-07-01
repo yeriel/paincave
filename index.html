@@ -19,6 +19,7 @@
 
   <div class="max-w-[480px] mx-auto px-4 py-6 relative">
     
+    <!-- CABECERA -->
     <div class="flex justify-between items-center mb-4">
       <div class="text-xs uppercase tracking-[0.08em] text-slate-400 font-bold" id="sessionLabel">Selecciona una rutina</div>
       <div class="flex items-center gap-2">
@@ -32,6 +33,7 @@
       </div>
     </div>
 
+    <!-- PROGRESO GLOBAL -->
     <div class="mb-6">
       <div class="flex justify-between text-[11px] font-bold tracking-wider text-slate-400 mb-1.5 uppercase">
         <span>Tiempo Total</span>
@@ -42,6 +44,7 @@
       </div>
     </div>
 
+    <!-- TEMPORIZADOR CIRCULAR -->
     <div class="text-center mb-6 cursor-pointer group relative" onclick="togglePause()">
       <div class="relative inline-flex items-center justify-center w-[200px] h-[200px] mx-auto mb-2 active:scale-95 transition-transform">
         <svg class="absolute top-0 left-0 -rotate-90" width="200" height="200" viewBox="0 0 200 200">
@@ -59,6 +62,7 @@
       </div>
     </div>
 
+    <!-- TARJETA PRINCIPAL (Fase actual) -->
     <div id="mainCard" class="bg-slate-800 border border-slate-700 rounded-2xl p-4 md:p-5 mb-4 shadow-lg transition-colors duration-500">
       <div class="text-[11px] uppercase tracking-[0.08em] text-slate-400 mb-1 font-semibold" id="exPhase">—</div>
       <div class="text-xl md:text-2xl font-bold text-white mb-2 leading-tight" id="exName">Esperando ciclista...</div>
@@ -66,13 +70,13 @@
       
       <div class="grid grid-cols-3 gap-2 md:gap-3">
         <div class="bg-slate-900/50 rounded-xl p-2 md:p-3 text-center border border-slate-700/50 flex flex-col justify-center">
-          <div class="text-[9px] md:text-[11px] uppercase tracking-[0.06em] text-slate-400 mb-1">Cadencia</div>
-          <div class="text-2xl md:text-4xl font-bold text-white font-mono" id="cadVal">—</div>
-          <div class="text-[9px] md:text-xs text-slate-500 font-medium mt-1">RPM</div>
+          <div class="text-[9px] md:text-[11px] uppercase tracking-[0.06em] text-slate-400 mb-1">Zona Obj.</div>
+          <div class="text-2xl md:text-4xl font-bold text-white font-mono" id="zoneVal">—</div>
+          <div class="text-[9px] md:text-xs text-slate-500 font-medium mt-1" id="zoneBpmTarget">BPM</div>
         </div>
         
         <div class="bg-slate-900/50 rounded-xl p-2 md:p-3 text-center border border-slate-700/50 cursor-pointer active:scale-95 transition-transform flex flex-col justify-center group" onclick="toggleHRM()">
-          <div class="text-[9px] md:text-[11px] uppercase tracking-[0.06em] text-slate-400 mb-1 group-hover:text-blue-400 transition-colors">Pulso</div>
+          <div class="text-[9px] md:text-[11px] uppercase tracking-[0.06em] text-slate-400 mb-1 group-hover:text-blue-400 transition-colors">Pulso Actual</div>
           <div class="text-2xl md:text-4xl font-bold text-white font-mono flex items-center justify-center gap-1">
             <span id="bpmVal">—</span>
           </div>
@@ -92,6 +96,7 @@
       </div>
     </div>
 
+    <!-- FASE SIGUIENTE -->
     <div class="bg-slate-800/80 rounded-xl px-4 py-3.5 flex items-center gap-3 mb-5 border border-slate-700/80">
       <div class="text-[11px] uppercase tracking-[0.06em] text-slate-400 font-semibold whitespace-nowrap">Siguiente</div>
       <div class="w-[1px] h-8 bg-slate-700"></div>
@@ -101,6 +106,7 @@
       </div>
     </div>
 
+    <!-- CONTROLES GLOBALES -->
     <div class="flex items-center justify-between bg-slate-800 rounded-xl px-4 py-2.5 mb-4 border border-slate-700 shadow-sm">
       <label class="flex items-center gap-2 cursor-pointer group">
         <input type="checkbox" id="voiceToggle" checked class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-0 focus:ring-offset-0 cursor-pointer">
@@ -118,6 +124,15 @@
       </div>
     </div>
 
+    <!-- BOTONES DE ENTRENAMIENTO -->
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <button class="py-3 rounded-xl text-sm font-bold cursor-pointer border-2 border-green-600/30 text-green-400 bg-green-900/10 hover:bg-green-900/30 transition-colors flex items-center justify-center gap-2 active:scale-95" onclick="prepWorkout('zona2')">
+        <i class="ti ti-leaf text-xl"></i> ZONA 2
+      </button>
+      <button class="py-3 rounded-xl text-sm font-bold cursor-pointer border-2 border-yellow-600/30 text-yellow-400 bg-yellow-900/10 hover:bg-yellow-900/30 transition-colors flex items-center justify-center gap-2 active:scale-95" onclick="prepWorkout('umbral')">
+        <i class="ti ti-flame text-xl"></i> UMBRAL
+      </button>
+    </div>
     <div class="grid grid-cols-2 gap-3 mb-3">
       <button class="py-3 rounded-xl text-sm font-bold cursor-pointer border-2 border-blue-600/30 text-blue-400 bg-blue-900/10 hover:bg-blue-900/30 transition-colors flex items-center justify-center gap-2 active:scale-95" onclick="prepWorkout('escalada')">
         <i class="ti ti-mountain text-xl"></i> ESCALADA
@@ -126,6 +141,8 @@
         <i class="ti ti-bolt text-xl"></i> HIIT
       </button>
     </div>
+
+    <!-- ACCIONES EXTRA -->
     <div class="grid grid-cols-2 gap-3 mb-3">
       <button class="py-2.5 rounded-xl text-sm font-medium cursor-pointer border border-slate-700 text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors flex items-center justify-center gap-1.5 active:scale-95" onclick="skipStep()">
         <i class="ti ti-player-track-next text-lg"></i> Saltar Fase
@@ -139,6 +156,7 @@
     </button>
   </div>
 
+  <!-- MODALES OVERLAY -->
   <div id="modalOverlay" class="fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-50 hidden flex-col items-center justify-center p-4 z-[100]">
     
     <div id="preWorkoutModal" class="hidden text-center w-full max-w-sm">
@@ -158,15 +176,16 @@
       </div>
     </div>
 
+    <!-- MODAL CSV ACTUALIZADO -->
     <div id="customModal" class="hidden text-left bg-slate-800 border border-slate-700 p-5 rounded-2xl w-full max-w-sm shadow-2xl">
       <h3 class="text-lg font-bold text-white mb-1">Importar Rutina (CSV)</h3>
-      <p class="text-slate-400 mb-3 text-xs">Línea 1: Dificultad (Ej: Amateur)<br>Línea 2+: Fase, Cadencia, RPE, Segundos</p>
+      <p class="text-slate-400 mb-3 text-xs">Línea 1: Dificultad (Ej: Amateur)<br>Línea 2+: Fase, Zona, RPE, Segundos</p>
       <label class="block w-full py-2 mb-3 text-center rounded-xl text-sm font-bold bg-slate-700 text-white cursor-pointer hover:bg-slate-600 border border-dashed border-slate-500">
         <i class="ti ti-upload mr-1"></i> Subir archivo .csv
         <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleFileUpload(event)">
       </label>
       <div class="flex items-center gap-2 mb-3"><div class="h-px bg-slate-700 flex-1"></div><span class="text-[10px] uppercase text-slate-500 font-bold">o pega el texto</span><div class="h-px bg-slate-700 flex-1"></div></div>
-      <textarea id="csvInput" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 font-mono focus:ring-1 focus:ring-blue-500 outline-none mb-4 custom-scrollbar" placeholder="Amateur&#10;Rodaje, 90, 4, 180..."></textarea>
+      <textarea id="csvInput" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 font-mono focus:ring-1 focus:ring-blue-500 outline-none mb-4 custom-scrollbar" placeholder="Amateur&#10;Rodaje, 2, 4, 180..."></textarea>
       <div class="grid grid-cols-2 gap-3">
         <button class="py-2.5 rounded-xl text-sm font-bold border border-slate-600 text-slate-300 hover:bg-slate-700" onclick="closeModals()">Cancelar</button>
         <button class="py-2.5 rounded-xl text-sm font-bold bg-green-600 text-white hover:bg-green-500" onclick="loadCustomCSV()">Cargar Ruta</button>
@@ -185,7 +204,6 @@
     </div>
 
     <div id="statsModal" class="hidden text-center bg-slate-800 border border-slate-700 p-6 rounded-2xl w-full max-w-sm shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
-      
       <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-4 border border-slate-700 mb-4 relative overflow-hidden">
         <div class="absolute -right-4 -top-4 opacity-10"><i class="ti ti-shield-check text-9xl text-white"></i></div>
         <div class="relative z-10 text-left">
@@ -315,6 +333,7 @@
       let num = parseInt(val);
       if (isNaN(num) || num < 100 || num > 240) { alert("Introduce FC Máxima válida (100 - 240)"); document.getElementById('maxHrInput').value = localStorage.getItem('painCaveMaxHR') || 190; return; }
       localStorage.setItem('painCaveMaxHR', num);
+      if (workout.length > 0 && currentStep < workout.length) renderStep(); // Refresh current zone target
     }
     function updateInterfaceColors(bpm, fallbackRpe) {
       let color = '#1D9E75'; const card = document.getElementById('mainCard');
@@ -401,19 +420,47 @@
       renderCalendar(); openModal('statsModal');
     }
 
-    // --- RUTINAS ESTÁNDAR ---
+    // --- CÁLCULO DE ZONAS HR ---
+    function getZoneBpmRange(zone) {
+      const maxHr = parseInt(localStorage.getItem('painCaveMaxHR')) || 190;
+      const z = parseInt(zone);
+      if (isNaN(z)) return '—';
+      // Z1: <60%, Z2: 60-70%, Z3: 70-80%, Z4: 80-90%, Z5: 90-100%
+      switch(z) {
+        case 1: return `< ${Math.round(maxHr*0.60)}`;
+        case 2: return `${Math.round(maxHr*0.60)} - ${Math.round(maxHr*0.70)}`;
+        case 3: return `${Math.round(maxHr*0.70)} - ${Math.round(maxHr*0.80)}`;
+        case 4: return `${Math.round(maxHr*0.80)} - ${Math.round(maxHr*0.90)}`;
+        case 5: return `> ${Math.round(maxHr*0.90)}`;
+        default: return '—';
+      }
+    }
+
+    // --- RUTINAS ESTÁNDAR (ENFOCADAS EN ZONAS HR) ---
     const WORKOUTS = {
+      zona2: {
+        principiante: [{desc:"Calentamiento [Zona 1] [RPE 3]", t:300}, {desc:"Fondo Aeróbico [Zona 2] [RPE 4]", t:1200}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}],
+        amateur: [{desc:"Calentamiento [Zona 1] [RPE 3]", t:300}, {desc:"Fondo Aeróbico [Zona 2] [RPE 4]", t:1800}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}],
+        elite: [{desc:"Calentamiento [Zona 1] [RPE 3]", t:300}, {desc:"Resistencia Base [Zona 2] [RPE 4]", t:2700}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}],
+        pro: [{desc:"Calentamiento [Zona 1] [RPE 3]", t:300}, {desc:"Tirada Larga [Zona 2] [RPE 4]", t:3600}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}]
+      },
+      umbral: {
+        principiante: [{desc:"Calentamiento [Zona 1] [RPE 3]", t:300}, {desc:"Tempo [Zona 3] [RPE 6]", t:300}, {desc:"Recuperación [Zona 2] [RPE 4]", t:120}, {desc:"Umbral [Zona 4] [RPE 7.5]", t:180}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}],
+        amateur: [{desc:"Calentamiento [Zona 1] [RPE 3]", t:300}, {desc:"Sweet Spot [Zona 3] [RPE 6.5]", t:480}, {desc:"Recuperación [Zona 2] [RPE 4]", t:180}, {desc:"Umbral [Zona 4] [RPE 8]", t:300}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}],
+        elite: [{desc:"Calentamiento [Zona 1] [RPE 3]", t:300}, {desc:"Umbral 1 [Zona 4] [RPE 8]", t:600}, {desc:"Descanso Activo [Zona 2] [RPE 4]", t:180}, {desc:"Umbral 2 [Zona 4] [RPE 8.5]", t:600}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}],
+        pro: [{desc:"Calentamiento [Zona 1] [RPE 3]", t:300}, {desc:"Bloque Sweet Spot [Zona 3] [RPE 7]", t:900}, {desc:"Umbral Crítico [Zona 4] [RPE 9]", t:900}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}]
+      },
       escalada: {
-        principiante: [{desc:"Calentamiento [Cadencia 85 RPM] [RPE 3]", t:180}, {desc:"Subida [Cadencia 75 RPM] [RPE 6]", t:120}, {desc:"Cumbre de pie [Cadencia 70 RPM] [RPE 7.5]", t:90}, {desc:"Descenso [Cadencia 80 RPM] [RPE 2]", t:240}],
-        amateur: [{desc:"Rodaje ágil [Cadencia 90 RPM] [RPE 4]", t:180}, {desc:"Rampa 5% [Cadencia 80 RPM] [RPE 6]", t:180}, {desc:"Rampa 8% [Cadencia 65 RPM] [RPE 8]", t:240}, {desc:"Ataque de pie [Cadencia 60 RPM] [RPE 9.5]", t:180}, {desc:"Descenso [Cadencia 85 RPM] [RPE 2]", t:300}],
-        elite: [{desc:"Pre-carrera [Cadencia 95 RPM] [RPE 5]", t:180}, {desc:"Puerto 1ª Cat [Cadencia 60 RPM] [RPE 8.5]", t:300}, {desc:"Rampa 14% de pie [Cadencia 55 RPM] [RPE 10]", t:120}, {desc:"Vuelta a calma [Cadencia 80 RPM] [RPE 2]", t:300}],
-        pro: [{desc:"Calentamiento Pro [Cadencia 100 RPM] [RPE 5]", t:240}, {desc:"Hors Catégorie [Cadencia 50 RPM] [RPE 9]", t:420}, {desc:"Muro Final de pie [Cadencia 60 RPM] [RPE 10]", t:180}, {desc:"Enfriamiento [Cadencia 85 RPM] [RPE 2]", t:300}]
+        principiante: [{desc:"Aproximación [Zona 1] [RPE 3]", t:180}, {desc:"Subida tendida [Zona 3] [RPE 6]", t:180}, {desc:"Rampa dura de pie [Zona 4] [RPE 7.5]", t:60}, {desc:"Descenso [Zona 1] [RPE 2]", t:240}],
+        amateur: [{desc:"Aproximación [Zona 2] [RPE 4]", t:240}, {desc:"Puerto Medio [Zona 3] [RPE 6.5]", t:300}, {desc:"Ataque de pie [Zona 4] [RPE 8.5]", t:120}, {desc:"Cumbre a tope [Zona 5] [RPE 9.5]", t:60}, {desc:"Descenso [Zona 1] [RPE 2]", t:300}],
+        elite: [{desc:"Aproximación [Zona 2] [RPE 4]", t:180}, {desc:"Puerto 1ª Cat [Zona 4] [RPE 8]", t:480}, {desc:"Muro del 15% de pie [Zona 5] [RPE 10]", t:120}, {desc:"Vuelta a calma [Zona 1] [RPE 2]", t:300}],
+        pro: [{desc:"Valle rápido [Zona 3] [RPE 6]", t:240}, {desc:"Hors Catégorie [Zona 4] [RPE 8.5]", t:600}, {desc:"Ataques continuos de pie [Zona 5] [RPE 10]", t:180}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}]
       },
       hiit: {
-        principiante: [{desc:"Calentamiento [Cadencia 85 RPM] [RPE 3]", t:240}, {desc:"Acelerón ágil [Cadencia 100 RPM] [RPE 7.5]", t:60}, {desc:"Soltar [Cadencia 80 RPM] [RPE 2]", t:180}],
-        amateur: [{desc:"Rodaje [Cadencia 90 RPM] [RPE 4]", t:180}, {desc:"Sprint de pie [Cadencia 115 RPM] [RPE 10]", t:30}, {desc:"Intervalo FTP [Cadencia 95 RPM] [RPE 8.5]", t:60}, {desc:"Lavado [Cadencia 80 RPM] [RPE 2]", t:240}],
-        elite: [{desc:"Pelotón rápido [Cadencia 95 RPM] [RPE 5]", t:240}, {desc:"Ataque explosivo [Cadencia 120 RPM] [RPE 10]", t:40}, {desc:"VO2 Max [Cadencia 100 RPM] [RPE 9.5]", t:60}, {desc:"Enfriamiento [Cadencia 85 RPM] [RPE 2]", t:300}],
-        pro: [{desc:"Rodaje vivo [Cadencia 100 RPM] [RPE 6]", t:180}, {desc:"Velódromo sprint [Cadencia 125 RPM] [RPE 10]", t:30}, {desc:"FTP Infierno [Cadencia 105 RPM] [RPE 10]", t:60}, {desc:"Recuperación [Cadencia 80 RPM] [RPE 2]", t:300}]
+        principiante: [{desc:"Rodaje suave [Zona 1] [RPE 3]", t:240}, {desc:"Sprint [Zona 4] [RPE 8]", t:30}, {desc:"Recuperación [Zona 1] [RPE 2]", t:120}, {desc:"Sprint [Zona 4] [RPE 8]", t:30}, {desc:"Soltar [Zona 1] [RPE 2]", t:180}],
+        amateur: [{desc:"Calentamiento [Zona 2] [RPE 4]", t:240}, {desc:"Sprint de pie [Zona 5] [RPE 10]", t:20}, {desc:"Descanso [Zona 1] [RPE 2]", t:40}, {desc:"Sprint de pie [Zona 5] [RPE 10]", t:20}, {desc:"Lavado [Zona 1] [RPE 2]", t:240}],
+        elite: [{desc:"Activación [Zona 2] [RPE 5]", t:240}, {desc:"VO2 Max 1 [Zona 5] [RPE 9.5]", t:60}, {desc:"Recuperación [Zona 1] [RPE 2]", t:60}, {desc:"VO2 Max 2 [Zona 5] [RPE 10]", t:60}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}],
+        pro: [{desc:"Activación rápida [Zona 3] [RPE 6]", t:180}, {desc:"Tabata (20s on/10s off) [Zona 5] [RPE 10]", t:120}, {desc:"Recuperación [Zona 1] [RPE 2]", t:120}, {desc:"Ataque sostenido [Zona 5] [RPE 10]", t:60}, {desc:"Enfriamiento [Zona 1] [RPE 2]", t:300}]
       }
     };
 
@@ -429,9 +476,10 @@
 
     function parseStep(desc) {
       const p = desc.split('[')[0].split('(')[0].trim(); const pm = desc.match(/\(([^)]+)\)/); const parte = pm ? pm[1] : '';
-      const cm = desc.match(/Cadencia (\d+) RPM/); const rm = desc.match(/RPE ([\d.]+)/);
+      const zm = desc.match(/Zona (\d)/);
+      const rm = desc.match(/RPE ([\d.]+)/);
       let pos = desc.toLowerCase().includes('de pie') ? 'de pie' : (desc.toLowerCase().includes('sentado') ? 'sentado' : '');
-      return { phase:p, parte, cad: cm?cm[1]:'—', rpe: rm?parseFloat(rm[1]):null, posture:pos };
+      return { phase:p, parte, zone: zm?zm[1]:'—', rpe: rm?parseFloat(rm[1]):null, posture:pos };
     }
 
     function buildDots() {
@@ -453,7 +501,31 @@
     }
     function cancelExit() { closeModals(); isPaused=false; document.getElementById('timerDisplay').classList.remove('opacity-50','animate-pulse'); document.getElementById('tapActionText').textContent="Pausar"; }
     function confirmExit(save) { if(save) recordProgress(); closeModals(); forceFullReset(); }
-    function forceFullReset() { clearInterval(timerInterval); releaseWakeLock(); localStorage.removeItem('bikeWorkoutState'); workout=[]; currentStep=0; isPaused=false; document.getElementById('timerDisplay').classList.remove('opacity-50','animate-pulse'); document.getElementById('tapActionText').textContent="Pausar"; document.getElementById('sessionLabel').textContent='Selecciona una rutina'; document.getElementById('timerDisplay').textContent='00:00'; document.getElementById('globalTime').textContent='00:00 / 00:00'; document.getElementById('globalProgress').style.width='0%'; document.getElementById('exPhase').textContent='—'; document.getElementById('exName').textContent='Esperando ciclista...'; document.getElementById('exPart').textContent='Súbete a la bici y elige una ruta'; document.getElementById('cadVal').textContent='—'; document.getElementById('rpeVal').textContent='—'; document.getElementById('rpeFill').style.width='0%'; document.getElementById('nextName').textContent='—'; document.getElementById('nextMeta').textContent='—'; document.getElementById('stepCounter').textContent='— / —'; document.getElementById('stepDots').innerHTML=''; updateInterfaceColors(null, 0); }
+    
+    function forceFullReset() { 
+      clearInterval(timerInterval); releaseWakeLock(); localStorage.removeItem('bikeWorkoutState'); 
+      workout=[]; currentStep=0; isPaused=false; 
+      document.getElementById('timerDisplay').classList.remove('opacity-50','animate-pulse'); 
+      document.getElementById('tapActionText').textContent="Pausar"; 
+      document.getElementById('sessionLabel').textContent='Selecciona una rutina'; 
+      document.getElementById('timerDisplay').textContent='00:00'; 
+      document.getElementById('globalTime').textContent='00:00 / 00:00'; 
+      document.getElementById('globalProgress').style.width='0%'; 
+      document.getElementById('exPhase').textContent='—'; 
+      document.getElementById('exName').textContent='Esperando ciclista...'; 
+      document.getElementById('exPart').textContent='Súbete a la bici y elige una ruta'; 
+      
+      document.getElementById('zoneVal').textContent='—'; 
+      document.getElementById('zoneBpmTarget').textContent='BPM';
+      document.getElementById('rpeVal').textContent='—'; 
+      document.getElementById('rpeFill').style.width='0%'; 
+      
+      document.getElementById('nextName').textContent='—'; 
+      document.getElementById('nextMeta').textContent='—'; 
+      document.getElementById('stepCounter').textContent='— / —'; 
+      document.getElementById('stepDots').innerHTML=''; 
+      updateInterfaceColors(null, 0); 
+    }
 
     function updateGlobalProgress() {
       if(workout.length===0) return; const tT = workout.reduce((a, s)=>a+s.t,0); const el = workout.slice(0, currentStep).reduce((a, s)=>a+s.t,0) + (stepTotal - timeLeft);
@@ -465,34 +537,67 @@
         document.getElementById('sessionLabel').textContent='¡Completado! 🎉'; document.getElementById('exName').textContent='Finalizada'; document.getElementById('exPhase').textContent='META'; document.getElementById('exPart').textContent='Gran esfuerzo.'; document.getElementById('timerDisplay').textContent='00:00'; document.getElementById('stepCounter').textContent=workout.length+' / '+workout.length; updateDots(); document.getElementById('timerRing').style.strokeDashoffset=CIRC; updateInterfaceColors(null,0); document.getElementById('globalProgress').style.width='100%'; releaseWakeLock(); localStorage.removeItem('bikeWorkoutState'); recordProgress(); playBeep(523.25, 0.2); return;
       }
       const st = workout[currentStep]; const d = parseStep(st.desc); stepTotal=st.t; if(!isPaused || timeLeft===0) timeLeft=st.t; 
-      document.getElementById('exPhase').textContent=d.phase; document.getElementById('exName').textContent=d.phase; document.getElementById('exPart').textContent=d.parte; document.getElementById('cadVal').textContent=d.cad; document.getElementById('rpeVal').textContent=d.rpe!==null?d.rpe:'—'; document.getElementById('rpeFill').style.width=d.rpe?(d.rpe/10*100)+'%':'0%';
+      
+      document.getElementById('exPhase').textContent=d.phase; 
+      document.getElementById('exName').textContent=d.phase; 
+      document.getElementById('exPart').textContent=d.parte; 
+      
+      document.getElementById('zoneVal').textContent = d.zone !== '—' ? 'Z' + d.zone : '—';
+      document.getElementById('zoneBpmTarget').textContent = d.zone !== '—' ? getZoneBpmRange(d.zone) + ' BPM' : 'BPM';
+      
+      document.getElementById('rpeVal').textContent=d.rpe!==null?d.rpe:'—'; 
+      document.getElementById('rpeFill').style.width=d.rpe?(d.rpe/10*100)+'%':'0%';
       
       const currentBpm = isHRMConnected ? parseInt(document.getElementById('bpmVal').textContent) : null;
       updateInterfaceColors(currentBpm, d.rpe);
 
       document.getElementById('stepCounter').textContent=(currentStep+1)+' / '+workout.length; updateDots(); document.getElementById('timerRing').style.strokeDashoffset=0; updateGlobalProgress();
-      const n = workout[currentStep+1]; if(n){ const nd=parseStep(n.desc); document.getElementById('nextName').textContent=nd.phase+(nd.parte?' — '+nd.parte:''); document.getElementById('nextMeta').textContent=nd.cad+' RPM · RPE '+(nd.rpe??'—')+' · '+fmt(n.t); } else { document.getElementById('nextName').textContent='Llegando a meta'; document.getElementById('nextMeta').textContent=''; }
+      
+      const n = workout[currentStep+1]; 
+      if(n){ 
+        const nd=parseStep(n.desc); 
+        document.getElementById('nextName').textContent=nd.phase+(nd.parte?' — '+nd.parte:''); 
+        document.getElementById('nextMeta').textContent=(nd.zone!=='—'?'Z'+nd.zone:'—')+' · RPE '+(nd.rpe??'—')+' · '+fmt(n.t); 
+      } else { 
+        document.getElementById('nextName').textContent='Llegando a meta'; 
+        document.getElementById('nextMeta').textContent=''; 
+      }
       clearInterval(timerInterval); timerInterval=setInterval(tick, 1000); saveState();
     }
 
     function tick() {
       if(isPaused) return; timeLeft--; document.getElementById('timerDisplay').textContent=fmt(timeLeft); document.getElementById('timerRing').style.strokeDashoffset=CIRC*(1-(timeLeft/stepTotal)); updateGlobalProgress(); saveState();
-      if(timeLeft===10 && workout[currentStep+1]){ const nd=parseStep(workout[currentStep+1].desc); announceText(`Siguiente: ${nd.phase}, ${nd.posture?nd.posture+', ':''}${nd.cad!=='—'?'a '+nd.cad+' revoluciones.':''}`); }
+      
+      if(timeLeft===10 && workout[currentStep+1]){ 
+        const nd=parseStep(workout[currentStep+1].desc); 
+        announceText(`Siguiente: ${nd.phase}, ${nd.posture?nd.posture+', ':''}${nd.zone!=='—'?'en Zona '+nd.zone+'.':''}`); 
+      }
       if(timeLeft>0 && timeLeft<=3) playBeep(440, 0.2); if(timeLeft<=0){ playBeep(880, 0.6); clearInterval(timerInterval); currentStep++; renderStep(); }
     }
 
     function prepWorkout(type) { tempWorkoutBuffer={ routine:WORKOUTS[type][selectedLevel], name:`${type.toUpperCase()} - Nivel ${selectedLevel.toUpperCase()}` }; document.getElementById('preWorkoutType').textContent=tempWorkoutBuffer.name; openModal('preWorkoutModal'); }
-    function startWorkout() { closeModals(); initAudio(); requestWakeLock(); clearInterval(timerInterval); workout=tempWorkoutBuffer.routine; currentSession=tempWorkoutBuffer.name; currentStep=0; isPaused=false; document.getElementById('sessionLabel').textContent=currentSession; document.getElementById('timerDisplay').classList.remove('opacity-50','animate-pulse'); document.getElementById('tapActionText').textContent="Pausar"; buildDots(); renderStep(); const pD=parseStep(workout[0].desc); announceText(`Comenzando sesión. ${pD.phase}, ${pD.posture?pD.posture+', ':''}${pD.cad!=='—'?'a '+pD.cad+' revoluciones.':''}`); }
+    
+    function startWorkout() { 
+      closeModals(); initAudio(); requestWakeLock(); clearInterval(timerInterval); 
+      workout=tempWorkoutBuffer.routine; currentSession=tempWorkoutBuffer.name; currentStep=0; isPaused=false; 
+      document.getElementById('sessionLabel').textContent=currentSession; 
+      document.getElementById('timerDisplay').classList.remove('opacity-50','animate-pulse'); 
+      document.getElementById('tapActionText').textContent="Pausar"; 
+      buildDots(); renderStep(); 
+      const pD=parseStep(workout[0].desc); 
+      announceText(`Comenzando sesión. ${pD.phase}, ${pD.posture?pD.posture+', ':''}${pD.zone!=='—'?'en Zona '+pD.zone+'.':''}`); 
+    }
     
     function openCustomModal() { openModal('customModal'); }
     function handleFileUpload(e) { const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>document.getElementById('csvInput').value=ev.target.result; r.readAsText(f); }
+    
     function loadCustomCSV() {
       const t=document.getElementById('csvInput').value.trim(); if(!t){ alert("Vacío."); return; } const lns=t.split('\n'); let cr=[];
       const lvl=lns[0].trim().toLowerCase().replace('é','e'); if(!['principiante','amateur','elite','pro'].includes(lvl)){ alert("Falta el nivel (Principiante, Amateur, Élite o Pro) en la línea 1."); return; }
       for(let i=1; i<lns.length; i++){
         let l=lns[i].trim(); if(!l)continue; let p=l.split(l.includes(';')?';':',').map(x=>x.trim()); if(p.length<4)continue;
-        let ph=p[0], c=p[1], r=(p.length>=5&&!isNaN(parseInt(p[4])))?p[2]+'.'+p[3]:p[2].replace(',','.'), ti=parseInt(p[p.length-1]);
-        if(!isNaN(ti)) cr.push({desc:`${ph} [Cadencia ${c} RPM] [RPE ${r}]`, t:ti});
+        let ph=p[0], z=p[1], r=(p.length>=5&&!isNaN(parseInt(p[4])))?p[2]+'.'+p[3]:p[2].replace(',','.'), ti=parseInt(p[p.length-1]);
+        if(!isNaN(ti)) cr.push({desc:`${ph} [Zona ${z}] [RPE ${r}]`, t:ti});
       }
       if(cr.length>0){ document.getElementById('difficulty').value=lvl; setLevel(lvl); tempWorkoutBuffer={routine:cr, name:`Personalizada (${lvl.toUpperCase()})`}; document.getElementById('preWorkoutType').textContent=tempWorkoutBuffer.name; openModal('preWorkoutModal'); } else alert("CSV Inválido.");
     }
