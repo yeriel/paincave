@@ -1,12 +1,14 @@
 /**
  * Manejador de la Interfaz de Usuario (UI) y Visualización
+ * Minimalista, directo al grano y enfocado en la experiencia deportiva
  */
 
 import { gamification } from './gamification.js';
 import { getZoneBpmRange, ROUTINES_POOL } from './workouts.js';
 import { exportToTCX } from './exporter.js';
+import { soundEngine } from './audio.js';
 
-const CIRC = 2 * Math.PI * 95; // Radio SVG 95px (~596.9)
+const CIRC = 2 * Math.PI * 90; // Radio SVG 90px (~565.48)
 
 export function formatTime(seconds) {
   const m = Math.floor(seconds / 60);
@@ -19,14 +21,14 @@ export function generateMiniProfileSvg(steps) {
   if (total === 0) return '';
   const zoneColors = { 1: '#3b82f6', 2: '#10b981', 3: '#eab308', 4: '#f97316', 5: '#ef4444' };
   let x = 0;
-  const svgWidth = 100;
-  const svgHeight = 22;
+  const svgWidth = 90;
+  const svgHeight = 20;
   let rects = '';
 
   steps.forEach(st => {
     const w = Math.max(1.2, (st.t / total) * svgWidth);
     const rpeVal = st.rpe || (st.zone ? st.zone * 2 : 5);
-    const h = Math.max(4, Math.min(svgHeight, (rpeVal / 10) * svgHeight));
+    const h = Math.max(3, Math.min(svgHeight, (rpeVal / 10) * svgHeight));
     const y = svgHeight - h;
     const color = zoneColors[st.zone || 2];
     rects += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="${color}" rx="1" />`;
@@ -55,16 +57,49 @@ export class UIManager {
     if (el) el.textContent = rank.title;
   }
 
+  updateLevelTabs(selectedLevel) {
+    document.querySelectorAll('.level-tab').forEach(tab => {
+      if (tab.dataset.level === selectedLevel) {
+        tab.className = 'level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm';
+      } else {
+        tab.className = 'level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white';
+      }
+    });
+  }
+
+  setRideMode(isRunning, isPaused = false) {
+    const catalog = document.getElementById('catalogSection');
+    const profile = document.getElementById('workoutProfileContainer');
+    const controls = document.getElementById('inRideControls');
+    const pauseBtn = document.getElementById('btnMainPause');
+
+    if (isRunning) {
+      if (catalog) catalog.classList.add('hidden');
+      if (profile) profile.classList.remove('hidden');
+      if (controls) controls.classList.remove('hidden');
+      if (pauseBtn) {
+        pauseBtn.innerHTML = isPaused ? '<i class="ti ti-player-play text-lg"></i> REANUDAR' : '<i class="ti ti-player-pause text-lg"></i> PAUSAR';
+        pauseBtn.className = isPaused 
+          ? 'flex-1 py-3.5 rounded-xl font-black text-sm text-white bg-green-600 hover:bg-green-500 flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md'
+          : 'flex-1 py-3.5 rounded-xl font-black text-sm text-white bg-blue-600 hover:bg-blue-500 flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md';
+      }
+    } else {
+      if (catalog) catalog.classList.remove('hidden');
+      if (profile) profile.classList.add('hidden');
+      if (controls) controls.classList.add('hidden');
+    }
+  }
+
   toggleFullscreen() {
     const btn = document.getElementById('btnFullscreen');
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(() => {});
-      if (btn) btn.innerHTML = '<i class="ti ti-minimize text-xl"></i>';
+      if (btn) btn.innerHTML = '<i class="ti ti-minimize text-lg"></i>';
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen().catch(() => {});
       }
-      if (btn) btn.innerHTML = '<i class="ti ti-maximize text-xl"></i>';
+      if (btn) btn.innerHTML = '<i class="ti ti-maximize text-lg"></i>';
     }
   }
 
@@ -72,9 +107,9 @@ export class UIManager {
     const btn = document.getElementById('btnFullscreen');
     if (!btn) return;
     if (document.fullscreenElement) {
-      btn.innerHTML = '<i class="ti ti-minimize text-xl"></i>';
+      btn.innerHTML = '<i class="ti ti-minimize text-lg"></i>';
     } else {
-      btn.innerHTML = '<i class="ti ti-maximize text-xl"></i>';
+      btn.innerHTML = '<i class="ti ti-maximize text-lg"></i>';
     }
   }
 
@@ -84,26 +119,26 @@ export class UIManager {
     const card = document.getElementById('mainCard');
     if (!card) return;
 
-    card.className = "bg-slate-800 border rounded-2xl p-4 md:p-5 mb-4 shadow-xl transition-all duration-500 relative overflow-hidden";
+    card.className = "bg-slate-800 border rounded-2xl p-4 shadow-xl transition-all duration-500 relative";
 
     if (isHRMConnected && currentBpm) {
       const maxHr = gamification.getMaxHR();
       const pct = (currentBpm / maxHr) * 100;
       if (pct < 60) {
         color = '#3b82f6';
-        card.classList.add('bg-blue-950/40', 'border-blue-500/40', 'shadow-[0_0_30px_rgba(59,130,246,0.15)]');
+        card.classList.add('bg-blue-950/40', 'border-blue-500/40');
       } else if (pct < 70) {
         color = '#10b981';
-        card.classList.add('bg-emerald-950/40', 'border-emerald-500/40', 'shadow-[0_0_30px_rgba(16,185,129,0.15)]');
+        card.classList.add('bg-emerald-950/40', 'border-emerald-500/40');
       } else if (pct < 80) {
         color = '#eab308';
-        card.classList.add('bg-yellow-950/40', 'border-yellow-500/40', 'shadow-[0_0_30px_rgba(234,179,8,0.15)]');
+        card.classList.add('bg-yellow-950/40', 'border-yellow-500/40');
       } else if (pct < 90) {
         color = '#f97316';
-        card.classList.add('bg-orange-950/40', 'border-orange-500/50', 'shadow-[0_0_30px_rgba(249,115,22,0.2)]');
+        card.classList.add('bg-orange-950/40', 'border-orange-500/50');
       } else {
         color = '#ef4444';
-        card.classList.add('bg-red-950/40', 'border-red-500/50', 'shadow-[0_0_30px_rgba(239,68,68,0.25)]');
+        card.classList.add('bg-red-950/40', 'border-red-500/50');
       }
     } else {
       const rpe = fallbackRpe !== null && fallbackRpe !== undefined ? fallbackRpe : 4;
@@ -118,7 +153,7 @@ export class UIManager {
         card.classList.add('bg-orange-950/30', 'border-orange-500/40');
       } else {
         color = '#EF4444';
-        card.classList.add('bg-red-950/40', 'border-red-500/50', 'shadow-[0_0_30px_rgba(239,68,68,0.2)]');
+        card.classList.add('bg-red-950/40', 'border-red-500/50');
       }
     }
 
@@ -129,9 +164,8 @@ export class UIManager {
   // Renderiza el paso activo en la pantalla principal
   renderStep({ step, stepIndex, totalSteps, nextStep }, isHRMConnected, currentBpm) {
     document.getElementById('sessionLabel').textContent = step.phase;
-    document.getElementById('exPhase').textContent = `FASE ${stepIndex + 1} DE ${totalSteps}`;
+    document.getElementById('exPhase').textContent = `FASE ${stepIndex + 1} / ${totalSteps}`;
     document.getElementById('exName').textContent = step.phase;
-    document.getElementById('exPart').textContent = step.instruction;
 
     // Badge de postura
     const postBadge = document.getElementById('exPostureBadge');
@@ -142,16 +176,16 @@ export class UIManager {
     if (step.posture === 'de pie') {
       postText.textContent = 'De pie';
       postIcon.textContent = '⚡';
-      postBadge.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full text-xs uppercase tracking-wider font-extrabold bg-amber-900/70 text-amber-200 border border-amber-500/50 animate-pulse';
+      postBadge.className = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] uppercase tracking-wider font-extrabold bg-amber-900/80 text-amber-200 border border-amber-500/50';
     } else {
       postText.textContent = 'Sentado';
       postIcon.textContent = '🪑';
-      postBadge.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full text-xs uppercase tracking-wider font-extrabold bg-slate-700/80 text-slate-200 border border-slate-600';
+      postBadge.className = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] uppercase tracking-wider font-extrabold bg-slate-700 text-slate-200 border border-slate-600';
     }
 
     // 1. Cadencia y Metrónomo Visual
     document.getElementById('cadenceVal').textContent = step.cadence ? step.cadence : '—';
-    document.getElementById('cadenceUnit').textContent = step.cadence ? 'RPM sug.' : 'Libre';
+    document.getElementById('cadenceUnit').textContent = step.cadence ? 'RPM' : 'Libre';
     
     const pacerDot = document.getElementById('cadencePacerDot');
     if (pacerDot) {
@@ -189,14 +223,13 @@ export class UIManager {
       document.getElementById('nextName').textContent = nextStep.phase;
       const details = [];
       if (nextStep.cadence) details.push(`${nextStep.cadence} RPM`);
-      if (nextStep.zone) details.push(`Z${nextStep.zone}`);
       if (nextStep.rpe) details.push(`RPE ${nextStep.rpe}`);
       details.push(formatTime(nextStep.t));
       details.push(nextStep.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado');
       document.getElementById('nextMeta').textContent = details.join(' · ');
     } else {
-      document.getElementById('nextName').textContent = 'Llegando a la meta';
-      document.getElementById('nextMeta').textContent = 'Último esfuerzo';
+      document.getElementById('nextName').textContent = 'Meta';
+      document.getElementById('nextMeta').textContent = 'Último bloque';
     }
 
     // Resaltar bloque actual en la barra de perfil visual
@@ -230,7 +263,6 @@ export class UIManager {
     const totalDuration = steps.reduce((a, s) => a + s.t, 0);
     if (totalDuration === 0) return;
 
-    // Colores según zona (1-5)
     const zoneColors = {
       1: '#3b82f6', // Azul
       2: '#10b981', // Verde
@@ -241,7 +273,8 @@ export class UIManager {
 
     steps.forEach((st, idx) => {
       const widthPct = (st.t / totalDuration) * 100;
-      const heightPct = Math.max(30, Math.min(100, (st.rpe || (st.zone * 2)) * 10));
+      const rpeVal = st.rpe || (st.zone ? st.zone * 2 : 5);
+      const heightPct = Math.max(30, Math.min(100, (rpeVal / 10) * 100));
       const color = zoneColors[st.zone || 2];
 
       const block = document.createElement('div');
@@ -250,18 +283,18 @@ export class UIManager {
       block.style.width = `${widthPct}%`;
 
       block.innerHTML = `
-        <div class="w-full rounded-t-sm transition-all duration-300 opacity-70 group-hover:opacity-100" 
+        <div class="w-full rounded-t-sm transition-all duration-300 opacity-75 group-hover:opacity-100" 
              style="height: ${heightPct}%; background-color: ${color};">
         </div>
       `;
-      block.title = `${idx + 1}. ${st.phase} (${formatTime(st.t)}) · Z${st.zone || 2} · RPE ${st.rpe || '—'}`;
+      block.title = `${idx + 1}. ${st.phase} (${formatTime(st.t)})`;
       container.appendChild(block);
     });
 
     // Marcador de progreso en la barra
     const marker = document.createElement('div');
     marker.id = 'profileProgressMarker';
-    marker.className = "absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_8px_#ffffff] z-10 transition-all duration-1000 ease-linear pointer-events-none";
+    marker.className = "absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_6px_#ffffff] z-10 transition-all duration-1000 ease-linear pointer-events-none";
     marker.style.left = '0%';
     container.appendChild(marker);
   }
@@ -273,14 +306,14 @@ export class UIManager {
       if (!block) return;
       const inner = block.firstElementChild;
       if (idx === stepIndex) {
-        inner.classList.remove('opacity-70');
+        inner.classList.remove('opacity-75');
         inner.classList.add('opacity-100', 'ring-1', 'ring-white');
       } else if (idx < stepIndex) {
         inner.classList.remove('opacity-100', 'ring-1', 'ring-white');
         inner.classList.add('opacity-40');
       } else {
         inner.classList.remove('opacity-40', 'ring-1', 'ring-white');
-        inner.classList.add('opacity-70');
+        inner.classList.add('opacity-75');
       }
     });
   }
@@ -290,33 +323,33 @@ export class UIManager {
     const c = document.getElementById('stepDots');
     if (!c) return;
     c.innerHTML = '';
-    const max = Math.min(count, 20);
+    const max = Math.min(count, 16);
     for (let i = 0; i < max; i++) {
       const d = document.createElement('div');
       d.id = 'dot-' + i;
       c.appendChild(d);
     }
-    if (count > 20) {
+    if (count > 16) {
       const s = document.createElement('span');
-      s.className = 'text-[11px] text-slate-500 font-bold ml-1';
-      s.textContent = '+' + (count - 20);
+      s.className = 'text-[10px] text-slate-500 font-bold ml-0.5';
+      s.textContent = '+' + (count - 16);
       c.appendChild(s);
     }
   }
 
   updateDots(currentStep, count) {
-    for (let i = 0; i < Math.min(count, 20); i++) {
+    for (let i = 0; i < Math.min(count, 16); i++) {
       const d = document.getElementById('dot-' + i);
       if (!d) continue;
       d.className = 'rounded-full transition-all duration-300 ' + (
         i < currentStep
-          ? 'w-[7px] h-[7px] bg-[#1D9E75]'
-          : (i === currentStep ? 'w-[10px] h-[10px] bg-[#378ADD] shadow-[0_0_8px_#378ADD]' : 'w-[7px] h-[7px] bg-slate-700')
+          ? 'w-[6px] h-[6px] bg-[#1D9E75]'
+          : (i === currentStep ? 'w-[9px] h-[9px] bg-[#378ADD] shadow-[0_0_6px_#378ADD]' : 'w-[6px] h-[6px] bg-slate-700')
       );
     }
   }
 
-  // Render del Pool de Rutinas con Mini-Perfil SVG
+  // Render del Pool de Rutinas (Limpio y directo)
   renderRoutinesPool(selectedLevel = 'amateur', activeCategory = 'todos') {
     const container = document.getElementById('routinesPoolGrid');
     if (!container) return;
@@ -334,30 +367,27 @@ export class UIManager {
       const miniSvg = generateMiniProfileSvg(steps);
 
       const card = document.createElement('button');
-      card.className = `p-3.5 rounded-xl border border-${routine.colorClass}-600/30 bg-${routine.colorClass}-950/20 hover:bg-${routine.colorClass}-900/30 text-left transition-all active:scale-[0.98] group flex flex-col justify-between shadow-sm`;
+      card.className = `p-3 rounded-xl border border-${routine.colorClass}-600/30 bg-slate-800/90 hover:bg-slate-750 text-left transition-all active:scale-[0.98] group flex flex-col justify-between shadow-sm`;
       card.onclick = () => window.painCaveApp.openPreWorkoutModal(routine.id);
 
       card.innerHTML = `
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <div class="p-2 rounded-lg bg-${routine.colorClass}-600/20 text-${routine.colorClass}-400">
-              <i class="ti ${routine.icon} text-xl"></i>
-            </div>
-            <span class="text-[11px] font-mono font-bold text-${routine.colorClass}-400 bg-${routine.colorClass}-950/80 px-2 py-0.5 rounded-full border border-${routine.colorClass}-600/40">
-              ${minutes} min · ${steps.length} fases
+        <div class="w-full">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-sm font-black text-white group-hover:text-${routine.colorClass}-400 transition-colors">
+              ${routine.title}
+            </span>
+            <span class="text-[11px] font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">
+              ${minutes} min
             </span>
           </div>
-          <div class="text-sm font-bold text-white group-hover:text-${routine.colorClass}-300 transition-colors">
-            ${routine.title}
-          </div>
-          <div class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">
-            ${routine.subtitle}
+          <div class="text-[11px] text-slate-400 mb-2">
+            ${steps.length} bloques · ${routine.subtitle}
           </div>
         </div>
-        <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
+        <div class="w-full pt-1.5 border-t border-slate-700/60 flex items-center justify-between">
           ${miniSvg}
           <span class="text-${routine.colorClass}-400 text-xs font-bold flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
-            Ver ruta <i class="ti ti-chevron-right text-xs"></i>
+            Iniciar <i class="ti ti-chevron-right text-xs"></i>
           </span>
         </div>
       `;
@@ -368,13 +398,12 @@ export class UIManager {
   // Render del Modal de Resumen al terminar entrenamiento
   showWorkoutSummaryModal(summaryData) {
     this.lastCompletedSessionData = summaryData;
-    const { sessionTitle, totalSeconds, hrStats, statsRecorded, level } = summaryData;
+    const { sessionTitle, totalSeconds, hrStats, statsRecorded } = summaryData;
 
     document.getElementById('summarySessionTitle').textContent = sessionTitle;
     document.getElementById('summaryTotalTime').textContent = formatTime(totalSeconds);
     document.getElementById('summaryXp').textContent = `+${statsRecorded ? statsRecorded.earnedXP : 0} XP`;
 
-    // FC stats
     const avgEl = document.getElementById('summaryAvgHr');
     const maxEl = document.getElementById('summaryMaxHr');
     if (hrStats && hrStats.avg) {
@@ -434,7 +463,7 @@ export class UIManager {
     let fDay = new Date(y, m, 1).getDay() - 1;
     if (fDay === -1) fDay = 6;
     for (let i = 0; i < fDay; i++) {
-      cal.innerHTML += `<div class="p-1 rounded bg-slate-800/30 h-10"></div>`;
+      cal.innerHTML += `<div class="p-1 rounded bg-slate-800/30 h-8"></div>`;
     }
 
     const clr = { 'principiante': 'text-green-500', 'amateur': 'text-blue-500', 'elite': 'text-orange-500', 'pro': 'text-red-500' };
@@ -443,7 +472,7 @@ export class UIManager {
     for (let d = 1; d <= totalDays; d++) {
       const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const ws = stats.workouts.filter(w => w.date === ds);
-      let html = `<span class="text-[10px] ${t.getDate() === d ? 'text-white font-bold' : 'text-slate-400'} leading-none">${d}</span>`;
+      let html = `<span class="text-[9px] ${t.getDate() === d ? 'text-white font-bold' : 'text-slate-400'} leading-none">${d}</span>`;
       if (ws.length > 0) {
         let best = 'principiante';
         let max = 0;
@@ -451,10 +480,27 @@ export class UIManager {
           const v = { 'principiante': 1, 'amateur': 2, 'elite': 3, 'pro': 4 }[w.level] || 1;
           if (v > max) { max = v; best = w.level; }
         });
-        html += `<i class="ti ti-flame text-base ${clr[best]} mt-0.5"></i>`;
+        html += `<i class="ti ti-flame text-sm ${clr[best]} mt-0.5"></i>`;
       }
-      cal.innerHTML += `<div class="flex flex-col items-center justify-center p-1 rounded h-10 border ${t.getDate() === d ? 'border-slate-500 bg-slate-700/50' : 'border-slate-700/50 bg-slate-800'}">${html}</div>`;
+      cal.innerHTML += `<div class="flex flex-col items-center justify-center p-1 rounded h-8 border ${t.getDate() === d ? 'border-slate-500 bg-slate-700/50' : 'border-slate-700/40 bg-slate-800'}">${html}</div>`;
     }
+  }
+
+  populateVoiceSelect() {
+    const select = document.getElementById('voiceSelect');
+    if (!select) return;
+    const voices = soundEngine.getSpanishVoices();
+    const current = soundEngine.getCurrentVoiceId();
+
+    select.innerHTML = '<option value="system">Voz natural del sistema (Por defecto)</option>';
+    voices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.voiceURI || v.name;
+      opt.textContent = `${v.name} (${v.lang})`;
+      select.appendChild(opt);
+    });
+
+    select.value = current;
   }
 
   showStatsModal() {
@@ -467,22 +513,22 @@ export class UIManager {
     document.getElementById('nextRankXpText').textContent = rank.next === Infinity ? "MAX" : `${rank.next} XP`;
     document.getElementById('rankProgressBar').style.width = `${rank.progress}%`;
     document.getElementById('maxHrInput').value = gamification.getMaxHR();
+    this.populateVoiceSelect();
     this.renderCalendar();
     this.openModal('statsModal');
   }
 
   resetDisplay() {
-    document.getElementById('sessionLabel').textContent = 'Selecciona una rutina';
+    document.getElementById('sessionLabel').textContent = 'PAIN CAVE';
     document.getElementById('timerDisplay').textContent = '00:00';
     document.getElementById('globalTime').textContent = '00:00 / 00:00';
     document.getElementById('globalProgress').style.width = '0%';
-    document.getElementById('exPhase').textContent = '—';
-    document.getElementById('exName').textContent = 'Esperando ciclista...';
-    document.getElementById('exPart').textContent = 'Súbete a la bici y elige una ruta abajo';
+    document.getElementById('exPhase').textContent = 'LISTO';
+    document.getElementById('exName').textContent = 'Selecciona una rutina';
     document.getElementById('exPostureBadge').classList.add('hidden');
 
     document.getElementById('cadenceVal').textContent = '—';
-    document.getElementById('cadenceUnit').textContent = 'RPM sug.';
+    document.getElementById('cadenceUnit').textContent = 'RPM';
     const pacerDot = document.getElementById('cadencePacerDot');
     if (pacerDot) pacerDot.classList.add('hidden');
 
@@ -492,7 +538,7 @@ export class UIManager {
     document.getElementById('rpeFill').style.width = '0%';
 
     document.getElementById('nextName').textContent = '—';
-    document.getElementById('nextMeta').textContent = '—';
+    document.getElementById('nextMeta').textContent = '';
     document.getElementById('stepCounter').textContent = '— / —';
     document.getElementById('stepDots').innerHTML = '';
 
@@ -500,13 +546,7 @@ export class UIManager {
     if (ring) ring.style.strokeDashoffset = this.CIRC;
     this.updateInterfaceColors(null, 0, false);
 
-    // Ocultar barra de perfil
-    const profileContainer = document.getElementById('workoutProfileContainer');
-    if (profileContainer) profileContainer.classList.add('hidden');
-
-    // Ocultar controles activos
-    const inRideControls = document.getElementById('inRideControls');
-    if (inRideControls) inRideControls.classList.add('hidden');
+    this.setRideMode(false);
   }
 }
 

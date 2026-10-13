@@ -1,8 +1,8 @@
 Pro
-Calentamiento estructurado, 90, 4, 480
-Activación rápida con ráfagas, 95, 7, 240
-Recuperación breve, 85, 3, 120
-Bloque 1: Umbral Crítico sostenido, 90, 8.5, 1080
-Descanso activo en llano, 85, 3.5, 240
-Bloque 2: Umbral Crítico sostenido, 90, 9, 1080
-Vuelta a la calma regenerativa, 80, 2, 360
+Calentamiento, 90, 4, 480
+Activación, 95, 7, 240
+Recuperación, 85, 3, 120
+Umbral crítico, 90, 8.5, 1080
+Recuperación, 85, 3.5, 240
+Umbral crítico, 90, 9, 1080
+Enfriamiento, 80, 2, 360

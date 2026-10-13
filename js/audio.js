@@ -1,5 +1,5 @@
 /**
- * Motor de Audio y Voz Guía (Web Audio API & Web Speech API)
+ * Motor de Audio y Voz Guía Natural (Web Audio API & Web Speech API)
  */
 
 class SoundEngine {
@@ -7,6 +7,69 @@ class SoundEngine {
     this.audioCtx = null;
     this.silentSource = null;
     this.voiceEnabled = true;
+    this.selectedVoice = null;
+    this.voicesLoaded = false;
+
+    if ('speechSynthesis' in window) {
+      this.initVoices();
+      window.speechSynthesis.onvoiceschanged = () => this.initVoices();
+    }
+  }
+
+  initVoices() {
+    try {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return;
+      this.voicesLoaded = true;
+
+      const savedUri = localStorage.getItem('paincave_voice');
+      if (savedUri && savedUri !== 'system') {
+        const found = voices.find(v => v.voiceURI === savedUri || v.name === savedUri);
+        if (found) {
+          this.selectedVoice = found;
+          return;
+        }
+      }
+
+      // Si no hay voz configurada o está en 'system', buscar si hay alguna voz Neural/Google explícita
+      const esVoices = voices.filter(v => v.lang && v.lang.toLowerCase().replace('_', '-').startsWith('es'));
+      const naturalVoice = esVoices.find(v => 
+        (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Neural') || v.name.includes('Online')) &&
+        !v.name.toLowerCase().includes('espeak')
+      );
+
+      // Si existe una voz Google/Natural explícita la usamos; de lo contrario dejamos null para que el navegador use su voz nativa por defecto (la que el usuario tenía antes)
+      this.selectedVoice = naturalVoice || null;
+    } catch (e) {}
+  }
+
+  getSpanishVoices() {
+    try {
+      if (!('speechSynthesis' in window)) return [];
+      const voices = window.speechSynthesis.getVoices() || [];
+      const esVoices = voices.filter(v => 
+        v.lang && v.lang.toLowerCase().replace('_', '-').startsWith('es') &&
+        !v.name.toLowerCase().includes('espeak')
+      );
+      return esVoices;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  setVoiceByUri(voiceUri) {
+    if (voiceUri === 'system' || !voiceUri) {
+      localStorage.setItem('paincave_voice', 'system');
+      this.initVoices();
+      return;
+    }
+    localStorage.setItem('paincave_voice', voiceUri);
+    this.initVoices();
+  }
+
+  getCurrentVoiceId() {
+    return localStorage.getItem('paincave_voice') || 'system';
   }
 
   init() {
@@ -25,7 +88,7 @@ class SoundEngine {
         this.silentSource.buffer = buffer;
         this.silentSource.loop = true;
         const silentGain = this.audioCtx.createGain();
-        silentGain.gain.value = 0.0001; // Casi inaudible pero mantiene vivo el hardware de audio
+        silentGain.gain.value = 0.0001; // Inaudible pero mantiene vivo el hardware de audio
         this.silentSource.connect(silentGain);
         silentGain.connect(this.audioCtx.destination);
         this.silentSource.start(0);
@@ -103,13 +166,41 @@ class SoundEngine {
     ]);
   }
 
+  testVoice() {
+    this.announce("Pain Cave listo. ¡A rodar!");
+  }
+
+  formatCoachCue(step, isStart = false) {
+    if (!step) return '';
+    let name = step.phase
+      .replace(/\(.*?\)/g, '')
+      .replace(/bloque\s*\d+:?\s*/i, '')
+      .trim();
+
+    const isStanding = step.posture === 'de pie' || name.toLowerCase().includes('de pie');
+    const postureStr = (isStanding && !name.toLowerCase().includes('de pie')) ? ', de pie' : '';
+    const cadenceStr = step.cadence ? `, a ${step.cadence} RPM` : '';
+
+    if (isStart) {
+      return `Comenzamos: ${name}${postureStr}${cadenceStr}.`;
+    }
+    return `En diez segundos: ${name}${postureStr}${cadenceStr}.`;
+  }
+
   announce(text) {
     try {
       if (!this.voiceEnabled || !('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
+
       const msg = new SpeechSynthesisUtterance(text);
       msg.lang = 'es-ES';
-      msg.rate = 1.05;
+      msg.rate = 1.0; // Velocidad natural humana (sin aceleración metálica)
+      msg.pitch = 1.0;
+
+      if (this.selectedVoice) {
+        msg.voice = this.selectedVoice;
+      }
+
       window.speechSynthesis.speak(msg);
     } catch (e) {}
   }

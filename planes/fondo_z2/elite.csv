@@ -1,7 +1,7 @@
 Elite
-Calentamiento progresivo sentado, 88, 3.5, 420
-Bloque 1: Fondo aeróbico sostenido, 92, 4.5, 1080
-Paso de pie con resistencia suave, 75, 4.5, 180
-Bloque 2: Fondo aeróbico sostenido, 90, 4.5, 1080
-Paso de pie con resistencia suave, 75, 4.5, 180
-Enfriamiento regenerativo final, 80, 2, 360
+Calentamiento, 88, 3.5, 420
+Fondo sostenido, 92, 4.5, 1080
+Pedaleo de pie, 75, 4.5, 180
+Fondo sostenido, 90, 4.5, 1080
+Pedaleo de pie, 75, 4.5, 180
+Enfriamiento, 80, 2, 360

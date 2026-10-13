@@ -112,12 +112,11 @@ class WorkoutEngine {
       });
     }
 
-    // Aviso por voz a los 10 segundos restantes
+    // Aviso por voz a los 10 segundos restantes (conciso y natural)
     if (this.timeLeft === 10 && this.workout[this.currentStep + 1]) {
       const next = this.workout[this.currentStep + 1];
-      const posText = next.posture === 'de pie' ? 'de pie' : 'sentado';
-      const cadText = next.cadence ? ` a ${next.cadence} revoluciones por minuto` : '';
-      soundEngine.announce(`En diez segundos: ${next.phase}, ${posText}${cadText}.`);
+      const cue = soundEngine.formatCoachCue(next, false);
+      soundEngine.announce(cue);
     }
 
     // Cuenta regresiva 3, 2, 1

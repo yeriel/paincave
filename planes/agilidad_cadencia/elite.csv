@@ -1,8 +1,8 @@
 Elite
-Calentamiento estructurado, 90, 4, 420
-Bloque 1 de alta cadencia sostenida, 105, 6.5, 600
-Recuperación activa rodando, 85, 3.5, 240
-Bloque 2 de alta cadencia sostenida, 105, 7, 600
-Recuperación activa rodando, 85, 3.5, 240
-Micro-intervalos: 30s rápido / 30s base, 115, 8, 480
-Lavado y enfriamiento suave, 80, 2, 440
+Calentamiento, 90, 4, 420
+Alta cadencia, 105, 6.5, 600
+Recuperación, 85, 3.5, 240
+Alta cadencia, 105, 7, 600
+Recuperación, 85, 3.5, 240
+Micro-intervalos, 115, 8, 480
+Enfriamiento, 80, 2, 440

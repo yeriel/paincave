@@ -1,8 +1,8 @@
 Elite
-Calentamiento estructurado, 88, 3.5, 420
-Activación con ráfaga en subida, 80, 6.5, 180
-Recuperación breve, 85, 3, 120
-Bloque 1: Sweet Spot (15 minutos), 90, 8, 900
-Descanso activo en Z2 baja, 85, 3.5, 300
-Bloque 2: Sweet Spot (15 minutos), 90, 8.5, 900
-Enfriamiento metabólico, 80, 2, 420
+Calentamiento, 88, 3.5, 420
+Activación, 80, 6.5, 180
+Recuperación, 85, 3, 120
+Sweet Spot, 90, 8, 900
+Recuperación, 85, 3.5, 300
+Sweet Spot, 90, 8.5, 900
+Enfriamiento, 80, 2, 420

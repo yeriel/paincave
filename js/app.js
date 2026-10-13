@@ -69,23 +69,13 @@ class PainCaveApp {
 
     workoutEngine.onStatusChange = ({ isRunning, isPaused }) => {
       const display = document.getElementById('timerDisplay');
-      const tapText = document.getElementById('tapActionText');
-      const inRideControls = document.getElementById('inRideControls');
-      const mainPauseBtn = document.getElementById('btnMainPause');
       if (!isRunning) {
         display.classList.remove('opacity-50', 'animate-pulse');
-        tapText.textContent = "Pausar";
-        if (inRideControls) inRideControls.classList.add('hidden');
       } else {
         display.classList.toggle('opacity-50', isPaused);
         display.classList.toggle('animate-pulse', isPaused);
-        tapText.textContent = isPaused ? "Reanudar" : "Pausar";
-        if (inRideControls) inRideControls.classList.remove('hidden');
-        if (mainPauseBtn) {
-          mainPauseBtn.innerHTML = isPaused ? '<i class="ti ti-player-play text-xl"></i> Reanudar' : '<i class="ti ti-player-pause text-xl"></i> Pausar';
-          mainPauseBtn.className = isPaused ? 'flex-1 py-3.5 rounded-xl font-bold text-white bg-green-600 hover:bg-green-500 flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg' : 'flex-1 py-3.5 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-500 flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg';
-        }
       }
+      ui.setRideMode(isRunning, isPaused);
     };
 
     // Verificar si hay sesión pendiente para reanudar
@@ -116,8 +106,7 @@ class PainCaveApp {
   setLevel(level) {
     this.selectedLevel = level;
     workoutEngine.selectedLevel = level;
-    const diffSelect = document.getElementById('difficulty');
-    if (diffSelect) diffSelect.value = level;
+    ui.updateLevelTabs(level);
     ui.renderRoutinesPool(this.selectedLevel, this.activeCategory);
   }
 
@@ -143,7 +132,10 @@ class PainCaveApp {
       name: `${routine.title} · ${this.selectedLevel.toUpperCase()}`
     };
 
-    document.getElementById('preWorkoutType').textContent = this.tempWorkoutBuffer.name;
+    document.getElementById('preWorkoutType').textContent = routine.title;
+    const totalSec = routine.steps.reduce((a, s) => a + s.t, 0);
+    const badgeEl = document.getElementById('preWorkoutDurationBadge');
+    if (badgeEl) badgeEl.textContent = `${Math.round(totalSec / 60)} min · ${routine.steps.length} bloques`;
 
     // Generar lista de fases
     const listEl = document.getElementById('preWorkoutStepsList');
@@ -178,7 +170,8 @@ class PainCaveApp {
     workoutEngine.start(routine, name, this.selectedLevel);
 
     const first = routine[0];
-    soundEngine.announce(`Comenzando sesión. ${first.phase}, ${first.posture === 'de pie' ? 'de pie' : 'sentado'}${first.cadence ? ' a ' + first.cadence + ' revoluciones' : ''}.`);
+    const cue = soundEngine.formatCoachCue(first, true);
+    soundEngine.announce(cue);
   }
 
   togglePause() {
@@ -354,6 +347,17 @@ class PainCaveApp {
 
   downloadTCX() {
     ui.downloadCurrentSessionTCX();
+  }
+
+  testVoice() {
+    soundEngine.init();
+    soundEngine.testVoice();
+  }
+
+  changeVoice(voiceUri) {
+    soundEngine.init();
+    soundEngine.setVoiceByUri(voiceUri);
+    soundEngine.testVoice();
   }
 
   closeModals() {
