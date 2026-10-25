@@ -146,7 +146,7 @@ class PainCaveApp {
       item.innerHTML = `
         <div class="truncate mr-2">
           <span class="font-bold text-slate-300">${idx + 1}. ${st.phase}</span>
-          <span class="text-[10px] text-slate-500 block">${st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado'} · ${st.cadence ? st.cadence + ' RPM · ' : ''}RPE ${st.rpe || '—'}</span>
+          <span class="text-[10px] text-slate-500 block">${st.posture === 'aero' ? '🚴 Aero' : (st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado')} · ${st.cadence ? st.cadence + ' RPM · ' : ''}RPE ${st.rpe || '—'}</span>
         </div>
         <span class="font-mono text-slate-400 shrink-0 font-semibold">${formatTime(st.t)}</span>
       `;
@@ -289,7 +289,7 @@ class PainCaveApp {
         item.innerHTML = `
           <div class="truncate mr-2">
             <span class="font-bold text-slate-300">${idx + 1}. ${st.phase}</span>
-            <span class="text-[10px] text-slate-500 block">${st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado'} · ${st.cadence ? st.cadence + ' RPM · ' : ''}RPE ${st.rpe || '—'}</span>
+            <span class="text-[10px] text-slate-500 block">${st.posture === 'aero' ? '🚴 Aero' : (st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado')} · ${st.cadence ? st.cadence + ' RPM · ' : ''}RPE ${st.rpe || '—'}</span>
           </div>
           <span class="font-mono text-slate-400 shrink-0 font-semibold">${formatTime(st.t)}</span>
         `;

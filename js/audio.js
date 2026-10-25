@@ -177,8 +177,13 @@ class SoundEngine {
       .replace(/bloque\s*\d+:?\s*/i, '')
       .trim();
 
-    const isStanding = step.posture === 'de pie' || name.toLowerCase().includes('de pie');
-    const postureStr = (isStanding && !name.toLowerCase().includes('de pie')) ? ', de pie' : '';
+    let postureStr = '';
+    const nameLower = name.toLowerCase();
+    if (step.posture === 'aero' && !nameLower.includes('aero')) {
+      postureStr = ', en posición aero';
+    } else if (step.posture === 'de pie' && !nameLower.includes('de pie')) {
+      postureStr = ', de pie';
+    }
     const cadenceStr = step.cadence ? `, a ${step.cadence} RPM` : '';
 
     if (isStart) {

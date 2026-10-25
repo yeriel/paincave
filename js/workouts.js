@@ -35,8 +35,18 @@ export function parseStep(step) {
   if (typeof step === 'object' && step.phase) {
     const rpe = step.rpe !== undefined ? step.rpe : null;
     const cadence = step.cadence !== undefined ? step.cadence : null;
-    const posture = step.posture || (step.phase.toLowerCase().includes('de pie') ? 'de pie' : 'sentado');
+    let posture = step.posture;
+    if (!posture) {
+      const pLower = (step.phase || '').toLowerCase();
+      if (pLower.includes('aero')) posture = 'aero';
+      else if (pLower.includes('de pie')) posture = 'de pie';
+      else posture = 'sentado';
+    }
     const zone = step.zone || getZoneFromRpe(rpe);
+    let instruction = 'Pedaleo fluido sentado';
+    if (posture === 'aero') instruction = 'Codos flexionados y core activo';
+    else if (posture === 'de pie') instruction = '¡Ponte de pie sobre los pedales!';
+
     return {
       phase: step.phase,
       desc: step.desc || `${step.phase}${cadence ? ` [Cadencia ${cadence} RPM]` : ''} [RPE ${rpe}]`,
@@ -45,7 +55,7 @@ export function parseStep(step) {
       rpe,
       posture,
       zone,
-      instruction: posture === 'de pie' ? '¡Ponte de pie sobre los pedales!' : 'Pedaleo fluido sentado'
+      instruction
     };
   }
 
@@ -57,8 +67,15 @@ export function parseStep(step) {
 
   const rpe = rm ? parseFloat(rm[1]) : (typeof step === 'object' && step.rpe !== undefined ? step.rpe : null);
   const cadence = cm ? parseInt(cm[1]) : (typeof step === 'object' && step.cadence !== undefined ? step.cadence : null);
-  const posture = desc.toLowerCase().includes('de pie') ? 'de pie' : 'sentado';
+  const pLower = (desc + ' ' + phase).toLowerCase();
+  let posture = 'sentado';
+  if (pLower.includes('aero')) posture = 'aero';
+  else if (pLower.includes('de pie')) posture = 'de pie';
   const zone = zm ? parseInt(zm[1]) : getZoneFromRpe(rpe);
+
+  let instruction = 'Pedaleo fluido sentado';
+  if (posture === 'aero') instruction = 'Codos flexionados y core activo';
+  else if (posture === 'de pie') instruction = '¡Ponte de pie sobre los pedales!';
 
   return {
     phase: phase || 'Fase activa',
@@ -68,7 +85,7 @@ export function parseStep(step) {
     rpe,
     posture,
     zone,
-    instruction: posture === 'de pie' ? '¡Ponte de pie sobre los pedales!' : 'Pedaleo fluido sentado'
+    instruction
   };
 }
 
@@ -109,7 +126,11 @@ export function parseCSV(content) {
       zone = getZoneFromRpe(rpe);
     }
 
-    const posture = phase.toLowerCase().includes('de pie') ? 'de pie' : 'sentado';
+    const pLower = phase.toLowerCase();
+    let posture = 'sentado';
+    if (pLower.includes('aero')) posture = 'aero';
+    else if (pLower.includes('de pie')) posture = 'de pie';
+
     steps.push({
       phase,
       desc: `${phase}${cadence ? ` [Cadencia ${cadence} RPM]` : ''} [Zona ${zone}] [RPE ${rpe}]`,
@@ -133,297 +154,332 @@ export function parseCSV(content) {
 // ==============================================================================
 
 export const ROUTINES_POOL = [
-  // 1. FONDO AERÓBICO (ZONA 2)
+  // 1. FONDO AERÓBICO (ZONA 2) - Base Mitocondrial y Quema de Grasas
   {
     id: "fondo_z2",
     category: "fondo",
     title: "Fondo Aeróbico Z2",
-    subtitle: "Resistencia base continua",
+    subtitle: "Resistencia base continua (88-92 RPM)",
     icon: "ti-leaf",
     colorClass: "emerald",
     levels: {
       principiante: [
         { phase: "Calentamiento", cadence: 85, rpe: 3, posture: "sentado", t: 360 },
-        { phase: "Rodaje base", cadence: 90, rpe: 4, posture: "sentado", t: 720 },
-        { phase: "Pedaleo de pie", cadence: 70, rpe: 4, posture: "de pie", t: 120 },
-        { phase: "Fondo aeróbico", cadence: 92, rpe: 4.5, posture: "sentado", t: 720 },
-        { phase: "Pedaleo de pie", cadence: 70, rpe: 4, posture: "de pie", t: 120 },
-        { phase: "Enfriamiento", cadence: 85, rpe: 3, posture: "sentado", t: 480 }
-      ], // 2520s = 42 min
+        { phase: "Rodaje base", cadence: 88, rpe: 4, posture: "sentado", t: 780 },
+        { phase: "Alivio de pie", cadence: 75, rpe: 4, posture: "de pie", t: 120 },
+        { phase: "Fondo Z2 sostenido", cadence: 90, rpe: 4.5, posture: "sentado", t: 900 },
+        { phase: "Alivio de pie", cadence: 75, rpe: 4, posture: "de pie", t: 120 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2.5, posture: "sentado", t: 420 }
+      ], // 2700s = 45 min
       amateur: [
-        { phase: "Calentamiento", cadence: 85, rpe: 3, posture: "sentado", t: 420 },
-        { phase: "Resistencia base", cadence: 90, rpe: 4, posture: "sentado", t: 900 },
-        { phase: "Pedaleo de pie", cadence: 70, rpe: 4, posture: "de pie", t: 120 },
-        { phase: "Fondo aeróbico", cadence: 92, rpe: 4.5, posture: "sentado", t: 900 },
-        { phase: "Pedaleo de pie", cadence: 70, rpe: 4.5, posture: "de pie", t: 180 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 480 }
+        { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 420 },
+        { phase: "Rodaje base Z2", cadence: 90, rpe: 4.5, posture: "sentado", t: 900 },
+        { phase: "Posición Aero Z2", cadence: 90, rpe: 5, posture: "aero", t: 240 },
+        { phase: "Fondo Z2 sostenido", cadence: 90, rpe: 4.5, posture: "sentado", t: 780 },
+        { phase: "Posición Aero Z2", cadence: 90, rpe: 5, posture: "aero", t: 240 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 420 }
       ], // 3000s = 50 min
       elite: [
         { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 420 },
-        { phase: "Fondo sostenido", cadence: 92, rpe: 4.5, posture: "sentado", t: 1080 },
-        { phase: "Pedaleo de pie", cadence: 75, rpe: 4.5, posture: "de pie", t: 180 },
-        { phase: "Fondo sostenido", cadence: 90, rpe: 4.5, posture: "sentado", t: 1080 },
-        { phase: "Pedaleo de pie", cadence: 75, rpe: 4.5, posture: "de pie", t: 180 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
+        { phase: "Fondo Z2 sostenido", cadence: 92, rpe: 4.5, posture: "sentado", t: 960 },
+        { phase: "Posición Aero Z2", cadence: 92, rpe: 5, posture: "aero", t: 360 },
+        { phase: "Fondo Z2 sostenido", cadence: 92, rpe: 4.5, posture: "sentado", t: 960 },
+        { phase: "Posición Aero Z2", cadence: 92, rpe: 5, posture: "aero", t: 300 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 300 }
       ], // 3300s = 55 min
       pro: [
-        { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 480 },
-        { phase: "Fondo sostenido", cadence: 92, rpe: 4.5, posture: "sentado", t: 1200 },
-        { phase: "Pedaleo de pie", cadence: 75, rpe: 4.5, posture: "de pie", t: 180 },
-        { phase: "Fondo sostenido", cadence: 90, rpe: 4.5, posture: "sentado", t: 1200 },
-        { phase: "Pedaleo de pie", cadence: 75, rpe: 4.5, posture: "de pie", t: 180 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
+        { phase: "Calentamiento", cadence: 90, rpe: 4, posture: "sentado", t: 480 },
+        { phase: "Fondo Z2 sostenido", cadence: 92, rpe: 4.5, posture: "sentado", t: 1020 },
+        { phase: "Posición Aero Z2", cadence: 92, rpe: 5, posture: "aero", t: 480 },
+        { phase: "Fondo Z2 sostenido", cadence: 92, rpe: 4.5, posture: "sentado", t: 960 },
+        { phase: "Posición Aero Z2", cadence: 92, rpe: 5, posture: "aero", t: 360 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 300 }
       ] // 3600s = 60 min
     }
   },
 
-  // 2. UMBRAL & SWEET SPOT
+  // 2. ADAPTACIÓN POSTURAL AERO - Codos a 90°, Core & Torso Inclinado
   {
-    id: "sweet_spot",
-    category: "fuerza",
-    title: "Sweet Spot",
-    subtitle: "Umbral · Potencia sostenida",
-    icon: "ti-flame",
-    colorClass: "amber",
+    id: "adaptacion_aero",
+    category: "aero",
+    title: "Adaptación Postural Aero",
+    subtitle: "Core, lumbares y codos a 90°",
+    icon: "ti-wind",
+    colorClass: "cyan",
     levels: {
       principiante: [
         { phase: "Calentamiento", cadence: 85, rpe: 3, posture: "sentado", t: 360 },
-        { phase: "Activación", cadence: 90, rpe: 5, posture: "sentado", t: 240 },
-        { phase: "Sweet Spot", cadence: 88, rpe: 7, posture: "sentado", t: 600 },
-        { phase: "Recuperación", cadence: 80, rpe: 3, posture: "sentado", t: 240 },
-        { phase: "Sweet Spot", cadence: 88, rpe: 7.5, posture: "sentado", t: 600 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
-      ], // 2400s = 40 min
+        { phase: "Posición Aero", cadence: 88, rpe: 4.5, posture: "aero", t: 240 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 180 },
+        { phase: "Posición Aero", cadence: 90, rpe: 5, posture: "aero", t: 300 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 180 },
+        { phase: "Posición Aero", cadence: 90, rpe: 5, posture: "aero", t: 360 },
+        { phase: "Alivio de pie", cadence: 75, rpe: 4, posture: "de pie", t: 120 },
+        { phase: "Posición Aero", cadence: 90, rpe: 5, posture: "aero", t: 480 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 420 }
+      ], // 2640s = 44 min
       amateur: [
-        { phase: "Calentamiento", cadence: 85, rpe: 3.5, posture: "sentado", t: 420 },
-        { phase: "Activación", cadence: 92, rpe: 6, posture: "sentado", t: 180 },
-        { phase: "Recuperación", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
-        { phase: "Sweet Spot", cadence: 88, rpe: 7.5, posture: "sentado", t: 780 },
-        { phase: "Recuperación", cadence: 85, rpe: 3.5, posture: "sentado", t: 300 },
-        { phase: "Sweet Spot", cadence: 88, rpe: 8, posture: "sentado", t: 780 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 300 }
+        { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 420 },
+        { phase: "Posición Aero", cadence: 90, rpe: 5, posture: "aero", t: 300 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 120 },
+        { phase: "Posición Aero", cadence: 90, rpe: 5, posture: "aero", t: 360 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 120 },
+        { phase: "Posición Aero", cadence: 90, rpe: 5.5, posture: "aero", t: 420 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 120 },
+        { phase: "Posición Aero", cadence: 90, rpe: 5.5, posture: "aero", t: 480 },
+        { phase: "Alivio de pie", cadence: 75, rpe: 4, posture: "de pie", t: 180 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 360 }
       ], // 2880s = 48 min
       elite: [
         { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 420 },
-        { phase: "Activación", cadence: 80, rpe: 6.5, posture: "sentado", t: 180 },
-        { phase: "Recuperación", cadence: 85, rpe: 3, posture: "sentado", t: 120 },
-        { phase: "Sweet Spot", cadence: 90, rpe: 8, posture: "sentado", t: 900 },
-        { phase: "Recuperación", cadence: 85, rpe: 3.5, posture: "sentado", t: 300 },
-        { phase: "Sweet Spot", cadence: 90, rpe: 8.5, posture: "sentado", t: 900 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 420 }
+        { phase: "Posición Aero", cadence: 92, rpe: 5.5, posture: "aero", t: 480 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 120 },
+        { phase: "Posición Aero", cadence: 92, rpe: 6, posture: "aero", t: 600 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 120 },
+        { phase: "Posición Aero", cadence: 92, rpe: 6, posture: "aero", t: 660 },
+        { phase: "Alivio de pie", cadence: 75, rpe: 4, posture: "de pie", t: 180 },
+        { phase: "Posición Aero final", cadence: 92, rpe: 6, posture: "aero", t: 480 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 300 }
+      ], // 3240s = 54 min
+      pro: [
+        { phase: "Calentamiento", cadence: 90, rpe: 4, posture: "sentado", t: 480 },
+        { phase: "Posición Aero", cadence: 92, rpe: 6, posture: "aero", t: 600 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 120 },
+        { phase: "Posición Aero", cadence: 92, rpe: 6.5, posture: "aero", t: 720 },
+        { phase: "Rodaje erguido", cadence: 88, rpe: 4, posture: "sentado", t: 120 },
+        { phase: "Posición Aero", cadence: 92, rpe: 6.5, posture: "aero", t: 840 },
+        { phase: "Alivio de pie", cadence: 75, rpe: 4.5, posture: "de pie", t: 180 },
+        { phase: "Crucero Aero final", cadence: 95, rpe: 7, posture: "aero", t: 300 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 240 }
+      ] // 3600s = 60 min
+    }
+  },
+
+  // 3. INTERVALOS 5x3 MIN (UMBRAL) - Pauta de los Miércoles de la Guía Técnica
+  {
+    id: "intervalos_umbral",
+    category: "umbral",
+    title: "Intervalos 5x3 min Umbral",
+    subtitle: "Pauta de miércoles (guía técnica)",
+    icon: "ti-flame",
+    colorClass: "rose",
+    levels: {
+      principiante: [
+        { phase: "Calentamiento suave", cadence: 85, rpe: 3.5, posture: "sentado", t: 480 },
+        { phase: "Activación previa", cadence: 90, rpe: 5.5, posture: "sentado", t: 180 },
+        { phase: "Recuperación previa", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Serie 1: Umbral", cadence: 88, rpe: 7.5, posture: "sentado", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Serie 2: Umbral", cadence: 88, rpe: 7.5, posture: "aero", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Serie 3: Umbral", cadence: 88, rpe: 8, posture: "sentado", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Serie 4: Umbral", cadence: 88, rpe: 8, posture: "aero", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Enfriamiento en Z2", cadence: 85, rpe: 2.5, posture: "sentado", t: 660 }
+      ], // 2640s = 44 min
+      amateur: [
+        { phase: "Calentamiento suave", cadence: 85, rpe: 3.5, posture: "sentado", t: 600 },
+        { phase: "Serie 1: Umbral", cadence: 88, rpe: 7.5, posture: "sentado", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Serie 2: Umbral", cadence: 90, rpe: 8, posture: "aero", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Serie 3: Umbral", cadence: 90, rpe: 8, posture: "sentado", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Serie 4: Umbral", cadence: 90, rpe: 8.5, posture: "aero", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Serie 5: Umbral final", cadence: 90, rpe: 8.5, posture: "aero", t: 180 },
+        { phase: "Recuperación suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Enfriamiento en Z2", cadence: 85, rpe: 3, posture: "sentado", t: 900 }
+      ], // 3000s = 50 min (Pauta exacta de la guía)
+      elite: [
+        { phase: "Calentamiento estructurado", cadence: 88, rpe: 4, posture: "sentado", t: 480 },
+        { phase: "Serie 1: Umbral", cadence: 90, rpe: 8.5, posture: "aero", t: 180 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 2: Umbral", cadence: 90, rpe: 8.5, posture: "aero", t: 180 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 3: Umbral", cadence: 92, rpe: 8.5, posture: "aero", t: 180 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 4: Umbral", cadence: 92, rpe: 8.5, posture: "aero", t: 180 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 5: Umbral", cadence: 92, rpe: 9, posture: "aero", t: 180 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 6: Umbral a tope", cadence: 92, rpe: 9, posture: "aero", t: 180 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Enfriamiento en Z2", cadence: 85, rpe: 2.5, posture: "sentado", t: 1020 }
+      ], // 3120s = 52 min
+      pro: [
+        { phase: "Calentamiento estructurado", cadence: 90, rpe: 4, posture: "sentado", t: 480 },
+        { phase: "Serie 1: Umbral Crítico", cadence: 92, rpe: 9, posture: "aero", t: 210 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 2: Umbral Crítico", cadence: 92, rpe: 9, posture: "aero", t: 210 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 3: Umbral Crítico", cadence: 92, rpe: 9, posture: "aero", t: 210 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 4: Umbral Crítico", cadence: 92, rpe: 9, posture: "aero", t: 210 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 5: Umbral Crítico", cadence: 92, rpe: 9.5, posture: "aero", t: 210 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Serie 6: Umbral Crítico", cadence: 94, rpe: 9.5, posture: "aero", t: 210 },
+        { phase: "Recuperación rápida", cadence: 85, rpe: 3.5, posture: "sentado", t: 90 },
+        { phase: "Enfriamiento en Z2", cadence: 85, rpe: 2.5, posture: "sentado", t: 1200 }
+      ] // 3480s = 58 min
+    }
+  },
+
+  // 4. SWEET SPOT 2x15 MIN - Potencia de Crucero Sostenida
+  {
+    id: "sweet_spot",
+    category: "umbral",
+    title: "Sweet Spot 2x15 min",
+    subtitle: "Potencia de crucero y umbral",
+    icon: "ti-bolt",
+    colorClass: "amber",
+    levels: {
+      principiante: [
+        { phase: "Calentamiento", cadence: 85, rpe: 3.5, posture: "sentado", t: 360 },
+        { phase: "Activación", cadence: 90, rpe: 5.5, posture: "sentado", t: 240 },
+        { phase: "Pausa suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Bloque 1: Sweet Spot", cadence: 88, rpe: 7.5, posture: "sentado", t: 600 },
+        { phase: "Recuperación activa", cadence: 82, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Bloque 2: Sweet Spot", cadence: 88, rpe: 7.5, posture: "aero", t: 600 },
+        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
+      ], // 2520s = 42 min
+      amateur: [
+        { phase: "Calentamiento", cadence: 85, rpe: 3.5, posture: "sentado", t: 420 },
+        { phase: "Activación", cadence: 92, rpe: 6, posture: "sentado", t: 180 },
+        { phase: "Pausa suave", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Bloque 1: Sweet Spot", cadence: 88, rpe: 7.5, posture: "sentado", t: 780 },
+        { phase: "Recuperación activa", cadence: 82, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Bloque 2: Sweet Spot Aero", cadence: 90, rpe: 8, posture: "aero", t: 780 },
+        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
+      ], // 2880s = 48 min
+      elite: [
+        { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 420 },
+        { phase: "Activación", cadence: 92, rpe: 6.5, posture: "sentado", t: 180 },
+        { phase: "Pausa suave", cadence: 85, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Bloque 1: Sweet Spot", cadence: 90, rpe: 8, posture: "sentado", t: 900 },
+        { phase: "Recuperación activa", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Bloque 2: Sweet Spot Aero", cadence: 90, rpe: 8.5, posture: "aero", t: 900 },
+        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 480 }
       ], // 3240s = 54 min
       pro: [
         { phase: "Calentamiento", cadence: 90, rpe: 4, posture: "sentado", t: 480 },
         { phase: "Activación", cadence: 95, rpe: 7, posture: "sentado", t: 240 },
-        { phase: "Recuperación", cadence: 85, rpe: 3, posture: "sentado", t: 120 },
-        { phase: "Umbral crítico", cadence: 90, rpe: 8.5, posture: "sentado", t: 1080 },
-        { phase: "Recuperación", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
-        { phase: "Umbral crítico", cadence: 90, rpe: 9, posture: "sentado", t: 1080 },
+        { phase: "Pausa suave", cadence: 85, rpe: 3, posture: "sentado", t: 120 },
+        { phase: "Bloque 1: Umbral sostenido", cadence: 92, rpe: 8.5, posture: "sentado", t: 1080 },
+        { phase: "Recuperación activa", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Bloque 2: Umbral Aero", cadence: 92, rpe: 9, posture: "aero", t: 1080 },
         { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
       ] // 3600s = 60 min
     }
   },
 
-  // 3. FUERZA & ESCALADA (ATRANQUE EN SPINNING)
-  {
-    id: "escalada_fuerza",
-    category: "escalada",
-    title: "Escalada de Fuerza",
-    subtitle: "55-65 RPM · Carga alta",
-    icon: "ti-mountain",
-    colorClass: "sky",
-    levels: {
-      principiante: [
-        { phase: "Calentamiento", cadence: 85, rpe: 3, posture: "sentado", t: 360 },
-        { phase: "Aproximación", cadence: 80, rpe: 4.5, posture: "sentado", t: 240 },
-        { phase: "Subida de fuerza", cadence: 65, rpe: 6, posture: "sentado", t: 480 },
-        { phase: "Rampa dura de pie", cadence: 60, rpe: 7.5, posture: "de pie", t: 120 },
-        { phase: "Falso llano", cadence: 80, rpe: 3.5, posture: "sentado", t: 240 },
-        { phase: "Subida de fuerza", cadence: 65, rpe: 6.5, posture: "sentado", t: 480 },
-        { phase: "Rampa final de pie", cadence: 55, rpe: 8, posture: "de pie", t: 120 },
-        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 480 }
-      ], // 2520s = 42 min
-      amateur: [
-        { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 420 },
-        { phase: "Aproximación", cadence: 80, rpe: 5, posture: "sentado", t: 240 },
-        { phase: "Subida de fuerza", cadence: 65, rpe: 7.5, posture: "sentado", t: 540 },
-        { phase: "Rampa dura de pie", cadence: 58, rpe: 8.5, posture: "de pie", t: 180 },
-        { phase: "Falso llano", cadence: 85, rpe: 4, posture: "sentado", t: 240 },
-        { phase: "Subida de fuerza", cadence: 65, rpe: 8, posture: "sentado", t: 540 },
-        { phase: "Cumbre de pie", cadence: 55, rpe: 9, posture: "de pie", t: 180 },
-        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 540 }
-      ], // 2880s = 48 min
-      elite: [
-        { phase: "Calentamiento", cadence: 90, rpe: 4, posture: "sentado", t: 420 },
-        { phase: "Entrada en rampa", cadence: 75, rpe: 6, posture: "sentado", t: 240 },
-        { phase: "Fuerza en subida", cadence: 60, rpe: 8, posture: "sentado", t: 600 },
-        { phase: "Muro de pie", cadence: 55, rpe: 9.5, posture: "de pie", t: 180 },
-        { phase: "Falso llano", cadence: 85, rpe: 4, posture: "sentado", t: 240 },
-        { phase: "Segunda subida", cadence: 60, rpe: 8.5, posture: "sentado", t: 660 },
-        { phase: "Cumbre de pie", cadence: 55, rpe: 9.5, posture: "de pie", t: 300 },
-        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 600 }
-      ], // 3240s = 54 min
-      pro: [
-        { phase: "Calentamiento", cadence: 92, rpe: 4, posture: "sentado", t: 480 },
-        { phase: "Aproximación", cadence: 80, rpe: 6.5, posture: "sentado", t: 300 },
-        { phase: "Subida a fuerza", cadence: 55, rpe: 8.5, posture: "sentado", t: 720 },
-        { phase: "Rampa dura de pie", cadence: 50, rpe: 10, posture: "de pie", t: 240 },
-        { phase: "Falso llano", cadence: 85, rpe: 4, posture: "sentado", t: 240 },
-        { phase: "Subida final", cadence: 65, rpe: 9, posture: "sentado", t: 720 },
-        { phase: "Cumbre de pie", cadence: 60, rpe: 10, posture: "de pie", t: 300 },
-        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 600 }
-      ] // 3600s = 60 min
-    }
-  },
-
-  // 4. AGILIDAD & CADENCIA (MOLINILLO Y EFICIENCIA)
+  // 5. AGILIDAD & MOLINILLO (90-110 RPM) - Eficiencia Neuromuscular y Single Speed
   {
     id: "agilidad_cadencia",
-    category: "agilidad",
+    category: "cadencia",
     title: "Agilidad & Molinillo",
-    subtitle: "95-115 RPM · Eficiencia",
+    subtitle: "90-110 RPM · Eficiencia neuromuscular",
     icon: "ti-rotate-clockwise",
     colorClass: "blue",
     levels: {
       principiante: [
         { phase: "Calentamiento", cadence: 85, rpe: 3, posture: "sentado", t: 360 },
         { phase: "Ritmo base", cadence: 90, rpe: 4, posture: "sentado", t: 360 },
-        { phase: "Molinillo ágil", cadence: 100, rpe: 5.5, posture: "sentado", t: 360 },
+        { phase: "Molinillo ágil", cadence: 98, rpe: 5, posture: "sentado", t: 360 },
         { phase: "Recuperación", cadence: 85, rpe: 3, posture: "sentado", t: 180 },
-        { phase: "Molinillo ágil", cadence: 100, rpe: 5.5, posture: "sentado", t: 360 },
+        { phase: "Molinillo ágil", cadence: 98, rpe: 5, posture: "sentado", t: 360 },
         { phase: "Recuperación", cadence: 85, rpe: 3, posture: "sentado", t: 180 },
-        { phase: "Aceleración ágil", cadence: 105, rpe: 6.5, posture: "sentado", t: 240 },
-        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 260 }
-      ], // 2400s = 40 min
+        { phase: "Aceleración ágil", cadence: 102, rpe: 6, posture: "sentado", t: 360 },
+        { phase: "Enfriamiento", cadence: 85, rpe: 2, posture: "sentado", t: 360 }
+      ], // 2520s = 42 min
       amateur: [
         { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 420 },
         { phase: "Ritmo base", cadence: 92, rpe: 4.5, posture: "sentado", t: 300 },
-        { phase: "Molinillo ágil", cadence: 102, rpe: 6, posture: "sentado", t: 300 },
-        { phase: "Molinillo rápido", cadence: 110, rpe: 7.5, posture: "sentado", t: 180 },
-        { phase: "Recuperación", cadence: 85, rpe: 3, posture: "sentado", t: 240 },
+        { phase: "Pirámide 1: Molinillo", cadence: 100, rpe: 5.5, posture: "sentado", t: 300 },
+        { phase: "Molinillo rápido", cadence: 108, rpe: 6.5, posture: "sentado", t: 180 },
+        { phase: "Recuperación suave", cadence: 85, rpe: 3, posture: "sentado", t: 240 },
         { phase: "Ritmo base", cadence: 92, rpe: 4.5, posture: "sentado", t: 300 },
-        { phase: "Molinillo ágil", cadence: 102, rpe: 6, posture: "sentado", t: 300 },
-        { phase: "Molinillo rápido", cadence: 110, rpe: 7.5, posture: "sentado", t: 180 },
-        { phase: "Recuperación", cadence: 85, rpe: 3, posture: "sentado", t: 240 },
-        { phase: "Sprint ágil", cadence: 115, rpe: 8.5, posture: "sentado", t: 60 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 240 }
-      ], // 2760s = 46 min
+        { phase: "Pirámide 2: Molinillo Aero", cadence: 100, rpe: 5.5, posture: "aero", t: 300 },
+        { phase: "Molinillo rápido Aero", cadence: 108, rpe: 6.5, posture: "aero", t: 180 },
+        { phase: "Recuperación suave", cadence: 85, rpe: 3, posture: "sentado", t: 240 },
+        { phase: "Sprint de cadencia", cadence: 115, rpe: 8, posture: "sentado", t: 60 },
+        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
+      ], // 2880s = 48 min
       elite: [
         { phase: "Calentamiento", cadence: 90, rpe: 4, posture: "sentado", t: 420 },
-        { phase: "Alta cadencia", cadence: 105, rpe: 6.5, posture: "sentado", t: 600 },
-        { phase: "Recuperación", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
-        { phase: "Alta cadencia", cadence: 105, rpe: 7, posture: "sentado", t: 600 },
-        { phase: "Recuperación", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
-        { phase: "Micro-intervalos", cadence: 115, rpe: 8, posture: "sentado", t: 480 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 440 }
+        { phase: "Alta cadencia sostenida", cadence: 105, rpe: 6.5, posture: "sentado", t: 600 },
+        { phase: "Recuperación activa", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Alta cadencia en Aero", cadence: 105, rpe: 7, posture: "aero", t: 600 },
+        { phase: "Recuperación activa", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Micro-intervalos rápidos", cadence: 115, rpe: 7.5, posture: "sentado", t: 540 },
+        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 480 }
       ], // 3120s = 52 min
       pro: [
         { phase: "Calentamiento", cadence: 92, rpe: 4, posture: "sentado", t: 480 },
-        { phase: "Tempo ágil", cadence: 105, rpe: 7, posture: "sentado", t: 720 },
-        { phase: "Recuperación", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
-        { phase: "Umbral ágil", cadence: 108, rpe: 8, posture: "sentado", t: 720 },
-        { phase: "Recuperación", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
-        { phase: "Aceleración extrema", cadence: 120, rpe: 9, posture: "sentado", t: 600 },
+        { phase: "Tempo cadencia elevada", cadence: 105, rpe: 7, posture: "sentado", t: 720 },
+        { phase: "Recuperación activa", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Umbral cadencia Aero", cadence: 108, rpe: 8, posture: "aero", t: 720 },
+        { phase: "Recuperación activa", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Ráfagas over-speed", cadence: 120, rpe: 8.5, posture: "sentado", t: 480 },
         { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 480 }
-      ] // 3480s = 58 min
+      ] // 3360s = 56 min
     }
   },
 
-  // 5. HIIT & POTENCIA MÁXIMA
+  // 6. TEST DE PASE AERO (60 MIN) - Criterio Objetivo de la Guía Técnica
   {
-    id: "hiit_spinning",
-    category: "hiit",
-    title: "HIIT Sprints",
-    subtitle: "Intervalos · Potencia máxima",
-    icon: "ti-bolt",
-    colorClass: "rose",
+    id: "test_pase_aero",
+    category: "test",
+    title: "Test de Pase Aero 60 min",
+    subtitle: "Evaluación objetiva (guía técnica)",
+    icon: "ti-award",
+    colorClass: "purple",
     levels: {
       principiante: [
-        { phase: "Calentamiento", cadence: 85, rpe: 3, posture: "sentado", t: 480 },
-        { phase: "Activación", cadence: 95, rpe: 6, posture: "sentado", t: 120 },
-        { phase: "Recuperación", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
-        { phase: "Sprint de pie", cadence: 105, rpe: 8.5, posture: "de pie", t: 30 },
-        { phase: "Recuperación", cadence: 75, rpe: 2.5, posture: "sentado", t: 90 },
-        { phase: "Sprint de pie", cadence: 105, rpe: 8.5, posture: "de pie", t: 30 },
-        { phase: "Recuperación", cadence: 75, rpe: 2.5, posture: "sentado", t: 90 },
-        { phase: "Sprint de pie", cadence: 105, rpe: 9, posture: "de pie", t: 30 },
-        { phase: "Recuperación", cadence: 75, rpe: 2.5, posture: "sentado", t: 90 },
-        { phase: "Rodaje intermedio", cadence: 88, rpe: 4, posture: "sentado", t: 480 },
-        { phase: "Aceleración sentado", cadence: 100, rpe: 8.5, posture: "sentado", t: 45 },
-        { phase: "Recuperación", cadence: 75, rpe: 2.5, posture: "sentado", t: 75 },
-        { phase: "Aceleración de pie", cadence: 105, rpe: 9, posture: "de pie", t: 45 },
-        { phase: "Recuperación", cadence: 75, rpe: 2.5, posture: "sentado", t: 75 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 480 }
-      ], // 2280s = 38 min
-      amateur: [
-        { phase: "Calentamiento", cadence: 88, rpe: 3.5, posture: "sentado", t: 480 },
-        { phase: "Activación", cadence: 95, rpe: 6.5, posture: "sentado", t: 180 },
-        { phase: "Recuperación", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
-        { phase: "Sprint de pie", cadence: 110, rpe: 9.5, posture: "de pie", t: 30 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Sprint de pie", cadence: 110, rpe: 9.5, posture: "de pie", t: 30 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Sprint de pie", cadence: 110, rpe: 9.5, posture: "de pie", t: 30 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Sprint de pie", cadence: 110, rpe: 10, posture: "de pie", t: 30 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Rodaje intermedio", cadence: 88, rpe: 4, posture: "sentado", t: 540 },
-        { phase: "Ataque sentado", cadence: 100, rpe: 9, posture: "sentado", t: 60 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Ataque de pie", cadence: 105, rpe: 9.5, posture: "de pie", t: 60 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Sprint final de pie", cadence: 115, rpe: 10, posture: "de pie", t: 30 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 760 }
-      ], // 2700s = 45 min
-      elite: [
-        { phase: "Calentamiento", cadence: 90, rpe: 4, posture: "sentado", t: 480 },
-        { phase: "Activación", cadence: 100, rpe: 7, posture: "sentado", t: 180 },
-        { phase: "Recuperación", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
-        { phase: "Sprint de pie", cadence: 115, rpe: 10, posture: "de pie", t: 40 },
-        { phase: "Recuperación", cadence: 70, rpe: 3, posture: "sentado", t: 50 },
-        { phase: "Sprint de pie", cadence: 115, rpe: 10, posture: "de pie", t: 40 },
-        { phase: "Recuperación", cadence: 70, rpe: 3, posture: "sentado", t: 50 },
-        { phase: "Sprint de pie", cadence: 115, rpe: 10, posture: "de pie", t: 40 },
-        { phase: "Recuperación", cadence: 70, rpe: 3, posture: "sentado", t: 50 },
-        { phase: "Sprint de pie", cadence: 115, rpe: 10, posture: "de pie", t: 40 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 120 },
-        { phase: "Rodaje intermedio", cadence: 90, rpe: 4.5, posture: "sentado", t: 600 },
-        { phase: "Intervalo VO2 sentado", cadence: 105, rpe: 9.5, posture: "sentado", t: 120 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Intervalo VO2 de pie", cadence: 105, rpe: 10, posture: "de pie", t: 120 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Sprint final de pie", cadence: 125, rpe: 10, posture: "de pie", t: 30 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 720 }
+        { phase: "Calentamiento progresivo", cadence: 85, rpe: 3, posture: "sentado", t: 480 },
+        { phase: "Bloque 1: Resistencia base", cadence: 88, rpe: 4.5, posture: "sentado", t: 900 },
+        { phase: "Bloque 2: Posición Aero", cadence: 88, rpe: 5, posture: "aero", t: 480 },
+        { phase: "Transición activa", cadence: 85, rpe: 3.5, posture: "sentado", t: 240 },
+        { phase: "Bloque 3: Sostenido final Aero", cadence: 90, rpe: 5, posture: "aero", t: 540 },
+        { phase: "Enfriamiento y soltar", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
       ], // 3000s = 50 min
+      amateur: [
+        { phase: "Calentamiento progresivo", cadence: 85, rpe: 3.5, posture: "sentado", t: 600 },
+        { phase: "Bloque 1: Resistencia erguido", cadence: 88, rpe: 4.5, posture: "sentado", t: 600 },
+        { phase: "Bloque 2: Posición Aero", cadence: 90, rpe: 5, posture: "aero", t: 600 },
+        { phase: "Transición activa de respiro", cadence: 85, rpe: 4, posture: "sentado", t: 300 },
+        { phase: "Bloque 3: Crucero Aero final", cadence: 90, rpe: 5.5, posture: "aero", t: 900 },
+        { phase: "Enfriamiento y soltar piernas", cadence: 80, rpe: 2, posture: "sentado", t: 600 }
+      ], // 3600s = 60 min (Test oficial de la guía)
+      elite: [
+        { phase: "Calentamiento estructurado", cadence: 88, rpe: 3.5, posture: "sentado", t: 480 },
+        { phase: "Bloque 1: Aero sostenido", cadence: 92, rpe: 5.5, posture: "aero", t: 900 },
+        { phase: "Transición activa", cadence: 88, rpe: 4, posture: "sentado", t: 240 },
+        { phase: "Bloque 2: Umbral Aero", cadence: 92, rpe: 6.5, posture: "aero", t: 900 },
+        { phase: "Transición activa", cadence: 88, rpe: 4, posture: "sentado", t: 240 },
+        { phase: "Remate Aero final", cadence: 95, rpe: 7.5, posture: "aero", t: 480 },
+        { phase: "Enfriamiento regenerativo", cadence: 80, rpe: 2, posture: "sentado", t: 360 }
+      ], // 3600s = 60 min
       pro: [
-        { phase: "Calentamiento", cadence: 92, rpe: 4, posture: "sentado", t: 480 },
-        { phase: "Activación", cadence: 105, rpe: 7.5, posture: "sentado", t: 180 },
-        { phase: "Recuperación", cadence: 80, rpe: 3, posture: "sentado", t: 120 },
-        { phase: "Sprint de pie", cadence: 120, rpe: 10, posture: "de pie", t: 45 },
-        { phase: "Recuperación", cadence: 70, rpe: 3, posture: "sentado", t: 45 },
-        { phase: "Sprint de pie", cadence: 120, rpe: 10, posture: "de pie", t: 45 },
-        { phase: "Recuperación", cadence: 70, rpe: 3, posture: "sentado", t: 45 },
-        { phase: "Sprint de pie", cadence: 120, rpe: 10, posture: "de pie", t: 45 },
-        { phase: "Recuperación", cadence: 70, rpe: 3, posture: "sentado", t: 45 },
-        { phase: "Sprint de pie", cadence: 120, rpe: 10, posture: "de pie", t: 45 },
-        { phase: "Recuperación", cadence: 70, rpe: 3, posture: "sentado", t: 45 },
-        { phase: "Rodaje intermedio", cadence: 90, rpe: 4.5, posture: "sentado", t: 600 },
-        { phase: "Intervalo anaeróbico", cadence: 110, rpe: 9.5, posture: "sentado", t: 180 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Intervalo anaeróbico de pie", cadence: 110, rpe: 10, posture: "de pie", t: 180 },
-        { phase: "Recuperación", cadence: 75, rpe: 3, posture: "sentado", t: 60 },
-        { phase: "Sprint final de pie", cadence: 130, rpe: 10, posture: "de pie", t: 40 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 940 }
-      ] // 3300s = 55 min
+        { phase: "Calentamiento estructurado", cadence: 90, rpe: 4, posture: "sentado", t: 480 },
+        { phase: "Bloque 1: Aero sostenido", cadence: 92, rpe: 6, posture: "aero", t: 1020 },
+        { phase: "Transición activa", cadence: 88, rpe: 4, posture: "sentado", t: 180 },
+        { phase: "Bloque 2: Aero sostenido", cadence: 94, rpe: 7, posture: "aero", t: 1020 },
+        { phase: "Transición activa", cadence: 88, rpe: 4, posture: "sentado", t: 180 },
+        { phase: "Esprint Aero final", cadence: 96, rpe: 8, posture: "aero", t: 420 },
+        { phase: "Enfriamiento regenerativo", cadence: 80, rpe: 2, posture: "sentado", t: 300 }
+      ] // 3600s = 60 min
     }
   },
 
-  // 6. RECUPERACIÓN ACTIVA (DÍAS POST-FATIGA)
+  // 7. RECUPERACIÓN ACTIVA (ZONA 1) - Regenerativo y Soltar Piernas
   {
     id: "recuperacion_activa",
     category: "recuperacion",
     title: "Recuperación Activa",
-    subtitle: "Zona 1 · Regenerativo",
+    subtitle: "Zona 1 · Regenerativo suave",
     icon: "ti-activity",
     colorClass: "teal",
     levels: {
@@ -432,15 +488,15 @@ export const ROUTINES_POOL = [
         { phase: "Pedaleo regenerativo", cadence: 88, rpe: 2.5, posture: "sentado", t: 600 },
         { phase: "Alivio de pie", cadence: 65, rpe: 2.5, posture: "de pie", t: 120 },
         { phase: "Pedaleo regenerativo", cadence: 88, rpe: 2.5, posture: "sentado", t: 600 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 480 }
-      ], // 2100s = 35 min
+        { phase: "Enfriamiento", cadence: 80, rpe: 2, posture: "sentado", t: 540 }
+      ], // 2160s = 36 min
       amateur: [
         { phase: "Rodaje suave", cadence: 82, rpe: 2, posture: "sentado", t: 360 },
         { phase: "Pedaleo regenerativo", cadence: 88, rpe: 2.5, posture: "sentado", t: 900 },
         { phase: "Alivio de pie", cadence: 68, rpe: 2.5, posture: "de pie", t: 180 },
-        { phase: "Pedaleo regenerativo", cadence: 88, rpe: 2.5, posture: "sentado", t: 720 },
-        { phase: "Enfriamiento", cadence: 80, rpe: 1.5, posture: "sentado", t: 360 }
-      ], // 2520s = 42 min
+        { phase: "Pedaleo regenerativo", cadence: 88, rpe: 2.5, posture: "sentado", t: 780 },
+        { phase: "Enfriamiento", cadence: 80, rpe: 1.5, posture: "sentado", t: 420 }
+      ], // 2640s = 44 min
       elite: [
         { phase: "Rodaje suave", cadence: 85, rpe: 2, posture: "sentado", t: 420 },
         { phase: "Pedaleo regenerativo", cadence: 90, rpe: 2.5, posture: "sentado", t: 1020 },
@@ -470,4 +526,4 @@ export function getRoutine(id, level = 'amateur') {
     steps: routine.map(s => parseStep(s))
   };
 }
-// Safelist: border-emerald-600/30 bg-emerald-950/20 hover:bg-emerald-900/30 text-emerald-300 text-emerald-400 bg-emerald-600/20 border-emerald-600/40 border-amber-600/30 bg-amber-950/20 hover:bg-amber-900/30 text-amber-300 text-amber-400 bg-amber-600/20 border-amber-600/40 border-sky-600/30 bg-sky-950/20 hover:bg-sky-900/30 text-sky-300 text-sky-400 bg-sky-600/20 border-sky-600/40 border-blue-600/30 bg-blue-950/20 hover:bg-blue-900/30 text-blue-300 text-blue-400 bg-blue-600/20 border-blue-600/40 border-rose-600/30 bg-rose-950/20 hover:bg-rose-900/30 text-rose-300 text-rose-400 bg-rose-600/20 border-rose-600/40 border-teal-600/30 bg-teal-950/20 hover:bg-teal-900/30 text-teal-300 text-teal-400 bg-teal-600/20 border-teal-600/40
+// Safelist: border-emerald-600/30 bg-emerald-950/20 hover:bg-emerald-900/30 text-emerald-300 text-emerald-400 bg-emerald-600/20 border-emerald-600/40 border-amber-600/30 bg-amber-950/20 hover:bg-amber-900/30 text-amber-300 text-amber-400 bg-amber-600/20 border-amber-600/40 border-sky-600/30 bg-sky-950/20 hover:bg-sky-900/30 text-sky-300 text-sky-400 bg-sky-600/20 border-sky-600/40 border-blue-600/30 bg-blue-950/20 hover:bg-blue-900/30 text-blue-300 text-blue-400 bg-blue-600/20 border-blue-600/40 border-rose-600/30 bg-rose-950/20 hover:bg-rose-900/30 text-rose-300 text-rose-400 bg-rose-600/20 border-rose-600/40 border-teal-600/30 bg-teal-950/20 hover:bg-teal-900/30 text-teal-300 text-teal-400 bg-teal-600/20 border-teal-600/40 border-cyan-600/30 bg-cyan-950/20 hover:bg-cyan-900/30 text-cyan-300 text-cyan-400 bg-cyan-600/20 border-cyan-600/40 border-purple-600/30 bg-purple-950/20 hover:bg-purple-900/30 text-purple-300 text-purple-400 bg-purple-600/20 border-purple-600/40

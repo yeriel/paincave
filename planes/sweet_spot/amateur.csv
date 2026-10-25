@@ -1,8 +1,8 @@
 Amateur
 Calentamiento, 85, 3.5, 420
 Activación, 92, 6, 180
-Recuperación, 80, 3, 120
-Sweet Spot, 88, 7.5, 780
-Recuperación, 85, 3.5, 300
-Sweet Spot, 88, 8, 780
-Enfriamiento, 80, 2, 300
+Pausa suave, 80, 3, 120
+Bloque 1: Sweet Spot, 88, 7.5, 780
+Recuperación activa, 82, 3.5, 240
+Bloque 2: Sweet Spot Aero, 90, 8, 780
+Enfriamiento, 80, 2, 360

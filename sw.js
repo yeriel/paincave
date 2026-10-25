@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pain-cave-v5';
+const CACHE_NAME = 'pain-cave-v6';
 const urlsToCache = [
   './',
   './index.html',
@@ -24,40 +24,36 @@ const urlsToCache = [
   './planes/fondo_z2/amateur.csv',
   './planes/fondo_z2/elite.csv',
   './planes/fondo_z2/pro.csv',
+  // Planes Adaptación Aero
+  './planes/adaptacion_aero/principiante.csv',
+  './planes/adaptacion_aero/amateur.csv',
+  './planes/adaptacion_aero/elite.csv',
+  './planes/adaptacion_aero/pro.csv',
+  // Planes Intervalos Umbral 5x3 min
+  './planes/intervalos_umbral/principiante.csv',
+  './planes/intervalos_umbral/amateur.csv',
+  './planes/intervalos_umbral/elite.csv',
+  './planes/intervalos_umbral/pro.csv',
   // Planes Sweet Spot
   './planes/sweet_spot/principiante.csv',
   './planes/sweet_spot/amateur.csv',
   './planes/sweet_spot/elite.csv',
   './planes/sweet_spot/pro.csv',
-  // Planes Escalada Fuerza
-  './planes/escalada_fuerza/principiante.csv',
-  './planes/escalada_fuerza/amateur.csv',
-  './planes/escalada_fuerza/elite.csv',
-  './planes/escalada_fuerza/pro.csv',
   // Planes Agilidad Cadencia
   './planes/agilidad_cadencia/principiante.csv',
   './planes/agilidad_cadencia/amateur.csv',
   './planes/agilidad_cadencia/elite.csv',
   './planes/agilidad_cadencia/pro.csv',
-  // Planes HIIT Spinning
-  './planes/hiit_spinning/principiante.csv',
-  './planes/hiit_spinning/amateur.csv',
-  './planes/hiit_spinning/elite.csv',
-  './planes/hiit_spinning/pro.csv',
+  // Planes Test de Pase Aero 60 min
+  './planes/test_pase_aero/principiante.csv',
+  './planes/test_pase_aero/amateur.csv',
+  './planes/test_pase_aero/elite.csv',
+  './planes/test_pase_aero/pro.csv',
   // Planes Recuperación Activa
   './planes/recuperacion_activa/principiante.csv',
   './planes/recuperacion_activa/amateur.csv',
   './planes/recuperacion_activa/elite.csv',
-  './planes/recuperacion_activa/pro.csv',
-  // Planes Originales
-  './planes/escalada/plan_a/principiante.csv',
-  './planes/escalada/plan_a/amateur.csv',
-  './planes/escalada/plan_a/elite.csv',
-  './planes/escalada/plan_a/pro.csv',
-  './planes/hiit/plan_a/principiante.csv',
-  './planes/hiit/plan_a/amateur.csv',
-  './planes/hiit/plan_a/elite.csv',
-  './planes/hiit/plan_a/pro.csv'
+  './planes/recuperacion_activa/pro.csv'
 ];
 
 self.addEventListener('install', event => {

@@ -1,8 +1,8 @@
 Elite
 Calentamiento, 88, 3.5, 420
-Activación, 80, 6.5, 180
-Recuperación, 85, 3, 120
-Sweet Spot, 90, 8, 900
-Recuperación, 85, 3.5, 300
-Sweet Spot, 90, 8.5, 900
-Enfriamiento, 80, 2, 420
+Activación, 92, 6.5, 180
+Pausa suave, 85, 3, 120
+Bloque 1: Sweet Spot, 90, 8, 900
+Recuperación activa, 85, 3.5, 240
+Bloque 2: Sweet Spot Aero, 90, 8.5, 900
+Enfriamiento, 80, 2, 480

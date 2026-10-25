@@ -1,8 +1,8 @@
 Pro
 Calentamiento, 90, 4, 480
 Activación, 95, 7, 240
-Recuperación, 85, 3, 120
-Umbral crítico, 90, 8.5, 1080
-Recuperación, 85, 3.5, 240
-Umbral crítico, 90, 9, 1080
+Pausa suave, 85, 3, 120
+Bloque 1: Umbral sostenido, 92, 8.5, 1080
+Recuperación activa, 85, 3.5, 240
+Bloque 2: Umbral Aero, 92, 9, 1080
 Enfriamiento, 80, 2, 360

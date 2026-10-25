@@ -173,7 +173,11 @@ export class UIManager {
     const postIcon = document.getElementById('exPostureIcon');
     postBadge.classList.remove('hidden');
     postBadge.classList.add('flex');
-    if (step.posture === 'de pie') {
+    if (step.posture === 'aero') {
+      postText.textContent = 'Posición Aero';
+      postIcon.textContent = '🚴';
+      postBadge.className = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] uppercase tracking-wider font-extrabold bg-cyan-950/90 text-cyan-200 border border-cyan-500/50 shadow-sm';
+    } else if (step.posture === 'de pie') {
       postText.textContent = 'De pie';
       postIcon.textContent = '⚡';
       postBadge.className = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] uppercase tracking-wider font-extrabold bg-amber-900/80 text-amber-200 border border-amber-500/50';
@@ -225,7 +229,8 @@ export class UIManager {
       if (nextStep.cadence) details.push(`${nextStep.cadence} RPM`);
       if (nextStep.rpe) details.push(`RPE ${nextStep.rpe}`);
       details.push(formatTime(nextStep.t));
-      details.push(nextStep.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado');
+      const postTag = nextStep.posture === 'aero' ? '🚴 Aero' : (nextStep.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado');
+      details.push(postTag);
       document.getElementById('nextMeta').textContent = details.join(' · ');
     } else {
       document.getElementById('nextName').textContent = 'Meta';
