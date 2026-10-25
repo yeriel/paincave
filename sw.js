@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pain-cave-v6';
+const CACHE_NAME = 'pain-cave-v7';
 const urlsToCache = [
   './',
   './index.html',
@@ -29,26 +29,16 @@ const urlsToCache = [
   './planes/adaptacion_aero/amateur.csv',
   './planes/adaptacion_aero/elite.csv',
   './planes/adaptacion_aero/pro.csv',
-  // Planes Intervalos Umbral 5x3 min
+  // Planes Intervalos Umbral Z4
   './planes/intervalos_umbral/principiante.csv',
   './planes/intervalos_umbral/amateur.csv',
   './planes/intervalos_umbral/elite.csv',
   './planes/intervalos_umbral/pro.csv',
-  // Planes Sweet Spot
+  // Planes Sweet Spot 88-93%
   './planes/sweet_spot/principiante.csv',
   './planes/sweet_spot/amateur.csv',
   './planes/sweet_spot/elite.csv',
   './planes/sweet_spot/pro.csv',
-  // Planes Agilidad Cadencia
-  './planes/agilidad_cadencia/principiante.csv',
-  './planes/agilidad_cadencia/amateur.csv',
-  './planes/agilidad_cadencia/elite.csv',
-  './planes/agilidad_cadencia/pro.csv',
-  // Planes Test de Pase Aero 60 min
-  './planes/test_pase_aero/principiante.csv',
-  './planes/test_pase_aero/amateur.csv',
-  './planes/test_pase_aero/elite.csv',
-  './planes/test_pase_aero/pro.csv',
   // Planes Recuperación Activa
   './planes/recuperacion_activa/principiante.csv',
   './planes/recuperacion_activa/amateur.csv',

@@ -1,11 +1,11 @@
 Amateur
-Calentamiento, 88, 3.5, 420
-Posición Aero, 90, 5, 300
-Rodaje erguido, 88, 4, 120
-Posición Aero, 90, 5, 360
-Rodaje erguido, 88, 4, 120
-Posición Aero, 90, 5.5, 420
-Rodaje erguido, 88, 4, 120
-Posición Aero, 90, 5.5, 480
-Alivio de pie, 75, 4, 180
-Enfriamiento, 85, 2, 360
+Calentamiento dinámico, 88, 3.5, 360
+Serie 1: Postura Aero, 90, 5.5, 420
+Recuperación erguido, 88, 4, 120
+Serie 2: Postura Aero, 90, 5.5, 480
+Recuperación erguido, 88, 4, 120
+Alivio de pie, 75, 4, 120
+Serie 3: Aero sostenida, 90, 6, 480
+Recuperación erguido, 88, 4, 120
+Serie 4: Aero consolidación, 90, 6, 420
+Enfriamiento articular, 82, 2, 360

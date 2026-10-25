@@ -1,8 +1,8 @@
 Pro
-Calentamiento, 90, 4, 480
-Activación, 95, 7, 240
-Pausa suave, 85, 3, 120
-Bloque 1: Umbral sostenido, 92, 8.5, 1080
-Recuperación activa, 85, 3.5, 240
-Bloque 2: Umbral Aero, 92, 9, 1080
-Enfriamiento, 80, 2, 360
+Calentamiento progresivo, 90, 4, 420
+Bloque 1: Sweet Spot sentado, 90, 7, 300
+Bloque 1: Sweet Spot Aero, 92, 7.5, 900
+Recuperación activa Z2, 85, 3.5, 300
+Bloque 2: Sweet Spot sentado, 90, 7, 300
+Bloque 2: Sweet Spot Aero, 92, 8, 900
+Enfriamiento regenerativo, 80, 2, 480

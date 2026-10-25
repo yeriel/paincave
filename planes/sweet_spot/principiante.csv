@@ -1,8 +1,7 @@
 Principiante
-Calentamiento, 85, 3.5, 360
-Activación, 90, 5.5, 240
-Pausa suave, 80, 3, 120
-Bloque 1: Sweet Spot, 88, 7.5, 600
-Recuperación activa, 82, 3.5, 240
-Bloque 2: Sweet Spot, 88, 7.5, 600
-Enfriamiento, 80, 2, 360
+Calentamiento progresivo, 85, 3.5, 420
+Bloque 1: Sweet Spot, 88, 7, 600
+Recuperación activa Z2, 85, 3.5, 240
+Bloque 2: Sweet Spot Aero, 90, 7, 600
+Recuperación activa Z2, 85, 3.5, 240
+Enfriamiento progresivo, 80, 2, 600
