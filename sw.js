@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pain-cave-v8';
+const CACHE_NAME = 'pain-cave-v10';
 const urlsToCache = [
   './',
   './index.html',
@@ -14,6 +14,7 @@ const urlsToCache = [
   './js/audio.js',
   './js/bluetooth.js',
   './js/gamification.js',
+  './js/trainingTracker.js',
   './js/workouts.js',
   './js/exporter.js',
   './js/engine.js',

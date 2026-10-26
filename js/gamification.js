@@ -73,7 +73,7 @@ class GamificationManager {
     return d.setDate(d.getDate() - d.getDay() + (d.getDay() === 0 ? -6 : 1));
   }
 
-  recordWorkout(elapsedSeconds, sessionTitle, level, hrStats = null) {
+  recordWorkout(elapsedSeconds, sessionTitle, level, hrStats = null, extraMeta = {}) {
     if (elapsedSeconds < 15) return null;
 
     const stats = this.getStats();
@@ -97,19 +97,27 @@ class GamificationManager {
     const earnedXP = Math.floor(elapsedSeconds * mult);
     stats.totalXP = (stats.totalXP || 0) + earnedXP;
 
-    // Registro de sesión individual
-    stats.workouts.push({
+    // Registro de sesión individual enriquecido con metadatos de tracking
+    const workoutRecord = {
       date: todayStr,
+      timestamp: Date.now(),
       session: sessionTitle,
       level,
       durationMinutes: minutes,
       earnedXP,
       avgBpm: hrStats ? hrStats.avg : null,
-      maxBpm: hrStats ? hrStats.max : null
-    });
+      maxBpm: hrStats ? hrStats.max : null,
+      routineId: extraMeta.routineId || null,
+      dayName: extraMeta.day || null,
+      phaseId: extraMeta.phaseId || level,
+      phaseName: extraMeta.phaseName || null,
+      weekNumber: extraMeta.weekNumber || null
+    };
+
+    stats.workouts.push(workoutRecord);
 
     this.saveStats(stats);
-    return { earnedXP, totalXP: stats.totalXP, streak: stats.streak };
+    return { earnedXP, totalXP: stats.totalXP, streak: stats.streak, workout: workoutRecord };
   }
 
   exportData() {

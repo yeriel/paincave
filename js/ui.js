@@ -7,6 +7,7 @@ import { gamification } from './gamification.js';
 import { getZoneBpmRange, ROUTINES_POOL } from './workouts.js';
 import { exportToTCX } from './exporter.js';
 import { soundEngine } from './audio.js';
+import { trainingTracker, formatDateISO } from './trainingTracker.js';
 
 const CIRC = 2 * Math.PI * 90; // Radio SVG 90px (~565.48)
 
@@ -43,10 +44,13 @@ export class UIManager {
     this.CIRC = CIRC;
     this.currentWorkoutSteps = [];
     this.lastCompletedSessionData = null;
+    this.selectedCalendarDate = formatDateISO(new Date());
+    this.activeStatsTab = 'tracking';
   }
 
   init() {
     this.updateMiniRank();
+    this.renderTrainingTrackerWidget();
     document.addEventListener('fullscreenchange', () => this.handleFullscreenChange());
   }
 
@@ -55,6 +59,12 @@ export class UIManager {
     const rank = gamification.calculateRank(stats.totalXP || 0);
     const el = document.getElementById('miniRankText');
     if (el) el.textContent = rank.title;
+
+    const pill = document.getElementById('headerTrackerPill');
+    if (pill) {
+      const prog = trainingTracker.getCurrentProgress();
+      pill.textContent = `Sem ${prog.currentWeek}`;
+    }
   }
 
   updateLevelTabs(selectedLevel) {
@@ -87,6 +97,7 @@ export class UIManager {
       if (catalog) catalog.classList.remove('hidden');
       if (profile) profile.classList.add('hidden');
       if (controls) controls.classList.add('hidden');
+      this.updateTrackingHeader();
     }
   }
 
@@ -472,7 +483,185 @@ export class UIManager {
     overlay.classList.replace('flex', 'hidden');
   }
 
-  renderCalendar() {
+  // ==============================================================================
+  // INDICADOR DE SEGUIMIENTO EN CABECERA
+  // ==============================================================================
+
+  updateTrackingHeader() {
+    const pill = document.getElementById('headerTrackerPill');
+    if (pill) {
+      const prog = trainingTracker.getCurrentProgress();
+      pill.textContent = `Sem ${prog.currentWeek}`;
+      const btn = document.getElementById('btnHeaderTracker');
+      if (btn) {
+        btn.title = `Semana ${prog.currentWeek} de ${prog.totalWeeks} · ${prog.matchedPhase.name}`;
+      }
+    }
+  }
+
+  renderTrainingTrackerWidget() {
+    this.updateTrackingHeader();
+  }
+
+  // ==============================================================================
+  // MODAL DE SEGUIMIENTO Y ESTADÍSTICAS
+  // ==============================================================================
+
+  showStatsModal(initialTab = 'tracking') {
+    this.activeStatsTab = initialTab;
+    this.switchStatsTab(initialTab);
+    this.openModal('statsModal');
+  }
+
+  switchStatsTab(tabName) {
+    this.activeStatsTab = tabName;
+    const trackingBtn = document.getElementById('modalTabTrackingBtn');
+    const profileBtn = document.getElementById('modalTabProfileBtn');
+    const trackingContent = document.getElementById('modalTabTrackingContent');
+    const profileContent = document.getElementById('modalTabProfileContent');
+
+    if (tabName === 'tracking') {
+      if (trackingBtn) {
+        trackingBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5';
+      }
+      if (profileBtn) {
+        profileBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
+      }
+      if (trackingContent) trackingContent.classList.remove('hidden');
+      if (profileContent) profileContent.classList.add('hidden');
+      this.renderTrackingTab(this.selectedCalendarDate);
+    } else {
+      if (profileBtn) {
+        profileBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5';
+      }
+      if (trackingBtn) {
+        trackingBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
+      }
+      if (profileContent) profileContent.classList.remove('hidden');
+      if (trackingContent) trackingContent.classList.add('hidden');
+      this.renderProfileTab();
+    }
+  }
+
+  renderTrackingTab(selectedDate = null) {
+    const prog = trainingTracker.getCurrentProgress();
+    const weekOverview = trainingTracker.getWeekOverview();
+
+    // 1. Tarjeta: ¿En qué fase estoy?
+    const phaseName = document.getElementById('modalTrackPhaseName');
+    if (phaseName) phaseName.textContent = `${prog.matchedPhase.name} (${prog.matchedPhase.subtitle})`;
+
+    const phaseSub = document.getElementById('modalTrackPhaseSub');
+    if (phaseSub) phaseSub.textContent = `Semanas ${prog.matchedPhase.startWeek} a ${prog.matchedPhase.endWeek} · ${prog.matchedPhase.description}`;
+
+    const phaseWeekIn = document.getElementById('modalTrackPhaseWeekIn');
+    if (phaseWeekIn) phaseWeekIn.textContent = `Semana ${prog.weekInPhase} de ${prog.totalWeeksInPhase}`;
+
+    const phasePct = document.getElementById('modalTrackPhasePct');
+    if (phasePct) phasePct.textContent = `${prog.phaseProgressPct}%`;
+
+    const phaseBar = document.getElementById('modalTrackPhaseBar');
+    if (phaseBar) phaseBar.style.width = `${prog.phaseProgressPct}%`;
+
+    // 2. Tarjeta: ¿Cuántas semanas llevo?
+    const totalWeeksTitle = document.getElementById('modalTrackTotalWeeksTitle');
+    if (totalWeeksTitle) totalWeeksTitle.textContent = `Semana ${prog.currentWeek} de ${prog.totalWeeks}`;
+
+    const activeWeeksLabel = document.getElementById('modalTrackActiveWeeksLabel');
+    if (activeWeeksLabel) {
+      activeWeeksLabel.textContent = `${prog.totalActiveWeeks} ${prog.totalActiveWeeks === 1 ? 'semana registrada' : 'semanas registradas'} (${prog.totalWorkouts} sesiones totales)`;
+    }
+
+    const overallPct = document.getElementById('modalTrackOverallPct');
+    if (overallPct) overallPct.textContent = `${prog.overallProgressPct}%`;
+
+    const overallBar = document.getElementById('modalTrackOverallBar');
+    if (overallBar) overallBar.style.width = `${prog.overallProgressPct}%`;
+
+    // 3. Tarjeta: Esta Semana
+    const thisWeekDays = document.getElementById('modalTrackThisWeekDays');
+    if (thisWeekDays) thisWeekDays.textContent = `${weekOverview.completedDaysCount} / ${weekOverview.targetDaysCount} Sesiones`;
+
+    const thisWeekMinutes = document.getElementById('modalTrackThisWeekMinutes');
+    if (thisWeekMinutes) thisWeekMinutes.textContent = `${weekOverview.totalMinutesThisWeek} min pedaleados`;
+
+    // 4. Lista de días de la semana actual
+    const weekRangeLabel = document.getElementById('modalTrackWeekRange');
+    if (weekRangeLabel) {
+      const first = weekOverview.days[0].date;
+      const last = weekOverview.days[6].date;
+      weekRangeLabel.textContent = `${first.slice(5)} al ${last.slice(5)}`;
+    }
+
+    const weekDaysList = document.getElementById('modalTrackWeekDaysList');
+    if (weekDaysList) {
+      weekDaysList.innerHTML = '';
+      weekOverview.days.forEach(day => {
+        const row = document.createElement('div');
+        row.className = `flex items-center justify-between p-2 rounded-lg border text-xs transition-colors ${
+          day.isCompleted 
+            ? 'border-emerald-600/40 bg-emerald-950/20' 
+            : (day.isToday ? 'border-blue-500/60 bg-blue-950/30' : 'border-slate-800 bg-slate-900/40')
+        }`;
+
+        let statusBadge = '';
+        if (day.isCompleted) {
+          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-900/80 text-emerald-300 border border-emerald-700/50 flex items-center gap-1"><i class="ti ti-check"></i> Hecho (${day.totalDuration} min)</span>`;
+        } else if (day.isToday) {
+          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-900/80 text-blue-300 border border-blue-600/50">Toca Hoy</span>`;
+        } else if (day.dayIndex === 6) {
+          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400">Descanso</span>`;
+        } else {
+          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold text-slate-500">Pendiente</span>`;
+        }
+
+        const sessionSummary = day.workouts.length > 0
+          ? day.workouts.map(w => w.session).join(' + ')
+          : day.expectedTitle;
+
+        row.innerHTML = `
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="font-bold text-slate-300 w-14 shrink-0">${day.dayName}</span>
+            <span class="text-[11px] text-slate-400 truncate">${sessionSummary}</span>
+          </div>
+          <div class="shrink-0 ml-2">${statusBadge}</div>
+        `;
+        weekDaysList.appendChild(row);
+      });
+    }
+
+    // 5. Calendario y detalle del día seleccionado
+    const dateToSelect = selectedDate || this.selectedCalendarDate || formatDateISO(new Date());
+    this.renderCalendar(dateToSelect);
+    this.renderDayDetail(dateToSelect);
+
+    // 6. Historial de sesiones
+    this.renderWorkoutHistory();
+
+    // 7. Panel de personalización
+    this.renderPlanCustomizationPanel();
+  }
+
+  renderProfileTab() {
+    const stats = gamification.getStats();
+    document.getElementById('statStreak').textContent = stats.streak || 0;
+    document.getElementById('statTotalTime').textContent = `${Math.floor(stats.totalMinutes / 60)}h ${stats.totalMinutes % 60}m`;
+    const rank = gamification.calculateRank(stats.totalXP || 0);
+    document.getElementById('rankTitle').textContent = rank.title;
+    document.getElementById('currentXpText').textContent = `${stats.totalXP || 0} XP`;
+    document.getElementById('nextRankXpText').textContent = rank.next === Infinity ? "MAX" : `${rank.next} XP`;
+    document.getElementById('rankProgressBar').style.width = `${rank.progress}%`;
+    document.getElementById('maxHrInput').value = gamification.getMaxHR();
+    this.populateVoiceSelect();
+  }
+
+  selectCalendarDate(dateStr) {
+    this.selectedCalendarDate = dateStr;
+    this.renderCalendar(dateStr);
+    this.renderDayDetail(dateStr);
+  }
+
+  renderCalendar(selectedDateStr = null) {
     const stats = gamification.getStats();
     const cal = document.getElementById('calendarGrid');
     if (!cal) return;
@@ -491,56 +680,191 @@ export class UIManager {
       cal.innerHTML += `<div class="p-1 rounded bg-slate-800/30 h-8"></div>`;
     }
 
-    const clr = { 'principiante': 'text-green-500', 'amateur': 'text-blue-500', 'elite': 'text-orange-500', 'pro': 'text-red-500' };
+    const clr = { 'fase1': 'text-cyan-400', 'fase2': 'text-amber-400', 'fase3': 'text-rose-400', 'principiante': 'text-green-500', 'amateur': 'text-blue-500', 'elite': 'text-orange-500', 'pro': 'text-red-500' };
     const totalDays = new Date(y, m + 1, 0).getDate();
 
     for (let d = 1; d <= totalDays; d++) {
       const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const ws = stats.workouts.filter(w => w.date === ds);
-      let html = `<span class="text-[9px] ${t.getDate() === d ? 'text-white font-bold' : 'text-slate-400'} leading-none">${d}</span>`;
+      const isSelected = (selectedDateStr === ds);
+      const isToday = (t.getDate() === d && t.getMonth() === m && t.getFullYear() === y);
+
+      let iconHtml = '';
       if (ws.length > 0) {
-        let best = 'principiante';
-        let max = 0;
-        ws.forEach(w => {
-          const v = { 'principiante': 1, 'amateur': 2, 'elite': 3, 'pro': 4 }[w.level] || 1;
-          if (v > max) { max = v; best = w.level; }
-        });
-        html += `<i class="ti ti-flame text-sm ${clr[best]} mt-0.5"></i>`;
+        const mainPhase = ws[0].phaseId || ws[0].level || 'fase1';
+        const color = clr[mainPhase] || 'text-orange-400';
+        iconHtml = `<i class="ti ti-flame text-sm ${color} mt-0.5 leading-none"></i>`;
       }
-      cal.innerHTML += `<div class="flex flex-col items-center justify-center p-1 rounded h-8 border ${t.getDate() === d ? 'border-slate-500 bg-slate-700/50' : 'border-slate-700/40 bg-slate-800'}">${html}</div>`;
+
+      let borderClasses = 'border-slate-800 bg-slate-800/80';
+      if (isSelected) {
+        borderClasses = 'border-blue-400 bg-blue-950/60 ring-1 ring-blue-400 shadow-md';
+      } else if (isToday) {
+        borderClasses = 'border-slate-500 bg-slate-700/60';
+      }
+
+      cal.innerHTML += `
+        <button type="button" onclick="window.painCaveApp.selectCalendarDate('${ds}')" class="flex flex-col items-center justify-center p-1 rounded h-8 border ${borderClasses} hover:border-slate-400 transition-all cursor-pointer">
+          <span class="text-[9px] ${isSelected ? 'text-white font-black' : (isToday ? 'text-blue-300 font-bold' : 'text-slate-400')} leading-none">${d}</span>
+          ${iconHtml}
+        </button>
+      `;
     }
   }
 
-  populateVoiceSelect() {
-    const select = document.getElementById('voiceSelect');
-    if (!select) return;
-    const voices = soundEngine.getSpanishVoices();
-    const current = soundEngine.getCurrentVoiceId();
+  renderDayDetail(dateStr) {
+    const box = document.getElementById('calendarDayDetailBox');
+    if (!box) return;
 
-    select.innerHTML = '<option value="system">Voz natural del sistema (Por defecto)</option>';
-    voices.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v.voiceURI || v.name;
-      opt.textContent = `${v.name} (${v.lang})`;
-      select.appendChild(opt);
+    const dayName = trainingTracker.getDayName(dateStr);
+    const workouts = trainingTracker.getWorkoutsForDate(dateStr);
+
+    if (workouts.length === 0) {
+      box.innerHTML = `
+        <div class="flex items-center justify-between text-slate-400">
+          <div>
+            <span class="font-bold text-slate-300">${dayName}, ${dateStr}</span>
+            <span class="block text-[11px] text-slate-500 mt-0.5">Día de descanso o sin entrenamientos registrados.</span>
+          </div>
+          <span class="text-[10px] uppercase font-mono px-2 py-0.5 bg-slate-900 rounded border border-slate-700 text-slate-400">Sin sesión</span>
+        </div>
+      `;
+      return;
+    }
+
+    let itemsHtml = '';
+    workouts.forEach(w => {
+      const phaseBadge = w.phaseName || (w.phaseId ? w.phaseId.toUpperCase() : (w.level || 'Fase 1'));
+      const hrText = w.avgBpm ? ` · <i class="ti ti-heart text-rose-400"></i> ${w.avgBpm} BPM prom` : '';
+      const xpText = w.earnedXP ? `<span class="text-orange-400 font-bold font-mono">+${w.earnedXP} XP</span>` : '';
+
+      itemsHtml += `
+        <div class="p-2 rounded bg-slate-900 border border-slate-700/60 last:mb-0 mb-1.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-white text-xs truncate mr-2">${w.session || 'Sesión de Ciclismo'}</span>
+            <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-950 text-blue-300 border border-blue-800 shrink-0">${phaseBadge}</span>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span>⏱️ ${w.durationMinutes || 0} min${hrText}</span>
+            ${xpText}
+          </div>
+        </div>
+      `;
     });
 
-    select.value = current;
+    box.innerHTML = `
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="font-bold text-white text-xs flex items-center gap-1.5">
+          <i class="ti ti-calendar text-blue-400"></i> ${dayName}, ${dateStr}
+        </span>
+        <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-600/40">
+          ${workouts.length} ${workouts.length === 1 ? 'Sesión completada' : 'Sesiones completadas'}
+        </span>
+      </div>
+      <div class="space-y-1">${itemsHtml}</div>
+    `;
   }
 
-  showStatsModal() {
+  renderWorkoutHistory() {
     const stats = gamification.getStats();
-    document.getElementById('statStreak').textContent = stats.streak || 0;
-    document.getElementById('statTotalTime').textContent = `${Math.floor(stats.totalMinutes / 60)}h ${stats.totalMinutes % 60}m`;
-    const rank = gamification.calculateRank(stats.totalXP || 0);
-    document.getElementById('rankTitle').textContent = rank.title;
-    document.getElementById('currentXpText').textContent = `${stats.totalXP || 0} XP`;
-    document.getElementById('nextRankXpText').textContent = rank.next === Infinity ? "MAX" : `${rank.next} XP`;
-    document.getElementById('rankProgressBar').style.width = `${rank.progress}%`;
-    document.getElementById('maxHrInput').value = gamification.getMaxHR();
-    this.populateVoiceSelect();
-    this.renderCalendar();
-    this.openModal('statsModal');
+    const container = document.getElementById('workoutHistoryContainer');
+    const badge = document.getElementById('modalTrackTotalHistoryBadge');
+    if (!container) return;
+
+    const workouts = stats.workouts || [];
+    if (badge) badge.textContent = `${workouts.length} sesiones`;
+
+    if (workouts.length === 0) {
+      container.innerHTML = `
+        <div class="text-center py-4 text-slate-500 text-xs">
+          <i class="ti ti-bike text-2xl mb-1 block opacity-50"></i>
+          Aún no has registrado entrenamientos. ¡Inicia hoy tu primera sesión!
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = '';
+    // Mostrar en orden cronológico inverso
+    const reversed = [...workouts].reverse();
+    reversed.forEach(w => {
+      const item = document.createElement('div');
+      item.className = 'p-2 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-between text-xs';
+      
+      const dayName = w.dayName || trainingTracker.getDayName(w.date);
+      const phaseLabel = w.phaseName || (w.phaseId ? w.phaseId.toUpperCase() : (w.level || ''));
+      const weekLabel = w.weekNumber ? `S${w.weekNumber}` : '';
+      const hrText = w.avgBpm ? ` · ${w.avgBpm} bpm` : '';
+
+      item.innerHTML = `
+        <div class="min-w-0 mr-2">
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="font-bold text-white truncate">${w.session}</span>
+            ${weekLabel ? `<span class="text-[9px] font-bold px-1 rounded bg-slate-700 text-slate-300 font-mono">${weekLabel}</span>` : ''}
+          </div>
+          <div class="text-[10px] text-slate-400">
+            ${dayName} ${w.date} · ${phaseLabel}
+          </div>
+        </div>
+        <div class="text-right shrink-0">
+          <span class="font-mono font-bold text-slate-200 block">${w.durationMinutes || 0} min${hrText}</span>
+          <span class="text-[10px] font-mono text-orange-400">+${w.earnedXP || 0} XP</span>
+        </div>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  renderPlanCustomizationPanel() {
+    const prog = trainingTracker.getCurrentProgress();
+    const phases = trainingTracker.getPhasesWithRanges();
+
+    // Input de semana activa
+    const weekInput = document.getElementById('configWeekInput');
+    if (weekInput) {
+      weekInput.value = prog.currentWeek;
+      weekInput.max = prog.totalWeeks;
+    }
+
+    // Select de fase activa
+    const phaseSelect = document.getElementById('configPhaseSelect');
+    if (phaseSelect) {
+      phaseSelect.innerHTML = '';
+      phases.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} (${p.subtitle}) · S${p.startWeek}-${p.endWeek}`;
+        if (p.id === prog.matchedPhase.id) opt.selected = true;
+        phaseSelect.appendChild(opt);
+      });
+    }
+
+    // Lista de fases configuradas
+    const phasesList = document.getElementById('configPhasesList');
+    if (phasesList) {
+      phasesList.innerHTML = '';
+      phases.forEach(phase => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-2 rounded bg-slate-800 border border-slate-700/60 text-xs';
+        row.innerHTML = `
+          <div class="min-w-0 mr-2">
+            <span class="font-bold text-white">${phase.name}</span>
+            <span class="text-slate-400 text-[11px] block truncate">${phase.subtitle} · ${phase.weeks} sem (S${phase.startWeek}-${phase.endWeek})</span>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            <button onclick="window.painCaveApp.promptEditPhase('${phase.id}')" class="p-1 rounded text-slate-400 hover:text-blue-400 hover:bg-slate-700" title="Editar duración de semanas">
+              <i class="ti ti-edit text-xs"></i>
+            </button>
+            ${phases.length > 1 ? `
+              <button onclick="window.painCaveApp.deletePhase('${phase.id}')" class="p-1 rounded text-slate-400 hover:text-red-400 hover:bg-slate-700" title="Eliminar fase">
+                <i class="ti ti-trash text-xs"></i>
+              </button>
+            ` : ''}
+          </div>
+        `;
+        phasesList.appendChild(row);
+      });
+    }
   }
 
   resetDisplay() {

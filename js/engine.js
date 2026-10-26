@@ -51,11 +51,12 @@ class WorkoutEngine {
     });
   }
 
-  start(workoutSteps, title, level = 'amateur') {
+  start(workoutSteps, title, level = 'amateur', metadata = {}) {
     this.stop(false);
     this.workout = workoutSteps;
     this.sessionTitle = title;
     this.selectedLevel = level;
+    this.workoutMetadata = metadata;
     this.currentStep = 0;
     this.isPaused = false;
     this.startTime = Date.now();
@@ -173,13 +174,15 @@ class WorkoutEngine {
         elapsed,
         this.sessionTitle,
         this.selectedLevel,
-        bluetoothManager.getHeartRateStats()
+        bluetoothManager.getHeartRateStats(),
+        this.workoutMetadata || {}
       );
     }
 
     this.clearSavedState();
     const wasRunning = this.workout.length > 0;
     this.workout = [];
+    this.workoutMetadata = {};
     this.currentStep = 0;
     this.isPaused = false;
     this.timeLeft = 0;
@@ -203,7 +206,8 @@ class WorkoutEngine {
       elapsed,
       this.sessionTitle,
       this.selectedLevel,
-      hrStats
+      hrStats,
+      this.workoutMetadata || {}
     );
     this.clearSavedState();
 
@@ -211,6 +215,7 @@ class WorkoutEngine {
       this.onWorkoutComplete({
         sessionTitle: this.sessionTitle,
         level: this.selectedLevel,
+        metadata: this.workoutMetadata,
         totalSeconds: elapsed,
         hrStats,
         statsRecorded,
@@ -221,6 +226,7 @@ class WorkoutEngine {
     }
 
     this.workout = [];
+    this.workoutMetadata = {};
     this.currentStep = 0;
     this.isPaused = false;
 
@@ -247,6 +253,7 @@ class WorkoutEngine {
     }
     localStorage.setItem(this.storageKey, JSON.stringify({
       workout: this.workout,
+      workoutMetadata: this.workoutMetadata,
       currentStep: this.currentStep,
       timeLeft: this.timeLeft,
       sessionTitle: this.sessionTitle,
@@ -270,6 +277,7 @@ class WorkoutEngine {
     if (!saved) return false;
 
     this.workout = saved.workout;
+    this.workoutMetadata = saved.workoutMetadata || {};
     this.currentStep = saved.currentStep;
     this.timeLeft = saved.timeLeft;
     this.sessionTitle = saved.sessionTitle;

@@ -8,6 +8,7 @@ import { gamification } from './gamification.js';
 import { workoutEngine } from './engine.js';
 import { ui, formatTime } from './ui.js';
 import { getRoutine, parseCSV } from './workouts.js';
+import { trainingTracker } from './trainingTracker.js';
 
 class PainCaveApp {
   constructor() {
@@ -65,6 +66,8 @@ class PainCaveApp {
     workoutEngine.onWorkoutComplete = (summaryData) => {
       ui.showWorkoutSummaryModal(summaryData);
       ui.resetDisplay();
+      ui.renderTrainingTrackerWidget();
+      ui.updateMiniRank();
     };
 
     workoutEngine.onStatusChange = ({ isRunning, isPaused }) => {
@@ -127,16 +130,22 @@ class PainCaveApp {
     const routine = getRoutine(routineId, this.selectedLevel);
     if (!routine) return;
 
+    const prog = trainingTracker.getCurrentProgress();
     const phaseNames = {
       fase1: 'Fase 1 (Cimientos)',
       fase2: 'Fase 2 (Densidad)',
       fase3: 'Fase 3 (Dominio Aero)'
     };
-    const phaseLabel = phaseNames[this.selectedLevel] || this.selectedLevel.toUpperCase();
+    const phaseLabel = phaseNames[this.selectedLevel] || (prog.matchedPhase?.id === this.selectedLevel ? `${prog.matchedPhase.name} (${prog.matchedPhase.subtitle})` : this.selectedLevel.toUpperCase());
 
     this.tempWorkoutBuffer = {
       routine: routine.steps,
-      name: `${routine.title} · ${phaseLabel}`
+      name: `${routine.title} · ${phaseLabel}`,
+      routineId: routine.id,
+      day: routine.day,
+      phaseId: this.selectedLevel,
+      phaseName: phaseLabel,
+      weekNumber: prog.currentWeek
     };
 
     document.getElementById('preWorkoutType').textContent = routine.title;
@@ -167,14 +176,14 @@ class PainCaveApp {
     if (!this.tempWorkoutBuffer) return;
     ui.closeModals();
 
-    const { routine, name } = this.tempWorkoutBuffer;
+    const { routine, name, ...meta } = this.tempWorkoutBuffer;
     ui.buildDots(routine.length);
     ui.renderWorkoutProfileBar(routine);
 
     const profileContainer = document.getElementById('workoutProfileContainer');
     if (profileContainer) profileContainer.classList.remove('hidden');
 
-    workoutEngine.start(routine, name, this.selectedLevel);
+    workoutEngine.start(routine, name, this.selectedLevel, meta);
 
     const first = routine[0];
     const cue = soundEngine.formatCoachCue(first, true);
@@ -309,8 +318,119 @@ class PainCaveApp {
     }
   }
 
-  showStatsModal() {
-    ui.showStatsModal();
+  showStatsModal(tab = 'tracking') {
+    ui.showStatsModal(tab);
+  }
+
+  openTrackingModal(tab = 'tracking') {
+    ui.showStatsModal(tab);
+  }
+
+  switchStatsTab(tabName) {
+    ui.switchStatsTab(tabName);
+  }
+
+  selectCalendarDate(dateStr) {
+    ui.selectCalendarDate(dateStr);
+  }
+
+  togglePlanConfigAccordion() {
+    const content = document.getElementById('planConfigAccordionContent');
+    const chevron = document.getElementById('planConfigAccordionChevron');
+    if (!content) return;
+    const isHidden = content.classList.contains('hidden');
+    content.classList.toggle('hidden', !isHidden);
+    if (chevron) {
+      chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+  }
+
+  saveCurrentWeekFromInput() {
+    const input = document.getElementById('configWeekInput');
+    if (!input) return;
+    const weekNum = parseInt(input.value);
+    if (isNaN(weekNum) || weekNum < 1) {
+      alert("Por favor introduce un número de semana válido (1 o mayor).");
+      return;
+    }
+    trainingTracker.setCurrentWeek(weekNum);
+    this.setLevel(trainingTracker.plan.currentPhaseId);
+    ui.renderTrainingTrackerWidget();
+    ui.renderTrackingTab();
+    ui.updateMiniRank();
+  }
+
+  saveCurrentPhaseFromSelect(phaseId) {
+    trainingTracker.setCurrentPhase(phaseId);
+    this.setLevel(phaseId);
+    ui.renderTrainingTrackerWidget();
+    ui.renderTrackingTab();
+    ui.updateMiniRank();
+  }
+
+  promptAddPhase() {
+    const name = prompt("Nombre de la nueva fase (ej: Fase 4):", `Fase ${trainingTracker.plan.phases.length + 1}`);
+    if (!name) return;
+    const subtitle = prompt("Subtítulo / Objetivo de la fase (ej: Especialización Pico FTP):", "Pico de Forma y Resistencia");
+    if (!subtitle) return;
+    const weeksStr = prompt("Duración en semanas (ej: 4):", "4");
+    const weeks = parseInt(weeksStr) || 4;
+
+    trainingTracker.addPhase({ name, subtitle, weeks });
+    ui.renderTrainingTrackerWidget();
+    ui.renderTrackingTab();
+    alert(`¡Fase "${name}" agregada con éxito!`);
+  }
+
+  promptEditPhase(phaseId) {
+    const phase = trainingTracker.plan.phases.find(p => p.id === phaseId);
+    if (!phase) return;
+    const newWeeks = prompt(`Modificar duración en semanas para "${phase.name}" (${phase.weeks} actuales):`, phase.weeks);
+    if (!newWeeks) return;
+    const weeks = parseInt(newWeeks);
+    if (isNaN(weeks) || weeks < 1) {
+      alert("Número de semanas inválido.");
+      return;
+    }
+    trainingTracker.updatePhase(phaseId, { weeks });
+    ui.renderTrainingTrackerWidget();
+    ui.renderTrackingTab();
+  }
+
+  deletePhase(phaseId) {
+    const phase = trainingTracker.plan.phases.find(p => p.id === phaseId);
+    if (!phase) return;
+    if (confirm(`¿Estás seguro de eliminar la "${phase.name}"?`)) {
+      try {
+        trainingTracker.removePhase(phaseId);
+        ui.renderTrainingTrackerWidget();
+        ui.renderTrackingTab();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+  }
+
+  startNewTrainingCycle() {
+    if (confirm("¿Iniciar un nuevo ciclo de entrenamiento? Se mantendrá intacto tu historial de sesiones y XP, y el plan avanzará al siguiente ciclo desde la Semana 1.")) {
+      const cycleName = prompt("Nombre del nuevo ciclo:", `Ciclo ${trainingTracker.plan.cycleNumber + 1}`);
+      trainingTracker.startNewCycle(cycleName);
+      this.setLevel(trainingTracker.plan.phases[0].id);
+      ui.renderTrainingTrackerWidget();
+      ui.renderTrackingTab();
+      ui.updateMiniRank();
+      alert("¡Nuevo ciclo de entrenamiento iniciado con éxito!");
+    }
+  }
+
+  resetPlanProgress() {
+    if (confirm("¿Deseas reiniciar la progresión a la Semana 1? (No se borrarán tus sesiones realizadas ni tu rango).")) {
+      trainingTracker.resetProgress();
+      this.setLevel(trainingTracker.plan.phases[0].id);
+      ui.renderTrainingTrackerWidget();
+      ui.renderTrackingTab();
+      ui.updateMiniRank();
+    }
   }
 
   saveMaxHR(val) {
@@ -328,7 +448,21 @@ class PainCaveApp {
 
   exportStats() {
     try {
-      gamification.exportData();
+      const stats = gamification.getStats();
+      const plan = trainingTracker.exportPlanData();
+      const backup = {
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        stats,
+        plan
+      };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `paincave-backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
     } catch (e) {
       alert(e.message);
     }
@@ -340,10 +474,22 @@ class PainCaveApp {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        gamification.importData(e.target.result);
+        const parsed = JSON.parse(e.target.result);
+        if (parsed.stats && Array.isArray(parsed.stats.workouts)) {
+          gamification.importData(JSON.stringify(parsed.stats));
+          if (parsed.plan) {
+            trainingTracker.importPlanData(parsed.plan);
+          }
+        } else if (Array.isArray(parsed.workouts)) {
+          // Archivo versión 1 anterior
+          gamification.importData(e.target.result);
+        } else {
+          throw new Error("El archivo no tiene el formato de Pain Cave.");
+        }
         ui.updateMiniRank();
-        ui.showStatsModal();
-        alert("¡Estadísticas importadas con éxito!");
+        ui.renderTrainingTrackerWidget();
+        ui.showStatsModal('tracking');
+        alert("¡Datos y plan importados con éxito!");
       } catch (err) {
         alert("Error al importar: " + err.message);
       }
