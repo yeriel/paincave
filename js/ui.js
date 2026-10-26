@@ -355,7 +355,7 @@ export class UIManager {
   }
 
   // Render del Pool de Rutinas (Limpio y directo)
-  renderRoutinesPool(selectedLevel = 'amateur', activeCategory = 'todos') {
+  renderRoutinesPool(selectedLevel = 'fase1', activeCategory = 'todos') {
     const container = document.getElementById('routinesPoolGrid');
     if (!container) return;
 
@@ -366,7 +366,7 @@ export class UIManager {
     });
 
     filtered.forEach(routine => {
-      const steps = routine.levels[selectedLevel] || routine.levels.amateur;
+      const steps = routine.levels[selectedLevel] || routine.levels.fase1 || Object.values(routine.levels)[0];
       const totalSec = steps.reduce((a, s) => a + s.t, 0);
       const minutes = Math.round(totalSec / 60);
       const miniSvg = generateMiniProfileSvg(steps);
@@ -398,6 +398,26 @@ export class UIManager {
       `;
       container.appendChild(card);
     });
+
+    // Tarjeta informativa de Domingo (Descanso total) si estamos viendo todos los días
+    if (activeCategory === 'todos') {
+      const sundayCard = document.createElement('div');
+      sundayCard.className = 'p-3 rounded-xl border border-slate-700/50 bg-slate-800/40 text-left flex flex-col justify-between opacity-75';
+      sundayCard.innerHTML = `
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <i class="ti ti-moon text-blue-400"></i> Domingo · Descanso Total
+          </span>
+          <span class="text-[10px] uppercase font-mono font-bold text-slate-400 bg-slate-900/60 px-1.5 py-0.5 rounded border border-slate-800">
+            Asimilación
+          </span>
+        </div>
+        <div class="text-[11px] text-slate-400">
+          Cero pedaleo. La adaptación mitocondrial y muscular se consolida durante el descanso.
+        </div>
+      `;
+      container.appendChild(sundayCard);
+    }
   }
 
   // Render del Modal de Resumen al terminar entrenamiento

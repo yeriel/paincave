@@ -193,23 +193,20 @@
           </button>
         </div>
         
-        <!-- Selector táctil de nivel -->
+        <!-- Selector táctil de Fases de Progresión -->
         <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-700/60" id="levelTabsContainer">
-          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="principiante" onclick="window.painCaveApp.setLevel('principiante')">Principiante</button>
-          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm" data-level="amateur" onclick="window.painCaveApp.setLevel('amateur')">Amateur</button>
-          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="elite" onclick="window.painCaveApp.setLevel('elite')">Élite</button>
-          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="pro" onclick="window.painCaveApp.setLevel('pro')">Pro</button>
+          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm" data-level="fase1" onclick="window.painCaveApp.setLevel('fase1')">Fase 1 (S1-4)</button>
+          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="fase2" onclick="window.painCaveApp.setLevel('fase2')">Fase 2 (S5-8)</button>
+          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="fase3" onclick="window.painCaveApp.setLevel('fase3')">Fase 3 (S9-12)</button>
         </div>
       </div>
 
-      <!-- FILTROS DE CATEGORÍA -->
+      <!-- FILTROS DE CATEGORÍA SEMANAL -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1.5 mb-3 custom-scrollbar">
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Todos</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Fondo Z2</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="aero" onclick="window.painCaveApp.setCategoryFilter('aero')">Postura Aero</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="umbral" onclick="window.painCaveApp.setCategoryFilter('umbral')">Umbral Z4</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="sweetspot" onclick="window.painCaveApp.setCategoryFilter('sweetspot')">Sweet Spot</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Recuperación</button>
+        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Semana Completa</button>
+        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Fondo Z2 (Lun/Jue/Sáb)</button>
+        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">Calidad (Mar/Vie)</button>
+        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Recuperación (Mié)</button>
       </div>
 
       <!-- GRID LIMPIO DEL POOL DE RUTINAS -->

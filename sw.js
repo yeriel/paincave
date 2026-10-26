@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pain-cave-v7';
+const CACHE_NAME = 'pain-cave-v8';
 const urlsToCache = [
   './',
   './index.html',
@@ -19,31 +19,30 @@ const urlsToCache = [
   './js/engine.js',
   './js/ui.js',
   './js/app.js',
-  // Planes Fondo Z2
-  './planes/fondo_z2/principiante.csv',
-  './planes/fondo_z2/amateur.csv',
-  './planes/fondo_z2/elite.csv',
-  './planes/fondo_z2/pro.csv',
-  // Planes Adaptación Aero
-  './planes/adaptacion_aero/principiante.csv',
-  './planes/adaptacion_aero/amateur.csv',
-  './planes/adaptacion_aero/elite.csv',
-  './planes/adaptacion_aero/pro.csv',
-  // Planes Intervalos Umbral Z4
-  './planes/intervalos_umbral/principiante.csv',
-  './planes/intervalos_umbral/amateur.csv',
-  './planes/intervalos_umbral/elite.csv',
-  './planes/intervalos_umbral/pro.csv',
-  // Planes Sweet Spot 88-93%
-  './planes/sweet_spot/principiante.csv',
-  './planes/sweet_spot/amateur.csv',
-  './planes/sweet_spot/elite.csv',
-  './planes/sweet_spot/pro.csv',
-  // Planes Recuperación Activa
-  './planes/recuperacion_activa/principiante.csv',
-  './planes/recuperacion_activa/amateur.csv',
-  './planes/recuperacion_activa/elite.csv',
-  './planes/recuperacion_activa/pro.csv'
+  // Lunes: Fondo Aero Z2
+  './planes/lunes_fondo_aero/fase1.csv',
+  './planes/lunes_fondo_aero/fase2.csv',
+  './planes/lunes_fondo_aero/fase3.csv',
+  // Martes: Sweet Spot
+  './planes/martes_sweet_spot/fase1.csv',
+  './planes/martes_sweet_spot/fase2.csv',
+  './planes/martes_sweet_spot/fase3.csv',
+  // Miércoles: Recuperación Z1
+  './planes/miercoles_recuperacion/fase1.csv',
+  './planes/miercoles_recuperacion/fase2.csv',
+  './planes/miercoles_recuperacion/fase3.csv',
+  // Jueves: Fondo Z2 Continuo
+  './planes/jueves_fondo_z2/fase1.csv',
+  './planes/jueves_fondo_z2/fase2.csv',
+  './planes/jueves_fondo_z2/fase3.csv',
+  // Viernes: Intervalos Umbral Z4
+  './planes/viernes_umbral_z4/fase1.csv',
+  './planes/viernes_umbral_z4/fase2.csv',
+  './planes/viernes_umbral_z4/fase3.csv',
+  // Sábado: Fondo Aero Extendido
+  './planes/sabado_fondo_extendido/fase1.csv',
+  './planes/sabado_fondo_extendido/fase2.csv',
+  './planes/sabado_fondo_extendido/fase3.csv'
 ];
 
 self.addEventListener('install', event => {

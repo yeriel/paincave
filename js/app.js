@@ -11,7 +11,7 @@ import { getRoutine, parseCSV } from './workouts.js';
 
 class PainCaveApp {
   constructor() {
-    this.selectedLevel = 'amateur';
+    this.selectedLevel = 'fase1';
     this.activeCategory = 'todos';
     this.tempWorkoutBuffer = null;
   }
@@ -127,9 +127,16 @@ class PainCaveApp {
     const routine = getRoutine(routineId, this.selectedLevel);
     if (!routine) return;
 
+    const phaseNames = {
+      fase1: 'Fase 1 (Cimientos)',
+      fase2: 'Fase 2 (Densidad)',
+      fase3: 'Fase 3 (Dominio Aero)'
+    };
+    const phaseLabel = phaseNames[this.selectedLevel] || this.selectedLevel.toUpperCase();
+
     this.tempWorkoutBuffer = {
       routine: routine.steps,
-      name: `${routine.title} · ${this.selectedLevel.toUpperCase()}`
+      name: `${routine.title} · ${phaseLabel}`
     };
 
     document.getElementById('preWorkoutType').textContent = routine.title;

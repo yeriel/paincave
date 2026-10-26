@@ -14,7 +14,7 @@ class WorkoutEngine {
     this.timeLeft = 0;
     this.stepTotal = 0;
     this.sessionTitle = '';
-    this.selectedLevel = 'amateur';
+    this.selectedLevel = 'fase1';
     this.timerInterval = null;
     this.startTime = null;
     this.wakeLock = null;
