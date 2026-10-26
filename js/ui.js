@@ -491,7 +491,7 @@ export class UIManager {
     const pill = document.getElementById('headerTrackerPill');
     if (pill) {
       const prog = trainingTracker.getCurrentProgress();
-      pill.textContent = `Sem ${prog.currentWeek}`;
+      pill.textContent = `${prog.currentWeek}`;
       const btn = document.getElementById('btnHeaderTracker');
       if (btn) {
         btn.title = `Semana ${prog.currentWeek} de ${prog.totalWeeks} · ${prog.matchedPhase.name}`;
