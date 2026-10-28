@@ -7,7 +7,7 @@ import { bluetoothManager } from './bluetooth.js';
 import { gamification } from './gamification.js';
 import { workoutEngine } from './engine.js';
 import { ui, formatTime } from './ui.js';
-import { getRoutine, parseCSV } from './workouts.js';
+import { getRoutine, parseCSV, getZoneBpmRange } from './workouts.js';
 import { trainingTracker } from './trainingTracker.js';
 
 class PainCaveApp {
@@ -23,6 +23,11 @@ class PainCaveApp {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
       });
+    }
+
+    // Calibración inicial de FC Máx personalizada (189 BPM)
+    if (gamification.getMaxHR() === 190) {
+      gamification.setMaxHR(189);
     }
 
     ui.init();
@@ -162,7 +167,7 @@ class PainCaveApp {
       item.innerHTML = `
         <div class="truncate mr-2">
           <span class="font-bold text-slate-300">${idx + 1}. ${st.phase}</span>
-          <span class="text-[10px] text-slate-500 block">${st.posture === 'aero' ? '🚴 Aero' : (st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado')} · ${st.cadence ? st.cadence + ' RPM · ' : ''}RPE ${st.rpe || '—'}</span>
+          <span class="text-[10px] text-slate-400 block">${st.posture === 'aero' ? '🚴 Aero' : (st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado')} · ${st.cadence ? st.cadence + ' RPM · ' : ''}${st.zone ? (st.zone === 'SS' ? 'Sweet Spot' : 'Z' + st.zone) + ' (' + getZoneBpmRange(st.zone) + ' BPM) · ' : ''}RPE ${st.rpe || '—'}</span>
         </div>
         <span class="font-mono text-slate-400 shrink-0 font-semibold">${formatTime(st.t)}</span>
       `;

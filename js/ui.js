@@ -20,7 +20,7 @@ export function formatTime(seconds) {
 export function generateMiniProfileSvg(steps) {
   const total = steps.reduce((a, s) => a + s.t, 0);
   if (total === 0) return '';
-  const zoneColors = { 1: '#3b82f6', 2: '#10b981', 3: '#eab308', 4: '#f97316', 5: '#ef4444' };
+  const zoneColors = { 1: '#3b82f6', 2: '#10b981', 3: '#eab308', 'SS': '#f59e0b', 'ss': '#f59e0b', 4: '#f97316', 5: '#ef4444' };
   let x = 0;
   const svgWidth = 90;
   const svgHeight = 20;
@@ -28,10 +28,10 @@ export function generateMiniProfileSvg(steps) {
 
   steps.forEach(st => {
     const w = Math.max(1.2, (st.t / total) * svgWidth);
-    const rpeVal = st.rpe || (st.zone ? st.zone * 2 : 5);
+    const rpeVal = st.rpe || (st.zone === 'SS' ? 7.8 : (st.zone ? st.zone * 2 : 5));
     const h = Math.max(3, Math.min(svgHeight, (rpeVal / 10) * svgHeight));
     const y = svgHeight - h;
-    const color = zoneColors[st.zone || 2];
+    const color = zoneColors[st.zone] || zoneColors[st.zone || 2] || '#10b981';
     rects += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="${color}" rx="1" />`;
     x += w;
   });
@@ -138,15 +138,15 @@ export class UIManager {
       if (pct < 60) {
         color = '#3b82f6';
         card.classList.add('bg-blue-950/40', 'border-blue-500/40');
-      } else if (pct < 70) {
+      } else if (pct < 71) {
         color = '#10b981';
         card.classList.add('bg-emerald-950/40', 'border-emerald-500/40');
-      } else if (pct < 80) {
+      } else if (pct < 81) {
         color = '#eab308';
         card.classList.add('bg-yellow-950/40', 'border-yellow-500/40');
-      } else if (pct < 90) {
-        color = '#f97316';
-        card.classList.add('bg-orange-950/40', 'border-orange-500/50');
+      } else if (pct < 91) {
+        color = '#f59e0b';
+        card.classList.add('bg-amber-950/40', 'border-amber-500/50');
       } else {
         color = '#ef4444';
         card.classList.add('bg-red-950/40', 'border-red-500/50');
@@ -214,7 +214,8 @@ export class UIManager {
     }
 
     // 2. Zona
-    document.getElementById('zoneVal').textContent = step.zone ? 'Z' + step.zone : '—';
+    const zoneStr = step.zone ? (String(step.zone).toUpperCase() === 'SS' ? 'SS' : 'Z' + step.zone) : '—';
+    document.getElementById('zoneVal').textContent = zoneStr;
     document.getElementById('zoneBpmTarget').textContent = step.zone ? getZoneBpmRange(step.zone) + ' BPM' : 'BPM';
 
     // 3. RPE

@@ -1,9 +1,9 @@
 fase3
 Calentamiento progresivo, 88, 4, 480
-Serie 1: Bloque Umbral Z4, 90, 8, 480
-Recuperación activa Z2, 85, 3.5, 180
-Serie 2: Bloque Umbral Z4 Aero, 92, 8.5, 480
-Recuperación activa Z2, 85, 3.5, 180
-Serie 3: Bloque Umbral Z4 Aero, 92, 8.5, 480
-Recuperación activa Z2, 85, 3.5, 180
-Enfriamiento regenerativo, 80, 2, 840
+Serie 1: Bloque Umbral Z4 (153-170 BPM), 90, 8.5, 480
+Recuperación activa Z2 (113-132 BPM), 85, 4, 180
+Serie 2: Bloque Umbral Z4 Aero (153-170 BPM), 92, 8.5, 480
+Recuperación activa Z2 (113-132 BPM), 85, 4, 180
+Serie 3: Bloque Umbral Z4 Aero (153-170 BPM), 92, 8.8, 480
+Recuperación activa Z2 (113-132 BPM), 85, 4, 180
+Enfriamiento regenerativo Z1, 80, 2, 840

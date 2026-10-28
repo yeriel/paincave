@@ -178,7 +178,7 @@ class SoundEngine {
       .trim();
 
     let postureStr = '';
-    const nameLower = name.toLowerCase();
+    const nameLower = (step.phase || '').toLowerCase();
     if (step.posture === 'aero' && !nameLower.includes('aero')) {
       postureStr = ', en posición aero';
     } else if (step.posture === 'de pie' && !nameLower.includes('de pie')) {
@@ -186,10 +186,22 @@ class SoundEngine {
     }
     const cadenceStr = step.cadence ? `, a ${step.cadence} RPM` : '';
 
-    if (isStart) {
-      return `Comenzamos: ${name}${postureStr}${cadenceStr}.`;
+    let targetCue = '';
+    const z = String(step.zone || '').toUpperCase();
+    if (z === 'SS' || nameLower.includes('sweet spot') || nameLower.includes('sweetspot')) {
+      targetCue = ', busca Sweet Spot entre 158 y 170 pulsaciones';
+    } else if (z === '4' || nameLower.includes('umbral')) {
+      targetCue = ', busca umbral entre 153 y 170 pulsaciones';
+    } else if (z === '2' || nameLower.includes('fondo') || nameLower.includes('z2')) {
+      targetCue = ', zona 2 aeróbica entre 113 y 132 pulsaciones';
+    } else if (z === '1' || nameLower.includes('recuperaci') || nameLower.includes('regenerativo')) {
+      targetCue = ', pedaleo suave por debajo de 113 pulsaciones';
     }
-    return `En diez segundos: ${name}${postureStr}${cadenceStr}.`;
+
+    if (isStart) {
+      return `Comenzamos: ${name}${postureStr}${cadenceStr}${targetCue}.`;
+    }
+    return `En diez segundos: ${name}${postureStr}${cadenceStr}${targetCue}.`;
   }
 
   announce(text) {

@@ -1,13 +1,13 @@
 fase2
-Calentamiento progresivo, 85, 3.5, 480
-Serie 1: Umbral Z4, 90, 7.5, 240
-Recuperación activa Z2, 85, 3.5, 120
-Serie 2: Umbral Z4 Aero, 90, 8, 240
-Recuperación activa Z2, 85, 3.5, 120
-Serie 3: Umbral Z4, 90, 8, 240
-Recuperación activa Z2, 85, 3.5, 120
-Serie 4: Umbral Z4 Aero, 90, 8.5, 240
-Recuperación activa Z2, 85, 3.5, 120
-Serie 5: Umbral Z4 Aero, 90, 8.5, 240
-Recuperación activa Z2, 85, 3.5, 120
-Enfriamiento regenerativo, 80, 2, 720
+Calentamiento Z1->Z2, 85, 3.5, 480
+Serie 1: Umbral Z4 (153-170 BPM), 90, 8.5, 240
+Recuperación activa Z2 (113-132 BPM), 85, 4, 120
+Serie 2: Umbral Z4 Aero (153-170 BPM), 90, 8.5, 240
+Recuperación activa Z2 (113-132 BPM), 85, 4, 120
+Serie 3: Umbral Z4 (153-170 BPM), 90, 8.5, 240
+Recuperación activa Z2 (113-132 BPM), 85, 4, 120
+Serie 4: Umbral Z4 Aero (153-170 BPM), 90, 8.5, 240
+Recuperación activa Z2 (113-132 BPM), 85, 4, 120
+Serie 5: Umbral Z4 Aero a tope, 92, 8.8, 240
+Recuperación activa Z2 (113-132 BPM), 85, 4, 120
+Enfriamiento regenerativo Z1, 80, 2, 720

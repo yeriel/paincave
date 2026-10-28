@@ -503,14 +503,22 @@
           </div>
         </div>
 
-        <!-- FC MÁXIMA -->
+        <!-- FC MÁXIMA Y ZONAS FISIOLÓGICAS -->
         <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
-          <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center justify-between gap-2 mb-2">
             <label for="maxHrInput" class="text-xs text-slate-300 font-bold">FC Máxima:</label>
             <div class="flex items-center gap-1">
-              <input type="number" id="maxHrInput" onchange="window.painCaveApp.saveMaxHR(this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-lg text-center font-mono font-bold text-white text-xs py-1 outline-none" min="100" max="240" placeholder="190">
+              <input type="number" id="maxHrInput" onchange="window.painCaveApp.saveMaxHR(this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-lg text-center font-mono font-bold text-white text-xs py-1 outline-none" min="100" max="240" placeholder="189">
               <span class="text-[10px] text-slate-500 font-bold font-mono">BPM</span>
             </div>
+          </div>
+          <div class="grid grid-cols-2 gap-1 pt-2 border-t border-slate-800 text-[10px] font-mono">
+            <div class="text-blue-400">Z1 (&lt; 60%): &lt; 113 BPM</div>
+            <div class="text-emerald-400">Z2 (60-70%): 113-132 BPM</div>
+            <div class="text-yellow-400">Z3 (71-80%): 134-151 BPM</div>
+            <div class="text-amber-400 font-bold">SS (84-90%): 158-170 BPM</div>
+            <div class="text-orange-400">Z4 (81-90%): 153-170 BPM</div>
+            <div class="text-red-400 font-bold">Z5 (&gt; 90%): 172-189 BPM</div>
           </div>
         </div>
 

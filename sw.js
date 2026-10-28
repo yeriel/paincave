@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pain-cave-v10';
+const CACHE_NAME = 'pain-cave-v11';
 const urlsToCache = [
   './',
   './index.html',
