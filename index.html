@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Pain Cave</title>
   
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#121212">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
@@ -16,33 +16,33 @@
   <link rel="stylesheet" href="./assets/css/tailwind.min.css">
   <link rel="stylesheet" href="./assets/css/tabler-icons.min.css">
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-blue-500/30 min-h-screen overflow-x-hidden">
+<body class="bg-[#121212] text-zinc-100 font-sans antialiased selection:bg-[#FC5200]/30 min-h-screen overflow-x-hidden">
 
   <div class="max-w-xl md:max-w-4xl mx-auto px-2.5 sm:px-4 py-2 sm:py-4 relative">
     
     <!-- CABECERA COMPACTA MOBILE-FIRST -->
-    <header class="flex justify-between items-center mb-2.5 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700/80 shadow-sm">
+    <header class="flex justify-between items-center mb-2.5 bg-[#1E1E1E] px-3 py-1.5 rounded-xl border border-[#2D2D2D] shadow-sm">
       <div class="flex items-center gap-2 min-w-0">
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" id="liveDot"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-[#FC5200] shrink-0" id="liveDot"></span>
         <span class="text-xs sm:text-sm font-black tracking-wider text-white uppercase truncate" id="sessionLabel">PAIN CAVE</span>
       </div>
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- Modo Pantalla Completa (Manillar) -->
-        <button onclick="window.painCaveApp.toggleFullscreen()" id="btnFullscreen" class="text-slate-400 hover:text-white transition-colors p-1.5 sm:p-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Pantalla Completa">
+        <button onclick="window.painCaveApp.toggleFullscreen()" id="btnFullscreen" class="text-zinc-400 hover:text-white transition-colors p-1.5 sm:p-2 bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Pantalla Completa">
           <i class="ti ti-maximize text-base sm:text-lg"></i>
         </button>
         <!-- Conectar Pulsómetro Bluetooth -->
-        <button onclick="window.painCaveApp.toggleHRM()" id="btnBluetooth" class="text-slate-400 hover:text-blue-400 transition-colors p-1.5 sm:p-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Pulsómetro BLE">
+        <button onclick="window.painCaveApp.toggleHRM()" id="btnBluetooth" class="text-zinc-400 hover:text-[#FC5200] transition-colors p-1.5 sm:p-2 bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Pulsómetro BLE">
           <i class="ti ti-bluetooth text-base sm:text-lg"></i>
         </button>
         <!-- Seguimiento y Plan -->
-        <button onclick="window.painCaveApp.openTrackingModal('tracking')" id="btnHeaderTracker" class="flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors px-2 py-1 sm:px-2.5 sm:py-1.5 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Seguimiento">
+        <button onclick="window.painCaveApp.openTrackingModal('tracking')" id="btnHeaderTracker" class="flex items-center gap-1 text-[#FC5200] hover:text-[#FF7033] transition-colors px-2 py-1 sm:px-2.5 sm:py-1.5 bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Seguimiento">
           <i class="ti ti-calendar-stats text-sm sm:text-base"></i>
           <span id="headerTrackerPill" class="text-[10px] sm:text-[11px] font-mono font-bold">Sem 1</span>
         </button>
         <!-- Perfil y Gamificación (Rango) -->
-        <button onclick="window.painCaveApp.showStatsModal('profile')" id="btnHeaderRank" class="flex items-center gap-1 text-slate-400 hover:text-white transition-colors px-2 py-1 sm:px-2.5 sm:py-1.5 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Rango">
-          <span id="miniRankText" class="text-[9px] sm:text-[10px] uppercase font-bold text-orange-400">Novato</span>
+        <button onclick="window.painCaveApp.showStatsModal('profile')" id="btnHeaderRank" class="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors px-2 py-1 sm:px-2.5 sm:py-1.5 bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Rango">
+          <span id="miniRankText" class="text-[9px] sm:text-[10px] uppercase font-bold text-amber-400">Novato</span>
           <i class="ti ti-shield-chevron text-sm sm:text-base"></i>
         </button>
       </div>
@@ -53,17 +53,17 @@
       
       <!-- PROGRESO GLOBAL & BARRA DE PERFIL DE BLOQUES -->
       <div class="mb-3">
-        <div class="flex justify-between text-xs font-mono font-bold text-slate-400 mb-1">
-          <span class="text-[10px] uppercase font-sans text-slate-500">Sesión</span>
-          <span id="globalTime">00:00 / 00:00</span>
+        <div class="flex justify-between text-xs font-mono font-bold text-zinc-400 mb-1">
+          <span class="text-[10px] uppercase font-sans font-bold text-zinc-500">Sesión</span>
+          <span id="globalTime" class="tabular-nums">00:00 / 00:00</span>
         </div>
-        <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden border border-slate-700/60 mb-2.5">
-          <div id="globalProgress" class="h-full bg-blue-500 transition-all duration-1000 ease-linear" style="width: 0%"></div>
+        <div class="h-2 w-full bg-[#252525] rounded-full overflow-hidden border border-[#2D2D2D] mb-2.5">
+          <div id="globalProgress" class="h-full bg-[#FC5200] transition-all duration-1000 ease-linear" style="width: 0%"></div>
         </div>
 
         <!-- BARRA GRÁFICA DE PERFIL (Solo activa en sesión) -->
-        <div id="workoutProfileContainer" class="hidden bg-slate-950 p-2 rounded-xl border border-slate-800">
-          <div id="workoutProfileBar" class="relative h-10 w-full bg-slate-900 rounded overflow-hidden flex items-end"></div>
+        <div id="workoutProfileContainer" class="hidden bg-[#181818] p-2 rounded-xl border border-[#2D2D2D]">
+          <div id="workoutProfileBar" class="relative h-10 w-full bg-[#121212] rounded overflow-hidden flex items-end"></div>
         </div>
       </div>
 
@@ -74,14 +74,14 @@
         <div class="landscape:col-span-5 md:col-span-5 flex flex-col items-center justify-center text-center py-1">
           <div class="relative w-[180px] h-[180px] sm:w-[200px] sm:h-[200px] mx-auto flex items-center justify-center cursor-pointer group active:scale-95 transition-transform" onclick="window.painCaveApp.togglePause()">
             <svg class="absolute inset-0 -rotate-90 w-full h-full pointer-events-none" viewBox="0 0 200 200">
-              <circle class="fill-none stroke-slate-800 stroke-[10px]" cx="100" cy="100" r="90"/>
-              <circle class="fill-none stroke-[10px] transition-all duration-[900ms] ease-linear" stroke-linecap="round" id="timerRing" cx="100" cy="100" r="90" stroke="#1D9E75" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
+              <circle class="fill-none stroke-[#252525] stroke-[10px]" cx="100" cy="100" r="90"/>
+              <circle class="fill-none stroke-[10px] transition-all duration-[900ms] ease-linear" stroke-linecap="round" id="timerRing" cx="100" cy="100" r="90" stroke="#FC5200" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
             </svg>
-            <div class="text-5xl sm:text-6xl font-black font-mono text-white tracking-tight leading-none select-none z-10" id="timerDisplay">00:00</div>
+            <div class="text-5xl sm:text-6xl font-black font-mono tabular-nums text-white tracking-tight leading-none select-none z-10" id="timerDisplay">00:00</div>
           </div>
           
           <div class="flex items-center justify-center gap-2 mt-2">
-            <span class="text-xs text-slate-400 font-mono font-bold" id="stepCounter">— / —</span>
+            <span class="text-xs text-zinc-400 font-mono font-bold" id="stepCounter">— / —</span>
             <div id="stepDots" class="flex gap-1 items-center"></div>
           </div>
         </div>
@@ -90,11 +90,11 @@
         <div class="landscape:col-span-7 md:col-span-7">
           
           <!-- TARJETA PRINCIPAL DEL BLOQUE -->
-          <div id="mainCard" class="bg-slate-800 border border-slate-700 rounded-2xl p-4 shadow-xl transition-all duration-500 relative">
+          <div id="mainCard" class="bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl p-4 shadow-xl transition-all duration-500 relative">
             
             <div class="flex items-center justify-between mb-1.5">
-              <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold" id="exPhase">LISTO</span>
-              <div id="exPostureBadge" class="hidden items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] uppercase tracking-wider font-extrabold bg-slate-700 text-slate-200 border border-slate-600">
+              <span class="text-[10px] uppercase tracking-wider text-zinc-400 font-bold" id="exPhase">LISTO</span>
+              <div id="exPostureBadge" class="hidden items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] uppercase tracking-wider font-extrabold bg-[#252525] text-zinc-200 border border-[#333333]">
                 <span id="exPostureIcon">🪑</span>
                 <span id="exPostureText">Sentado</span>
               </div>
@@ -106,70 +106,70 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
               
               <!-- 1. Cadencia con Metrónomo Visual -->
-              <div class="bg-slate-900/80 rounded-xl p-2.5 text-center border border-slate-700/60 flex flex-col justify-center">
-                <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold mb-0.5 flex items-center justify-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-cadence hidden shrink-0" id="cadencePacerDot"></span>
+              <div class="bg-[#252525] rounded-xl p-2.5 text-center border border-[#303030] flex flex-col justify-center">
+                <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold mb-0.5 flex items-center justify-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#FC5200] animate-cadence hidden shrink-0" id="cadencePacerDot"></span>
                   <span>Cadencia</span>
                 </div>
-                <div class="text-2xl md:text-3xl font-black text-white font-mono" id="cadenceVal">—</div>
-                <div class="text-[9px] text-slate-400 font-bold" id="cadenceUnit">RPM</div>
+                <div class="text-2xl md:text-3xl font-black text-white font-mono tabular-nums" id="cadenceVal">—</div>
+                <div class="text-[9px] text-zinc-400 font-bold" id="cadenceUnit">RPM</div>
               </div>
 
               <!-- 2. Zona FC Objetivo -->
-              <div class="bg-slate-900/80 rounded-xl p-2.5 text-center border border-slate-700/60 flex flex-col justify-center">
-                <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold mb-0.5">Zona Obj.</div>
-                <div class="text-2xl md:text-3xl font-black text-white font-mono" id="zoneVal">—</div>
-                <div class="text-[9px] text-slate-400 font-bold" id="zoneBpmTarget">BPM</div>
+              <div class="bg-[#252525] rounded-xl p-2.5 text-center border border-[#303030] flex flex-col justify-center">
+                <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold mb-0.5">Zona Obj.</div>
+                <div class="text-2xl md:text-3xl font-black text-white font-mono tabular-nums" id="zoneVal">—</div>
+                <div class="text-[9px] text-zinc-400 font-bold" id="zoneBpmTarget">BPM</div>
               </div>
 
               <!-- 3. Pulso Real BLE -->
-              <div class="bg-slate-900/80 rounded-xl p-2.5 text-center border border-slate-700/60 cursor-pointer active:scale-95 transition-transform flex flex-col justify-center group" onclick="window.painCaveApp.toggleHRM()" title="Conectar pulsómetro">
-                <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold mb-0.5 group-hover:text-blue-400 transition-colors">Pulso Real</div>
-                <div class="text-2xl md:text-3xl font-black text-white font-mono flex items-center justify-center gap-1">
+              <div class="bg-[#252525] rounded-xl p-2.5 text-center border border-[#303030] cursor-pointer active:scale-95 transition-transform flex flex-col justify-center group hover:border-[#FC5200]/50" onclick="window.painCaveApp.toggleHRM()" title="Conectar pulsómetro">
+                <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold mb-0.5 group-hover:text-[#FC5200] transition-colors">Pulso Real</div>
+                <div class="text-2xl md:text-3xl font-black text-white font-mono tabular-nums flex items-center justify-center gap-1">
                   <span id="bpmVal">—</span>
                 </div>
-                <div class="text-[9px] text-slate-400 font-bold flex items-center justify-center gap-1">
+                <div class="text-[9px] text-zinc-400 font-bold flex items-center justify-center gap-1">
                   <i class="ti ti-heart-filled text-rose-500 hidden text-xs" id="hrIcon"></i>
                   <span id="bpmLabel">Conectar</span>
                 </div>
               </div>
 
               <!-- 4. Esfuerzo RPE -->
-              <div class="bg-slate-900/80 rounded-xl p-2.5 text-center border border-slate-700/60 flex flex-col justify-center">
-                <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold mb-0.5">Esfuerzo</div>
-                <div class="text-2xl md:text-3xl font-black text-white font-mono" id="rpeVal">—</div>
-                <div class="h-1 rounded-full mt-1.5 bg-slate-800 overflow-hidden relative">
-                  <div class="absolute h-full rounded-full transition-all duration-500" id="rpeFill" style="width:0%;background:#1D9E75;"></div>
+              <div class="bg-[#252525] rounded-xl p-2.5 text-center border border-[#303030] flex flex-col justify-center">
+                <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold mb-0.5">Esfuerzo</div>
+                <div class="text-2xl md:text-3xl font-black text-white font-mono tabular-nums" id="rpeVal">—</div>
+                <div class="h-1.5 rounded-full mt-1.5 bg-[#181818] overflow-hidden relative border border-[#333333]">
+                  <div class="absolute h-full rounded-full transition-all duration-500" id="rpeFill" style="width:0%;background:#FC5200;"></div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- BANNER SIGUIENTE BLOQUE -->
-          <div class="bg-slate-800/80 rounded-xl px-3.5 py-2 flex items-center gap-3 mb-3 border border-slate-700/80 text-xs">
-            <span class="text-[10px] uppercase font-bold text-slate-400 whitespace-nowrap">Próximo</span>
-            <div class="w-px h-5 bg-slate-700"></div>
+          <div class="bg-[#1E1E1E] rounded-xl px-3.5 py-2 flex items-center gap-3 mb-3 border border-[#2D2D2D] text-xs">
+            <span class="text-[10px] uppercase font-bold text-zinc-400 whitespace-nowrap">Próximo</span>
+            <div class="w-px h-5 bg-[#333333]"></div>
             <div class="flex-1 min-w-0 truncate">
-              <span class="font-bold text-slate-200" id="nextName">—</span>
-              <span class="text-slate-400 ml-1.5 font-mono text-[11px]" id="nextMeta"></span>
+              <span class="font-bold text-white" id="nextName">—</span>
+              <span class="text-zinc-400 ml-1.5 font-mono text-[11px]" id="nextMeta"></span>
             </div>
           </div>
 
           <!-- CONTROLES SUDOR-FRIENDLY (Activos durante la sesión) -->
-          <div id="inRideControls" class="hidden mb-3 bg-slate-800 p-2 rounded-xl border border-slate-700">
+          <div id="inRideControls" class="hidden mb-3 bg-[#1E1E1E] p-2 rounded-xl border border-[#2D2D2D]">
             <div class="flex items-center gap-2 mb-2">
-              <button class="py-3 px-3.5 rounded-xl text-xs font-bold bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600 active:scale-95 transition-all" onclick="window.painCaveApp.adjustTime(-15)">
+              <button class="py-3 px-3.5 rounded-xl text-xs font-bold bg-[#252525] hover:bg-[#2E2E2E] text-zinc-200 border border-[#333333] active:scale-95 transition-all" onclick="window.painCaveApp.adjustTime(-15)">
                 -15s
               </button>
-              <button id="btnMainPause" class="flex-1 py-3.5 rounded-xl font-black text-sm text-white bg-blue-600 hover:bg-blue-500 flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md" onclick="window.painCaveApp.togglePause()">
+              <button id="btnMainPause" class="flex-1 py-3.5 rounded-xl font-black text-sm text-white bg-[#FC5200] hover:bg-[#E04800] flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md" onclick="window.painCaveApp.togglePause()">
                 <i class="ti ti-player-pause text-lg"></i> PAUSAR
               </button>
-              <button class="py-3 px-3.5 rounded-xl text-xs font-bold bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600 active:scale-95 transition-all" onclick="window.painCaveApp.adjustTime(15)">
+              <button class="py-3 px-3.5 rounded-xl text-xs font-bold bg-[#252525] hover:bg-[#2E2E2E] text-zinc-200 border border-[#333333] active:scale-95 transition-all" onclick="window.painCaveApp.adjustTime(15)">
                 +15s
               </button>
             </div>
             <div class="grid grid-cols-2 gap-2">
-              <button class="py-2.5 rounded-xl text-xs font-bold bg-slate-700/80 hover:bg-slate-700 text-slate-300 border border-slate-600 flex items-center justify-center gap-1.5 active:scale-95 transition-all" onclick="window.painCaveApp.skipStep()">
+              <button class="py-2.5 rounded-xl text-xs font-bold bg-[#252525] hover:bg-[#2E2E2E] text-zinc-300 border border-[#333333] flex items-center justify-center gap-1.5 active:scale-95 transition-all" onclick="window.painCaveApp.skipStep()">
                 <i class="ti ti-player-track-next text-sm"></i> Saltar Fase
               </button>
               <button class="py-2.5 rounded-xl text-xs font-bold bg-red-950/40 hover:bg-red-900/50 text-red-400 border border-red-800/40 flex items-center justify-center gap-1.5 active:scale-95 transition-all" onclick="window.painCaveApp.resetWorkout()">
@@ -186,38 +186,38 @@
     <section id="catalogSection" class="mt-2">
       
       <!-- SELECTOR DE FASES Y VOZ -->
-      <div class="flex items-center justify-between mb-2.5 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700">
+      <div class="flex items-center justify-between mb-2.5 bg-[#1E1E1E] p-1.5 rounded-xl border border-[#2D2D2D]">
         <div class="flex items-center gap-1">
-          <label class="flex items-center gap-1 cursor-pointer px-1.5 py-1">
-            <input type="checkbox" id="voiceToggle" checked class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-0 cursor-pointer">
-            <span class="text-xs font-bold text-slate-400">Voz</span>
+          <label class="flex items-center gap-1.5 cursor-pointer px-2 py-1 bg-[#252525] rounded-lg border border-[#333333]">
+            <input type="checkbox" id="voiceToggle" checked class="w-3.5 h-3.5 rounded bg-[#181818] border-[#383838] text-[#FC5200] focus:ring-0 cursor-pointer">
+            <span class="text-xs font-bold text-zinc-300">Voz</span>
           </label>
-          <button type="button" onclick="window.painCaveApp.testVoice()" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-700/60 transition-colors" title="Probar voz">
+          <button type="button" onclick="window.painCaveApp.testVoice()" class="text-zinc-400 hover:text-white p-1.5 rounded-lg bg-[#252525] hover:bg-[#2E2E2E] border border-[#333333] transition-colors" title="Probar voz">
             <i class="ti ti-volume text-sm"></i>
           </button>
         </div>
         
         <!-- Selector táctil de Fases -->
-        <div class="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-700/60" id="levelTabsContainer">
-          <button class="level-tab px-2 py-1 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm" data-level="fase1" onclick="window.painCaveApp.setLevel('fase1')">Fase 1</button>
-          <button class="level-tab px-2 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="fase2" onclick="window.painCaveApp.setLevel('fase2')">Fase 2</button>
-          <button class="level-tab px-2 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="fase3" onclick="window.painCaveApp.setLevel('fase3')">Fase 3</button>
+        <div class="flex items-center gap-1 bg-[#252525] p-0.5 rounded-lg border border-[#333333]" id="levelTabsContainer">
+          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-[#FC5200] text-white shadow-sm" data-level="fase1" onclick="window.painCaveApp.setLevel('fase1')">Fase 1</button>
+          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-zinc-400 hover:text-white" data-level="fase2" onclick="window.painCaveApp.setLevel('fase2')">Fase 2</button>
+          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-zinc-400 hover:text-white" data-level="fase3" onclick="window.painCaveApp.setLevel('fase3')">Fase 3</button>
         </div>
       </div>
 
       <!-- FILTROS DE CATEGORÍA DEL MICROCICLO ROTATIVO -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 mb-2.5 custom-scrollbar">
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Todos</button>
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Día 1: Z2 (60m)</button>
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">Día 2: Sweet Spot</button>
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Día 3: Z1</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-[#FC5200] text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Todos</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Día 1: Z2 (60m)</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">Día 2: Sweet Spot</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Día 3: Z1</button>
       </div>
 
       <!-- GRID LIMPIO DEL POOL DE RUTINAS -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-4" id="routinesPoolGrid"></div>
 
       <!-- BOTÓN IMPORTAR CSV -->
-      <button class="w-full py-2.5 rounded-xl text-xs font-bold border border-dashed border-slate-600 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5 active:scale-95 mb-6" onclick="window.painCaveApp.openCustomModal()">
+      <button class="w-full py-2.5 rounded-xl text-xs font-bold border border-dashed border-[#383838] text-zinc-400 hover:text-white hover:bg-[#1E1E1E] transition-colors flex items-center justify-center gap-1.5 active:scale-95 mb-6" onclick="window.painCaveApp.openCustomModal()">
         <i class="ti ti-file-upload text-base"></i> Importar Rutina CSV
       </button>
     </section>
@@ -225,105 +225,105 @@
   </div>
 
   <!-- MODALES COMPACTOS Y RÁPIDOS -->
-  <div id="modalOverlay" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm hidden flex-col items-center justify-center p-4 z-[100]">
+  <div id="modalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4 z-[100]">
     
     <!-- MODAL INICIO / VISTA PREVIA -->
-    <div id="preWorkoutModal" class="hidden text-left bg-slate-800 border border-slate-700 p-5 rounded-2xl w-full max-w-sm shadow-2xl">
+    <div id="preWorkoutModal" class="hidden text-left bg-[#1E1E1E] border border-[#2D2D2D] p-5 rounded-2xl w-full max-w-sm shadow-2xl">
       <div class="flex justify-between items-center mb-2">
         <h3 class="text-lg font-black text-white truncate mr-2" id="preWorkoutType">Entrenamiento</h3>
-        <span class="text-xs font-mono font-bold text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded border border-blue-500/40" id="preWorkoutDurationBadge">—</span>
+        <span class="text-xs font-mono font-bold text-[#FC5200] bg-[#FC5200]/15 px-2 py-0.5 rounded border border-[#FC5200]/30" id="preWorkoutDurationBadge">—</span>
       </div>
       
       <!-- Desglose scrolleable de bloques -->
-      <div class="bg-slate-900 rounded-xl p-2.5 border border-slate-700/80 mb-4 max-h-52 overflow-y-auto custom-scrollbar" id="preWorkoutStepsList"></div>
+      <div class="bg-[#161616] rounded-xl p-2.5 border border-[#2D2D2D] mb-4 max-h-52 overflow-y-auto custom-scrollbar" id="preWorkoutStepsList"></div>
 
-      <button class="w-full py-3.5 rounded-xl text-sm font-black text-white bg-blue-600 hover:bg-blue-500 shadow-lg transition-all active:scale-95" onclick="window.painCaveApp.startWorkout()">
+      <button class="w-full py-3.5 rounded-xl text-sm font-black text-white bg-[#FC5200] hover:bg-[#E04800] shadow-lg transition-all active:scale-95" onclick="window.painCaveApp.startWorkout()">
         INICIAR ENTRENAMIENTO
       </button>
-      <button class="w-full mt-2 py-1.5 text-xs font-semibold text-slate-400 hover:text-white" onclick="window.painCaveApp.closeModals()">
+      <button class="w-full mt-2 py-1.5 text-xs font-semibold text-zinc-400 hover:text-white transition-colors" onclick="window.painCaveApp.closeModals()">
         Cancelar
       </button>
     </div>
 
     <!-- MODAL RESUMEN & STRAVA -->
-    <div id="summaryModal" class="hidden text-center bg-slate-800 border border-slate-700 p-6 rounded-2xl w-full max-w-sm shadow-2xl">
-      <div class="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 rounded-full flex items-center justify-center mx-auto mb-2 text-emerald-400">
+    <div id="summaryModal" class="hidden text-center bg-[#1E1E1E] border border-[#2D2D2D] p-6 rounded-2xl w-full max-w-sm shadow-2xl">
+      <div class="w-12 h-12 bg-[#FC5200]/15 border border-[#FC5200]/40 rounded-full flex items-center justify-center mx-auto mb-2 text-[#FC5200]">
         <i class="ti ti-trophy text-2xl"></i>
       </div>
       <h3 class="text-xl font-black text-white mb-0.5">¡Sesión Completada!</h3>
-      <p class="text-xs text-slate-400 mb-3" id="summarySessionTitle">—</p>
+      <p class="text-xs text-zinc-400 mb-3" id="summarySessionTitle">—</p>
 
       <div class="grid grid-cols-2 gap-2 mb-4 text-left">
-        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/80">
-          <div class="text-[9px] uppercase font-bold text-slate-500">Tiempo</div>
-          <div class="text-lg font-mono font-bold text-white" id="summaryTotalTime">00:00</div>
+        <div class="bg-[#252525] p-2.5 rounded-xl border border-[#303030]">
+          <div class="text-[9px] uppercase font-bold text-zinc-400">Tiempo</div>
+          <div class="text-lg font-mono font-bold text-white tabular-nums" id="summaryTotalTime">00:00</div>
         </div>
-        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/80">
-          <div class="text-[9px] uppercase font-bold text-slate-500">XP Ganada</div>
-          <div class="text-lg font-mono font-bold text-orange-400" id="summaryXp">+0 XP</div>
+        <div class="bg-[#252525] p-2.5 rounded-xl border border-[#303030]">
+          <div class="text-[9px] uppercase font-bold text-zinc-400">XP Ganada</div>
+          <div class="text-lg font-mono font-bold text-[#FC5200] tabular-nums" id="summaryXp">+0 XP</div>
         </div>
-        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/80">
-          <div class="text-[9px] uppercase font-bold text-slate-500">FC Media</div>
-          <div class="text-lg font-mono font-bold text-blue-400" id="summaryAvgHr">—</div>
+        <div class="bg-[#252525] p-2.5 rounded-xl border border-[#303030]">
+          <div class="text-[9px] uppercase font-bold text-zinc-400">FC Media</div>
+          <div class="text-lg font-mono font-bold text-white tabular-nums" id="summaryAvgHr">—</div>
         </div>
-        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/80">
-          <div class="text-[9px] uppercase font-bold text-slate-500">FC Máxima</div>
-          <div class="text-lg font-mono font-bold text-rose-400" id="summaryMaxHr">—</div>
+        <div class="bg-[#252525] p-2.5 rounded-xl border border-[#303030]">
+          <div class="text-[9px] uppercase font-bold text-zinc-400">FC Máxima</div>
+          <div class="text-lg font-mono font-bold text-rose-400 tabular-nums" id="summaryMaxHr">—</div>
         </div>
       </div>
 
-      <button class="w-full py-3 rounded-xl text-xs font-bold bg-orange-600 hover:bg-orange-500 text-white flex items-center justify-center gap-1.5 mb-2 transition-all active:scale-95 shadow-lg" onclick="window.painCaveApp.downloadTCX()">
+      <button class="w-full py-3 rounded-xl text-xs font-bold bg-[#FC5200] hover:bg-[#E04800] text-white flex items-center justify-center gap-1.5 mb-2 transition-all active:scale-95 shadow-lg" onclick="window.painCaveApp.downloadTCX()">
         <i class="ti ti-download text-base"></i> Guardar para Strava (.TCX)
       </button>
-      <button class="w-full py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:text-white" onclick="window.painCaveApp.closeModals()">
+      <button class="w-full py-2 rounded-xl text-xs font-semibold bg-[#2A2A2A] hover:bg-[#333333] text-zinc-300 hover:text-white border border-[#383838] transition-colors" onclick="window.painCaveApp.closeModals()">
         Volver
       </button>
     </div>
 
     <!-- MODAL REANUDAR -->
-    <div id="resumeModal" class="hidden text-center bg-slate-800 border border-slate-700 p-5 rounded-2xl w-full max-w-sm shadow-2xl">
+    <div id="resumeModal" class="hidden text-center bg-[#1E1E1E] border border-[#2D2D2D] p-5 rounded-2xl w-full max-w-sm shadow-2xl">
       <h3 class="text-lg font-bold text-white mb-1">Sesión en pausa</h3>
-      <p class="text-slate-400 mb-4 text-xs">Guardamos tu progreso. ¿Deseas continuar?</p>
+      <p class="text-zinc-400 mb-4 text-xs">Guardamos tu progreso. ¿Deseas continuar?</p>
       <div class="grid grid-cols-2 gap-2">
-        <button class="py-2.5 rounded-xl text-xs font-bold border border-slate-600 text-slate-300 hover:bg-slate-700" onclick="window.painCaveApp.discardSavedState()">Descartar</button>
-        <button class="py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-500" onclick="window.painCaveApp.resumeSavedState()">Reanudar</button>
+        <button class="py-2.5 rounded-xl text-xs font-bold border border-[#383838] text-zinc-300 hover:bg-[#2A2A2A] transition-colors" onclick="window.painCaveApp.discardSavedState()">Descartar</button>
+        <button class="py-2.5 rounded-xl text-xs font-bold bg-[#FC5200] text-white hover:bg-[#E04800] transition-colors" onclick="window.painCaveApp.resumeSavedState()">Reanudar</button>
       </div>
     </div>
 
     <!-- MODAL CSV -->
-    <div id="customModal" class="hidden text-left bg-slate-800 border border-slate-700 p-5 rounded-2xl w-full max-w-sm shadow-2xl">
+    <div id="customModal" class="hidden text-left bg-[#1E1E1E] border border-[#2D2D2D] p-5 rounded-2xl w-full max-w-sm shadow-2xl">
       <h3 class="text-base font-bold text-white mb-1">Importar CSV</h3>
-      <p class="text-slate-400 mb-2.5 text-[11px] font-mono">Fase, Cadencia, RPE, Segundos</p>
-      <label class="block w-full py-2 mb-2 text-center rounded-xl text-xs font-bold bg-slate-700 text-white cursor-pointer hover:bg-slate-600 border border-dashed border-slate-500">
+      <p class="text-zinc-400 mb-2.5 text-[11px] font-mono">Fase, Cadencia, RPE, Segundos</p>
+      <label class="block w-full py-2 mb-2 text-center rounded-xl text-xs font-bold bg-[#252525] text-white cursor-pointer hover:bg-[#2E2E2E] border border-dashed border-[#383838] transition-colors">
         <i class="ti ti-upload mr-1"></i> Seleccionar archivo .csv
         <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="window.painCaveApp.handleFileUpload(event)">
       </label>
-      <textarea id="csvInput" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-300 font-mono focus:ring-1 focus:ring-blue-500 outline-none mb-3 custom-scrollbar" placeholder="Amateur&#10;Calentamiento, 90, 4, 180"></textarea>
+      <textarea id="csvInput" rows="4" class="w-full bg-[#161616] border border-[#2D2D2D] rounded-xl p-2.5 text-xs text-zinc-300 font-mono focus:ring-1 focus:ring-[#FC5200] outline-none mb-3 custom-scrollbar" placeholder="Amateur&#10;Calentamiento, 90, 4, 180"></textarea>
       <div class="grid grid-cols-2 gap-2">
-        <button class="py-2 rounded-xl text-xs font-bold border border-slate-600 text-slate-300 hover:bg-slate-700" onclick="window.painCaveApp.closeModals()">Cancelar</button>
-        <button class="py-2 rounded-xl text-xs font-bold bg-green-600 text-white hover:bg-green-500" onclick="window.painCaveApp.loadCustomCSV()">Cargar</button>
+        <button class="py-2 rounded-xl text-xs font-bold border border-[#383838] text-zinc-300 hover:bg-[#2A2A2A] transition-colors" onclick="window.painCaveApp.closeModals()">Cancelar</button>
+        <button class="py-2 rounded-xl text-xs font-bold bg-[#FC5200] text-white hover:bg-[#E04800] transition-colors" onclick="window.painCaveApp.loadCustomCSV()">Cargar</button>
       </div>
     </div>
 
     <!-- MODAL CONFIRMAR SALIDA -->
-    <div id="exitModal" class="hidden text-center bg-slate-800 border border-slate-700 p-5 rounded-2xl w-full max-w-sm shadow-2xl">
+    <div id="exitModal" class="hidden text-center bg-[#1E1E1E] border border-[#2D2D2D] p-5 rounded-2xl w-full max-w-sm shadow-2xl">
       <h3 class="text-lg font-bold text-white mb-1">¿Detener sesión?</h3>
-      <p class="text-slate-400 mb-4 text-xs">Has pedaleado un buen bloque. ¿Deseas registrar la XP ganada?</p>
+      <p class="text-zinc-400 mb-4 text-xs">Has pedaleado un buen bloque. ¿Deseas registrar la XP ganada?</p>
       <div class="flex flex-col gap-1.5">
-        <button class="w-full py-2.5 rounded-xl text-xs font-bold bg-green-600 text-white hover:bg-green-500" onclick="window.painCaveApp.confirmExit(true)">Guardar XP y salir</button>
-        <button class="w-full py-2.5 rounded-xl text-xs font-bold bg-red-600/20 text-red-400 border border-red-500/30" onclick="window.painCaveApp.confirmExit(false)">Descartar</button>
-        <button class="w-full py-2 mt-1 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300" onclick="window.painCaveApp.cancelExit()">Continuar rodando</button>
+        <button class="w-full py-2.5 rounded-xl text-xs font-bold bg-[#FC5200] text-white hover:bg-[#E04800] transition-colors" onclick="window.painCaveApp.confirmExit(true)">Guardar XP y salir</button>
+        <button class="w-full py-2.5 rounded-xl text-xs font-bold bg-rose-950/40 text-rose-400 border border-rose-800/40 hover:bg-rose-900/50 transition-colors" onclick="window.painCaveApp.confirmExit(false)">Descartar</button>
+        <button class="w-full py-2 mt-1 rounded-xl text-xs font-semibold bg-[#2A2A2A] text-zinc-300 hover:bg-[#333333] border border-[#383838] transition-colors" onclick="window.painCaveApp.cancelExit()">Continuar rodando</button>
       </div>
     </div>
 
     <!-- MODAL ESTADÍSTICAS & TRACKING -->
-    <div id="statsModal" class="hidden text-center bg-slate-800 border border-slate-700 p-4 sm:p-5 rounded-2xl w-full max-w-lg shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+    <div id="statsModal" class="hidden text-center bg-[#1E1E1E] border border-[#2D2D2D] p-4 sm:p-5 rounded-2xl w-full max-w-lg shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
       <!-- SELECTOR DE PESTAÑAS -->
-      <div class="flex p-1 bg-slate-900 rounded-xl border border-slate-700/80 mb-3">
-        <button id="modalTabTrackingBtn" onclick="window.painCaveApp.switchStatsTab('tracking')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5">
+      <div class="flex p-1 bg-[#161616] rounded-xl border border-[#2D2D2D] mb-3">
+        <button id="modalTabTrackingBtn" onclick="window.painCaveApp.switchStatsTab('tracking')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-[#FC5200] text-white shadow-sm flex items-center justify-center gap-1.5">
           <i class="ti ti-chart-bar text-sm"></i> Seguimiento
         </button>
-        <button id="modalTabProfileBtn" onclick="window.painCaveApp.switchStatsTab('profile')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+        <button id="modalTabProfileBtn" onclick="window.painCaveApp.switchStatsTab('profile')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-white flex items-center justify-center gap-1.5">
           <i class="ti ti-trophy text-sm"></i> Perfil & Zonas
         </button>
       </div>
@@ -331,43 +331,43 @@
       <!-- PESTAÑA 1: SEGUIMIENTO DEL PLAN -->
       <div id="modalTabTrackingContent" class="space-y-2.5 text-left">
         <!-- 1. RESUMEN COMPACTO DEL PLAN -->
-        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
+        <div class="bg-[#252525] rounded-xl p-3 border border-[#303030]">
           <div class="flex items-center justify-between mb-1.5">
             <div>
               <span id="modalTrackPhaseName" class="text-xs sm:text-sm font-black text-white">Fase 1 (Cimientos)</span>
-              <span id="modalTrackPhaseSub" class="text-[10px] text-slate-400 block">Semanas 1 a 4</span>
+              <span id="modalTrackPhaseSub" class="text-[10px] text-zinc-400 block">Semanas 1 a 4</span>
             </div>
             <div class="text-right">
-              <span id="modalTrackTotalWeeksTitle" class="text-xs font-black text-emerald-400 block">Semana 1 de 12</span>
-              <span id="modalTrackOverallPct" class="text-[10px] font-mono text-slate-400">8%</span>
+              <span id="modalTrackTotalWeeksTitle" class="text-xs font-black text-[#FC5200] block">Semana 1 de 12</span>
+              <span id="modalTrackOverallPct" class="text-[10px] font-mono text-zinc-400">8%</span>
             </div>
           </div>
-          <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden mb-2">
-            <div id="modalTrackOverallBar" class="h-full bg-emerald-500 rounded-full transition-all" style="width: 8%"></div>
+          <div class="h-1.5 w-full bg-[#181818] rounded-full overflow-hidden mb-2 border border-[#333333]">
+            <div id="modalTrackOverallBar" class="h-full bg-[#FC5200] rounded-full transition-all" style="width: 8%"></div>
           </div>
-          <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-slate-800/80 text-center">
-            <div class="bg-slate-800/60 p-1.5 rounded-lg">
-              <span class="text-[9px] uppercase text-slate-400 font-bold block">Esta Sem.</span>
+          <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-[#303030] text-center">
+            <div class="bg-[#1E1E1E] p-1.5 rounded-lg border border-[#2D2D2D]">
+              <span class="text-[9px] uppercase text-zinc-400 font-bold block">Esta Sem.</span>
               <span id="modalTrackThisWeekDays" class="text-xs font-bold text-white">0 Sesiones</span>
             </div>
-            <div class="bg-slate-800/60 p-1.5 rounded-lg">
-              <span class="text-[9px] uppercase text-slate-400 font-bold block">Tiempo</span>
-              <span id="modalTrackThisWeekMinutes" class="text-xs font-bold text-blue-400">0 min</span>
+            <div class="bg-[#1E1E1E] p-1.5 rounded-lg border border-[#2D2D2D]">
+              <span class="text-[9px] uppercase text-zinc-400 font-bold block">Tiempo</span>
+              <span id="modalTrackThisWeekMinutes" class="text-xs font-bold text-[#FC5200]">0 min</span>
             </div>
-            <div class="bg-slate-800/60 p-1.5 rounded-lg">
-              <span class="text-[9px] uppercase text-slate-400 font-bold block">Total</span>
+            <div class="bg-[#1E1E1E] p-1.5 rounded-lg border border-[#2D2D2D]">
+              <span class="text-[9px] uppercase text-zinc-400 font-bold block">Total</span>
               <span id="modalTrackTotalHistoryBadge" class="text-xs font-bold text-emerald-400">0 sesiones</span>
             </div>
           </div>
         </div>
 
         <!-- 2. ESTADO DEL CICLO ROTATIVO (4 DÍAS) -->
-        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
+        <div class="bg-[#252525] rounded-xl p-3 border border-[#303030]">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-bold text-white flex items-center gap-1.5">
-              <i class="ti ti-repeat text-blue-400"></i> Ciclo Rotativo (4 Días)
+              <i class="ti ti-repeat text-[#FC5200]"></i> Ciclo Rotativo (4 Días)
             </span>
-            <span class="text-[9px] text-slate-400">Toca para alinear</span>
+            <span class="text-[9px] text-zinc-400">Toca para alinear</span>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5" id="modalCyclePillsContainer">
             <!-- Rellenado dinámicamente -->
@@ -375,34 +375,34 @@
         </div>
 
         <!-- 3. CALENDARIO INTERACTIVO & DETALLE -->
-        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
+        <div class="bg-[#252525] rounded-xl p-3 border border-[#303030]">
           <div class="flex justify-between items-center mb-2">
             <!-- Selector / Navegador de Mes -->
             <div class="flex items-center gap-1.5">
-              <button type="button" onclick="window.painCaveApp.changeCalendarMonth(-1)" class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 text-xs active:scale-95" title="Mes anterior">
+              <button type="button" onclick="window.painCaveApp.changeCalendarMonth(-1)" class="w-6 h-6 rounded flex items-center justify-center bg-[#1E1E1E] hover:bg-[#2A2A2A] text-zinc-300 hover:text-white transition-colors border border-[#333333] text-xs active:scale-95" title="Mes anterior">
                 <i class="ti ti-chevron-left"></i>
               </button>
               <span class="text-xs font-bold text-white min-w-[100px] text-center" id="calendarMonthLabel">Mes Actual</span>
-              <button type="button" onclick="window.painCaveApp.changeCalendarMonth(1)" class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 text-xs active:scale-95" title="Mes siguiente">
+              <button type="button" onclick="window.painCaveApp.changeCalendarMonth(1)" class="w-6 h-6 rounded flex items-center justify-center bg-[#1E1E1E] hover:bg-[#2A2A2A] text-zinc-300 hover:text-white transition-colors border border-[#333333] text-xs active:scale-95" title="Mes siguiente">
                 <i class="ti ti-chevron-right"></i>
               </button>
             </div>
-            <span class="text-[9px] text-slate-400">Toca un día para ver detalle</span>
+            <span class="text-[9px] text-zinc-400">Toca un día para ver detalle</span>
           </div>
           <div class="grid grid-cols-7 gap-1 mb-1 text-center font-mono">
-            <div class="text-[8px] font-bold text-slate-500 uppercase">L</div>
-            <div class="text-[8px] font-bold text-slate-500 uppercase">M</div>
-            <div class="text-[8px] font-bold text-slate-500 uppercase">X</div>
-            <div class="text-[8px] font-bold text-slate-500 uppercase">J</div>
-            <div class="text-[8px] font-bold text-slate-500 uppercase">V</div>
-            <div class="text-[8px] font-bold text-slate-500 uppercase">S</div>
-            <div class="text-[8px] font-bold text-slate-500 uppercase">D</div>
+            <div class="text-[8px] font-bold text-zinc-500 uppercase">L</div>
+            <div class="text-[8px] font-bold text-zinc-500 uppercase">M</div>
+            <div class="text-[8px] font-bold text-zinc-500 uppercase">X</div>
+            <div class="text-[8px] font-bold text-zinc-500 uppercase">J</div>
+            <div class="text-[8px] font-bold text-zinc-500 uppercase">V</div>
+            <div class="text-[8px] font-bold text-zinc-500 uppercase">S</div>
+            <div class="text-[8px] font-bold text-zinc-500 uppercase">D</div>
           </div>
           <div id="calendarGrid" class="grid grid-cols-7 gap-1 mb-2"></div>
 
           <!-- Tarjeta de Detalle del Día Seleccionado -->
-          <div id="calendarDayDetailBox" class="bg-slate-800/80 rounded-lg p-2.5 border border-slate-700/80 text-xs">
-            <div class="text-slate-400 text-center py-1">Selecciona una fecha del calendario.</div>
+          <div id="calendarDayDetailBox" class="bg-[#1E1E1E] rounded-lg p-2.5 border border-[#2D2D2D] text-xs">
+            <div class="text-zinc-400 text-center py-1">Selecciona una fecha del calendario.</div>
           </div>
         </div>
       </div>
@@ -410,68 +410,68 @@
       <!-- PESTAÑA 2: PERFIL Y GAMIFICACIÓN -->
       <div id="modalTabProfileContent" class="hidden space-y-3 text-left">
         <!-- RANGO CICLISTA -->
-        <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-3.5 border border-slate-700">
-          <div class="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Rango Ciclista</div>
-          <div class="text-2xl font-black text-orange-400 mb-1" id="rankTitle">Novato</div>
-          <div class="flex justify-between text-xs text-slate-300 font-medium mb-1.5">
+        <div class="bg-gradient-to-br from-[#252525] to-[#1E1E1E] rounded-xl p-3.5 border border-[#303030]">
+          <div class="text-[9px] uppercase tracking-widest text-zinc-400 font-bold mb-0.5">Rango Ciclista</div>
+          <div class="text-2xl font-black text-[#FC5200] mb-1" id="rankTitle">Novato</div>
+          <div class="flex justify-between text-xs text-zinc-300 font-medium mb-1.5">
             <span id="currentXpText">0 XP</span>
             <span id="nextRankXpText">1000 XP</span>
           </div>
-          <div class="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
-            <div id="rankProgressBar" class="h-full bg-gradient-to-r from-orange-500 to-yellow-400 transition-all duration-1000" style="width: 0%"></div>
+          <div class="h-1.5 w-full bg-[#181818] rounded-full overflow-hidden border border-[#333333]">
+            <div id="rankProgressBar" class="h-full bg-gradient-to-r from-[#FC5200] to-amber-500 transition-all duration-1000" style="width: 0%"></div>
           </div>
         </div>
 
         <!-- FC MÁXIMA Y ZONAS FISIOLÓGICAS -->
-        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
+        <div class="bg-[#252525] rounded-xl p-3 border border-[#303030]">
           <div class="flex items-center justify-between gap-2 mb-2">
-            <label for="maxHrInput" class="text-xs text-slate-300 font-bold">FC Máxima:</label>
+            <label for="maxHrInput" class="text-xs text-zinc-300 font-bold">FC Máxima:</label>
             <div class="flex items-center gap-1">
-              <input type="number" id="maxHrInput" onchange="window.painCaveApp.saveMaxHR(this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-lg text-center font-mono font-bold text-white text-xs py-1 outline-none" min="100" max="240" placeholder="189">
-              <span class="text-[10px] text-slate-500 font-bold font-mono">BPM</span>
+              <input type="number" id="maxHrInput" onchange="window.painCaveApp.saveMaxHR(this.value)" class="w-16 bg-[#1E1E1E] border border-[#383838] rounded-lg text-center font-mono font-bold text-white text-xs py-1 outline-none focus:border-[#FC5200]" min="100" max="240" placeholder="189">
+              <span class="text-[10px] text-zinc-400 font-bold font-mono">BPM</span>
             </div>
           </div>
-          <div id="profileZonesGrid" class="grid grid-cols-2 gap-1 pt-2 border-t border-slate-800 text-[10px] font-mono">
-            <div class="text-blue-400">Z1 (&lt; 60%): &lt; 113 BPM</div>
+          <div id="profileZonesGrid" class="grid grid-cols-2 gap-1 pt-2 border-t border-[#303030] text-[10px] font-mono">
+            <div class="text-zinc-300">Z1 (&lt; 60%): &lt; 113 BPM</div>
             <div class="text-emerald-400">Z2 (60-74%): 113-140 BPM</div>
             <div class="text-yellow-400">Z3 (75-85%): 142-161 BPM</div>
-            <div class="text-amber-400 font-bold">SS (83-88%): 157-166 BPM</div>
+            <div class="text-[#FC5200] font-bold">SS (83-88%): 157-166 BPM</div>
             <div class="text-orange-400">Z4 (85-94%): 161-178 BPM</div>
-            <div class="text-red-400 font-bold">Z5 (94-100%): 178-189 BPM</div>
+            <div class="text-rose-400 font-bold">Z5 (94-100%): 178-189 BPM</div>
           </div>
         </div>
 
         <!-- VOZ GUÍA -->
-        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
+        <div class="bg-[#252525] rounded-xl p-3 border border-[#303030]">
           <div class="flex items-center justify-between mb-1.5">
-            <label for="voiceSelect" class="text-xs text-slate-300 font-bold">Voz Guía:</label>
-            <button type="button" onclick="window.painCaveApp.testVoice()" class="text-[11px] font-bold text-blue-400 hover:text-blue-300 bg-blue-950/60 px-2 py-0.5 rounded border border-blue-800/50 flex items-center gap-1 active:scale-95">
+            <label for="voiceSelect" class="text-xs text-zinc-300 font-bold">Voz Guía:</label>
+            <button type="button" onclick="window.painCaveApp.testVoice()" class="text-[11px] font-bold text-[#FC5200] hover:text-[#FF7033] bg-[#FC5200]/15 px-2 py-0.5 rounded border border-[#FC5200]/30 flex items-center gap-1 active:scale-95 transition-colors">
               <i class="ti ti-volume text-xs"></i> Probar
             </button>
           </div>
-          <select id="voiceSelect" onchange="window.painCaveApp.changeVoice(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-200 py-1.5 px-2 outline-none">
+          <select id="voiceSelect" onchange="window.painCaveApp.changeVoice(this.value)" class="w-full bg-[#1E1E1E] border border-[#383838] rounded-lg text-xs text-zinc-200 py-1.5 px-2 outline-none focus:border-[#FC5200]">
             <option value="system">Voz natural del sistema (Por defecto)</option>
           </select>
         </div>
 
         <!-- RACHA Y TIEMPO TOTAL -->
         <div class="grid grid-cols-2 gap-2">
-          <div class="bg-slate-900 rounded-xl p-2.5 border border-slate-700">
-            <div class="text-[9px] uppercase text-slate-500 font-bold mb-0.5">Racha Semanal</div>
-            <div class="text-xl font-black text-blue-400" id="statStreak">0</div>
+          <div class="bg-[#252525] rounded-xl p-2.5 border border-[#303030]">
+            <div class="text-[9px] uppercase text-zinc-400 font-bold mb-0.5">Racha Semanal</div>
+            <div class="text-xl font-black text-[#FC5200]" id="statStreak">0</div>
           </div>
-          <div class="bg-slate-900 rounded-xl p-2.5 border border-slate-700">
-            <div class="text-[9px] uppercase text-slate-500 font-bold mb-0.5">Tiempo Total</div>
-            <div class="text-xl font-black text-white" id="statTotalTime">0h 0m</div>
+          <div class="bg-[#252525] rounded-xl p-2.5 border border-[#303030]">
+            <div class="text-[9px] uppercase text-zinc-400 font-bold mb-0.5">Tiempo Total</div>
+            <div class="text-xl font-black text-white tabular-nums" id="statTotalTime">0h 0m</div>
           </div>
         </div>
 
         <!-- EXPORTAR E IMPORTAR BACKUP -->
         <div class="flex gap-2">
-          <button class="flex-1 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center gap-1.5 border border-slate-600" onclick="window.painCaveApp.exportStats()">
+          <button class="flex-1 py-2 rounded-xl text-xs font-bold bg-[#252525] text-zinc-300 hover:text-white hover:bg-[#2E2E2E] flex items-center justify-center gap-1.5 border border-[#383838] transition-colors" onclick="window.painCaveApp.exportStats()">
             <i class="ti ti-download text-base"></i> Exportar Datos
           </button>
-          <label class="flex-1 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center gap-1.5 cursor-pointer border border-slate-600">
+          <label class="flex-1 py-2 rounded-xl text-xs font-bold bg-[#252525] text-zinc-300 hover:text-white hover:bg-[#2E2E2E] flex items-center justify-center gap-1.5 cursor-pointer border border-[#383838] transition-colors">
             <i class="ti ti-upload text-base"></i> Importar Datos
             <input type="file" class="hidden" accept=".json" onchange="window.painCaveApp.importStats(event)">
           </label>
@@ -479,16 +479,104 @@
       </div>
 
       <!-- BOTÓN VOLVER -->
-      <button class="w-full mt-3 py-2.5 rounded-xl text-xs font-bold bg-slate-700 text-white hover:bg-slate-600 transition-colors" onclick="window.painCaveApp.closeModals()">
+      <button class="w-full mt-3 py-2.5 rounded-xl text-xs font-bold bg-[#2A2A2A] hover:bg-[#333333] text-zinc-200 border border-[#383838] transition-colors" onclick="window.painCaveApp.closeModals()">
         Volver
       </button>
     </div>
   </div>
 
   <style>
+    /* ==========================================================================
+       STRAVA ATHLETIC DARK THEME (100% STANDALONE CSS RULES)
+       ========================================================================== */
+    :root {
+      --strava-orange: #FC5200;
+      --strava-orange-hover: #E04800;
+      --strava-bg: #121212;
+      --strava-surface: #1E1E1E;
+      --strava-surface-2: #252525;
+      --strava-border: #2D2D2D;
+      --strava-border-subtle: #333333;
+    }
+
+    body {
+      background-color: #121212 !important;
+      color: #F4F4F5 !important;
+    }
+
+    /* Backgrounds */
+    .bg-\[\#121212\] { background-color: #121212 !important; }
+    .bg-\[\#161616\] { background-color: #161616 !important; }
+    .bg-\[\#181818\] { background-color: #181818 !important; }
+    .bg-\[\#1E1E1E\] { background-color: #1E1E1E !important; }
+    .bg-\[\#252525\] { background-color: #252525 !important; }
+    .bg-\[\#2A2A2A\] { background-color: #2A2A2A !important; }
+    .bg-\[\#2E2E2E\] { background-color: #2E2E2E !important; }
+    .bg-\[\#FC5200\] { background-color: #FC5200 !important; }
+    .bg-\[\#FC5200\]\/10 { background-color: rgba(252, 82, 0, 0.10) !important; }
+    .bg-\[\#FC5200\]\/15 { background-color: rgba(252, 82, 0, 0.15) !important; }
+    .bg-\[\#FC5200\]\/20 { background-color: rgba(252, 82, 0, 0.20) !important; }
+    .bg-emerald-950\/20 { background-color: rgba(6, 78, 59, 0.20) !important; }
+    .bg-yellow-950\/20 { background-color: rgba(113, 63, 18, 0.20) !important; }
+    .bg-rose-950\/20 { background-color: rgba(76, 5, 25, 0.20) !important; }
+    .bg-rose-950\/40 { background-color: rgba(76, 5, 25, 0.40) !important; }
+    .bg-amber-500\/10 { background-color: rgba(245, 158, 11, 0.10) !important; }
+    .bg-amber-500\/15 { background-color: rgba(245, 158, 11, 0.15) !important; }
+    .bg-amber-500\/20 { background-color: rgba(245, 158, 11, 0.20) !important; }
+
+    /* Hover Backgrounds */
+    .hover\:bg-\[\#E04800\]:hover { background-color: #E04800 !important; }
+    .hover\:bg-\[\#2E2E2E\]:hover { background-color: #2E2E2E !important; }
+    .hover\:bg-\[\#333333\]:hover { background-color: #333333 !important; }
+    .hover\:bg-\[\#2A2A2A\]:hover { background-color: #2A2A2A !important; }
+    .hover\:bg-\[\#252525\]:hover { background-color: #252525 !important; }
+    .hover\:bg-\[\#1E1E1E\]:hover { background-color: #1E1E1E !important; }
+    .hover\:bg-rose-900\/50:hover { background-color: rgba(136, 19, 55, 0.50) !important; }
+    .hover\:bg-emerald-500:hover { background-color: #10B981 !important; }
+
+    /* Text Colors */
+    .text-\[\#FC5200\] { color: #FC5200 !important; }
+    .hover\:text-\[\#FC5200\]:hover { color: #FC5200 !important; }
+    .hover\:text-\[\#FF7033\]:hover { color: #FF7033 !important; }
+    .group:hover .group-hover\:text-\[\#FC5200\] { color: #FC5200 !important; }
+    .text-zinc-100 { color: #F4F4F5 !important; }
+    .text-zinc-200 { color: #E4E4E7 !important; }
+    .text-zinc-300 { color: #D4D4D8 !important; }
+    .text-zinc-400 { color: #A1A1AA !important; }
+    .text-zinc-500 { color: #71717A !important; }
+    .text-rose-400 { color: #FB7185 !important; }
+
+    /* Borders */
+    .border-\[\#2D2D2D\] { border-color: #2D2D2D !important; }
+    .border-\[\#303030\] { border-color: #303030 !important; }
+    .border-\[\#333333\] { border-color: #333333 !important; }
+    .border-\[\#383838\] { border-color: #383838 !important; }
+    .border-\[\#FC5200\] { border-color: #FC5200 !important; }
+    .border-\[\#FC5200\]\/30 { border-color: rgba(252, 82, 0, 0.30) !important; }
+    .border-\[\#FC5200\]\/40 { border-color: rgba(252, 82, 0, 0.40) !important; }
+    .border-\[\#FC5200\]\/50 { border-color: rgba(252, 82, 0, 0.50) !important; }
+    .border-\[\#FC5200\]\/70 { border-color: rgba(252, 82, 0, 0.70) !important; }
+    .hover\:border-\[\#FC5200\]\/50:hover { border-color: rgba(252, 82, 0, 0.50) !important; }
+    .border-emerald-500\/40 { border-color: rgba(16, 185, 129, 0.40) !important; }
+    .border-yellow-500\/40 { border-color: rgba(234, 179, 8, 0.40) !important; }
+    .border-yellow-600\/30 { border-color: rgba(202, 138, 4, 0.30) !important; }
+    .border-amber-500\/30 { border-color: rgba(245, 158, 11, 0.30) !important; }
+    .border-amber-500\/50 { border-color: rgba(245, 158, 11, 0.50) !important; }
+    .border-rose-500\/50 { border-color: rgba(244, 63, 94, 0.50) !important; }
+    .border-rose-800\/40 { border-color: rgba(159, 18, 57, 0.40) !important; }
+    .border-zinc-500 { border-color: #71717A !important; }
+    .border-zinc-700 { border-color: #3F3F46 !important; }
+    .hover\:border-zinc-500:hover { border-color: #71717A !important; }
+
+    /* Rings & Tabular numbers */
+    .ring-\[\#FC5200\] { box-shadow: 0 0 0 1px #FC5200 !important; }
+    .ring-\[\#FC5200\]\/40 { box-shadow: 0 0 0 1px rgba(252, 82, 0, 0.40) !important; }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+
+    /* Scrollbars and Animations */
     .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #333333; border-radius: 10px; }
     @keyframes heartBeat { 0% { transform: scale(1); } 14% { transform: scale(1.3); } 28% { transform: scale(1); } 42% { transform: scale(1.3); } 70% { transform: scale(1); } }
     .animate-heart-beat { animation: heartBeat 1.2s infinite; }
     @keyframes cadenceBeat { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.4); opacity: 1; } }
