@@ -377,7 +377,16 @@
         <!-- 3. CALENDARIO INTERACTIVO & DETALLE -->
         <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
           <div class="flex justify-between items-center mb-2">
-            <div class="text-xs font-bold text-white" id="calendarMonthLabel">Mes Actual</div>
+            <!-- Selector / Navegador de Mes -->
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="window.painCaveApp.changeCalendarMonth(-1)" class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 text-xs active:scale-95" title="Mes anterior">
+                <i class="ti ti-chevron-left"></i>
+              </button>
+              <span class="text-xs font-bold text-white min-w-[100px] text-center" id="calendarMonthLabel">Mes Actual</span>
+              <button type="button" onclick="window.painCaveApp.changeCalendarMonth(1)" class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 text-xs active:scale-95" title="Mes siguiente">
+                <i class="ti ti-chevron-right"></i>
+              </button>
+            </div>
             <span class="text-[9px] text-slate-400">Toca un día para ver detalle</span>
           </div>
           <div class="grid grid-cols-7 gap-1 mb-1 text-center font-mono">
@@ -392,18 +401,8 @@
           <div id="calendarGrid" class="grid grid-cols-7 gap-1 mb-2"></div>
 
           <!-- Tarjeta de Detalle del Día Seleccionado -->
-          <div id="calendarDayDetailBox" class="bg-slate-800/80 rounded-lg p-2 border border-slate-700/80 text-xs">
+          <div id="calendarDayDetailBox" class="bg-slate-800/80 rounded-lg p-2.5 border border-slate-700/80 text-xs">
             <div class="text-slate-400 text-center py-1">Selecciona una fecha del calendario.</div>
-          </div>
-        </div>
-
-        <!-- 4. HISTORIAL RECIENTE -->
-        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
-          <div class="text-xs font-bold text-white mb-2 flex items-center gap-1.5">
-            <i class="ti ti-history text-slate-400"></i> Historial Reciente
-          </div>
-          <div id="workoutHistoryContainer" class="max-h-36 overflow-y-auto custom-scrollbar space-y-1.5">
-            <!-- Elementos de historial -->
           </div>
         </div>
       </div>
@@ -437,7 +436,7 @@
             <div class="text-emerald-400">Z2 (60-74%): 113-140 BPM</div>
             <div class="text-yellow-400">Z3 (75-85%): 142-161 BPM</div>
             <div class="text-amber-400 font-bold">SS (83-88%): 157-166 BPM</div>
-            <div class="text-orange-400">Z4 (88-94%): 166-178 BPM</div>
+            <div class="text-orange-400">Z4 (85-94%): 161-178 BPM</div>
             <div class="text-red-400 font-bold">Z5 (94-100%): 178-189 BPM</div>
           </div>
         </div>

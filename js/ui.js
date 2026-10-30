@@ -45,6 +45,7 @@ export class UIManager {
     this.currentWorkoutSteps = [];
     this.lastCompletedSessionData = null;
     this.selectedCalendarDate = formatDateISO(new Date());
+    this.calendarViewDate = new Date();
     this.activeStatsTab = 'tracking';
   }
 
@@ -648,9 +649,6 @@ export class UIManager {
     const dateToSelect = selectedDate || this.selectedCalendarDate || formatDateISO(new Date());
     this.renderCalendar(dateToSelect);
     this.renderDayDetail(dateToSelect);
-
-    // 4. Historial de sesiones
-    this.renderWorkoutHistory();
   }
 
   renderProfileTab() {
@@ -677,13 +675,26 @@ export class UIManager {
       <div class="text-emerald-400">Z2 (60-74%): ${Math.round(hr * 0.60)}-${Math.round(hr * 0.74)} BPM</div>
       <div class="text-yellow-400">Z3 (75-85%): ${Math.round(hr * 0.75)}-${Math.round(hr * 0.85)} BPM</div>
       <div class="text-amber-400 font-bold">SS (83-88%): ${Math.round(hr * 0.83)}-${Math.round(hr * 0.88)} BPM</div>
-      <div class="text-orange-400">Z4 (88-94%): ${Math.round(hr * 0.88)}-${Math.round(hr * 0.94)} BPM</div>
+      <div class="text-orange-400">Z4 (85-94%): ${Math.round(hr * 0.85)}-${Math.round(hr * 0.94)} BPM</div>
       <div class="text-red-400 font-bold">Z5 (94-100%): ${Math.round(hr * 0.94)}-${hr} BPM</div>
     `;
   }
 
+  changeCalendarMonth(offset) {
+    if (!this.calendarViewDate) {
+      this.calendarViewDate = new Date();
+    }
+    this.calendarViewDate.setDate(1);
+    this.calendarViewDate.setMonth(this.calendarViewDate.getMonth() + offset);
+    this.renderCalendar(this.selectedCalendarDate);
+  }
+
   selectCalendarDate(dateStr) {
     this.selectedCalendarDate = dateStr;
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      this.calendarViewDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, 1);
+    }
     this.renderCalendar(dateStr);
     this.renderDayDetail(dateStr);
   }
@@ -693,13 +704,17 @@ export class UIManager {
     const cal = document.getElementById('calendarGrid');
     if (!cal) return;
     cal.innerHTML = '';
-    const t = new Date();
-    const m = t.getMonth();
-    const y = t.getFullYear();
+    const now = new Date();
+    const viewDate = this.calendarViewDate || now;
+    const m = viewDate.getMonth();
+    const y = viewDate.getFullYear();
 
-    document.getElementById('calendarMonthLabel').textContent = [
-      'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'
-    ][m] + ' ' + y;
+    const monthLabel = document.getElementById('calendarMonthLabel');
+    if (monthLabel) {
+      monthLabel.textContent = [
+        'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'
+      ][m] + ' ' + y;
+    }
 
     let fDay = new Date(y, m, 1).getDay() - 1;
     if (fDay === -1) fDay = 6;
@@ -714,7 +729,7 @@ export class UIManager {
       const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const ws = stats.workouts.filter(w => w.date === ds);
       const isSelected = (selectedDateStr === ds);
-      const isToday = (t.getDate() === d && t.getMonth() === m && t.getFullYear() === y);
+      const isToday = (now.getDate() === d && now.getMonth() === m && now.getFullYear() === y);
 
       let iconHtml = '';
       if (ws.length > 0) {
@@ -802,53 +817,7 @@ export class UIManager {
   }
 
   renderWorkoutHistory() {
-    const stats = gamification.getStats();
-    const container = document.getElementById('workoutHistoryContainer');
-    const badge = document.getElementById('modalTrackTotalHistoryBadge');
-    if (!container) return;
-
-    const workouts = stats.workouts || [];
-    if (badge) badge.textContent = `${workouts.length} sesiones`;
-
-    if (workouts.length === 0) {
-      container.innerHTML = `
-        <div class="text-center py-4 text-slate-500 text-xs">
-          <i class="ti ti-bike text-2xl mb-1 block opacity-50"></i>
-          Aún no has registrado entrenamientos. ¡Inicia hoy tu primera sesión!
-        </div>
-      `;
-      return;
-    }
-
-    container.innerHTML = '';
-    // Mostrar en orden cronológico inverso
-    const reversed = [...workouts].reverse();
-    reversed.forEach(w => {
-      const item = document.createElement('div');
-      item.className = 'p-2 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-between text-xs';
-      
-      const dayName = w.dayName || trainingTracker.getDayName(w.date);
-      const phaseLabel = w.phaseName || (w.phaseId ? w.phaseId.toUpperCase() : (w.level || ''));
-      const weekLabel = w.weekNumber ? `S${w.weekNumber}` : '';
-      const hrText = w.avgBpm ? ` · ${w.avgBpm} bpm` : '';
-
-      item.innerHTML = `
-        <div class="min-w-0 mr-2">
-          <div class="flex items-center gap-1.5 mb-0.5">
-            <span class="font-bold text-white truncate">${w.session}</span>
-            ${weekLabel ? `<span class="text-[9px] font-bold px-1 rounded bg-slate-700 text-slate-300 font-mono">${weekLabel}</span>` : ''}
-          </div>
-          <div class="text-[10px] text-slate-400">
-            ${dayName} ${w.date} · ${phaseLabel}
-          </div>
-        </div>
-        <div class="text-right shrink-0">
-          <span class="font-mono font-bold text-slate-200 block">${w.durationMinutes || 0} min${hrText}</span>
-          <span class="text-[10px] font-mono text-orange-400">+${w.earnedXP || 0} XP</span>
-        </div>
-      `;
-      container.appendChild(item);
-    });
+    // Lista de historial eliminada para simplificar UX; el calendario navegable muestra el detalle con 1 toque.
   }
 
   resetDisplay() {

@@ -13,7 +13,8 @@ export function getZoneFromRpe(rpe) {
   if (rpe <= 5.0) return 2;    // Fondo aeróbico (60-74% FC Máx = 113-140 BPM)
   if (rpe <= 6.8) return 3;    // Tempo (75-85% FC Máx = 142-161 BPM)
   if (rpe <= 7.8) return 'SS'; // Sweet Spot subzona (83-88% FC Máx = 157-166 BPM)
-  if (rpe <= 8.8) return 4;    // Umbral de lactato (88-94% FC Máx = 166-178 BPM)
+
+  if (rpe <= 8.8) return 4;    // Umbral de lactato (85-94% FC Máx = 161-178 BPM)
   return 5;                    // VO2 Máx (94-100% FC Máx = 178-189 BPM)
 }
 
@@ -28,7 +29,7 @@ export function getZoneBpmRange(zone, maxHr = null) {
     case 1: return `<${Math.round(hr * 0.60)}`; // < 113 BPM (< 60%)
     case 2: return `${Math.round(hr * 0.60)} - ${Math.round(hr * 0.74)}`; // 113 - 140 BPM (60-74%)
     case 3: return `${Math.round(hr * 0.75)} - ${Math.round(hr * 0.85)}`; // 142 - 161 BPM (75-85%)
-    case 4: return `${Math.round(hr * 0.88)} - ${Math.round(hr * 0.94)}`; // 166 - 178 BPM (88-94%)
+    case 4: return `${Math.round(hr * 0.85)} - ${Math.round(hr * 0.94)}`; // 161 - 178 BPM (85-94%)
     case 5: return `${Math.round(hr * 0.94)} - ${hr}`; // 178 - 189 BPM (94-100%)
     default: return '—';
   }
@@ -65,7 +66,7 @@ export function parseStep(step) {
 
     let instruction = 'Pedaleo fluido sentado';
     if (zone === 'SS') instruction = 'Sweet Spot: busca 157-166 BPM';
-    else if (zone === 4) instruction = 'Umbral: 166-178 BPM';
+    else if (zone === 4) instruction = 'Umbral: 161-178 BPM';
     else if (zone === 3) instruction = 'Tempo: 142-161 BPM';
     else if (zone === 2) instruction = 'Zona 2: ritmo fluido (113-140 BPM)';
     else if (zone === 1) instruction = 'Recuperación suave (< 113 BPM)';
@@ -116,7 +117,7 @@ export function parseStep(step) {
 
   let instruction = 'Pedaleo fluido sentado';
   if (zone === 'SS') instruction = 'Sweet Spot: busca 157-166 BPM';
-  else if (zone === 4) instruction = 'Umbral: 166-178 BPM';
+  else if (zone === 4) instruction = 'Umbral: 161-178 BPM';
   else if (zone === 3) instruction = 'Tempo: 142-161 BPM';
   else if (zone === 2) instruction = 'Zona 2: ritmo fluido (113-140 BPM)';
   else if (zone === 1) instruction = 'Recuperación suave (< 113 BPM)';
@@ -774,7 +775,7 @@ export const ROUTINES_POOL = [
     "day": "Opcional",
     "category": "calidad",
     "title": "Alternativa · Umbral Z4",
-    "subtitle": "Intervalos en umbral de lactato (166-178 BPM)",
+    "subtitle": "Intervalos en umbral de lactato (161-178 BPM)",
     "icon": "ti-bolt",
     "colorClass": "rose",
     "levels": {

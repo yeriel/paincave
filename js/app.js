@@ -353,6 +353,10 @@ class PainCaveApp {
     ui.selectCalendarDate(dateStr);
   }
 
+  changeCalendarMonth(offset) {
+    ui.changeCalendarMonth(offset);
+  }
+
   alignCycleDay(cycleDay) {
     trainingTracker.setCycleAnchor(formatDateISO(new Date()), cycleDay);
     ui.renderRoutinesPool(this.selectedLevel, this.activeCategory);

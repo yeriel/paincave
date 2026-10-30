@@ -184,7 +184,7 @@ class SoundEngine {
       const aero = step.posture === 'aero' ? ' aero' : '';
       cue = `Sweet Spot${aero}, 157 a 166 pulsaciones`;
     } else if (pLower.includes('umbral') || step.zone === 4) {
-      cue = 'Umbral, 166 a 178 pulsaciones';
+      cue = 'Umbral, 161 a 178 pulsaciones';
     } else if (step.posture === 'de pie' || pLower.includes('de pie')) {
       cue = `De pie, cadencia ${step.cadence || 75}`;
     } else if (step.posture === 'aero' || pLower.includes('aero')) {

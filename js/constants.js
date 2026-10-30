@@ -33,6 +33,6 @@ export const ZONE_COLORS = {
   3: "#eab308", // Amarillo (Z3 Tempo 142-161)
   'SS': "#f59e0b", // Ámbar (Sweet Spot 157-166)
   'ss': "#f59e0b",
-  4: "#f97316", // Naranja (Z4 Umbral 166-178)
+  4: "#f97316", // Naranja (Z4 Umbral 161-178)
   5: "#ef4444"  // Rojo (Z5 VO2 Max 178-189)
 };
