@@ -427,7 +427,7 @@
             <span id="currentXpText">0 XP</span>
             <span id="nextRankXpText">1000 XP</span>
           </div>
-          <div class="h-1.5 w-full bg-[#181818] rounded-full overflow-hidden border border-[#333333]">
+          <div class="h-2 w-full bg-[#161616] rounded-full overflow-hidden border border-[#333333]">
             <div id="rankProgressBar" class="h-full bg-gradient-to-r from-[#FC5200] to-amber-500 transition-all duration-1000" style="width: 0%"></div>
           </div>
         </div>
@@ -513,6 +513,12 @@
     body {
       background-color: #121212 !important;
       color: #F4F4F5 !important;
+    }
+
+    /* Gradient for Rank Progress Bar */
+    .bg-gradient-to-r.from-\[\#FC5200\].to-amber-500,
+    #rankProgressBar {
+      background: linear-gradient(to right, #FC5200, #F59E0B) !important;
     }
 
     /* Backgrounds */

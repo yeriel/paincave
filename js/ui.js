@@ -337,18 +337,20 @@ export class UIManager {
     if (totalDuration === 0) return;
 
     const zoneColors = {
-      1: '#3b82f6', // Azul
-      2: '#10b981', // Verde
-      3: '#eab308', // Amarillo
-      4: '#f97316', // Naranja
-      5: '#ef4444'  // Rojo
+      1: '#3b82f6',         // Azul (Z1)
+      2: '#10b981',         // Verde (Z2)
+      3: '#eab308',         // Amarillo (Z3)
+      'SS': '#F59E0B',      // Ámbar/Naranja dorado (Sweet Spot)
+      'ss': '#F59E0B',
+      4: '#f97316',         // Naranja (Z4)
+      5: '#ef4444'          // Rojo (Z5)
     };
 
     steps.forEach((st, idx) => {
       const widthPct = (st.t / totalDuration) * 100;
-      const rpeVal = st.rpe || (st.zone ? st.zone * 2 : 5);
+      const rpeVal = st.rpe || (st.zone === 'SS' ? 7.8 : (st.zone ? st.zone * 2 : 5));
       const heightPct = Math.max(30, Math.min(100, (rpeVal / 10) * 100));
-      const color = zoneColors[st.zone || 2];
+      const color = zoneColors[st.zone] || zoneColors[st.zone || 2] || '#F59E0B';
 
       const block = document.createElement('div');
       block.id = `profile-step-${idx}`;

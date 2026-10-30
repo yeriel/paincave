@@ -219,11 +219,12 @@ export const ROUTINES_POOL = [
     "id": "dia1_fondo_z2",
     "day": "Día 1",
     "category": "fondo",
-    "title": "Día 1 · Fondo Z2 (60m)",
-    "subtitle": "Base aeróbica (113-140 BPM) con bloques aero",
+    "title": "Día 1 · Fondo Z2",
+    "subtitle": "Base aeróbica (113-140 BPM) con volumen progresivo",
     "icon": "ti-wind",
     "colorClass": "cyan",
     "levels": {
+      // Fase 1 (Semanas 1 a 4): 60 minutos (3.600 segundos) - Adaptación y base inicial
       "fase1": [
         {
           "phase": "Calentamiento",
@@ -298,6 +299,7 @@ export const ROUTINES_POOL = [
           "t": 240
         }
       ],
+      // Fase 2 (Semanas 5 a 8): 75 minutos (4.500 segundos) - Progresión de volumen y resistencia aeróbica
       "fase2": [
         {
           "phase": "Calentamiento",
@@ -305,7 +307,7 @@ export const ROUTINES_POOL = [
           "rpe": 3.5,
           "zone": 2,
           "posture": "sentado",
-          "t": 360
+          "t": 420
         },
         {
           "phase": "Fondo Z2",
@@ -313,7 +315,7 @@ export const ROUTINES_POOL = [
           "rpe": 4.5,
           "zone": 2,
           "posture": "sentado",
-          "t": 600
+          "t": 780
         },
         {
           "phase": "Aero Z2 sostenido",
@@ -321,7 +323,7 @@ export const ROUTINES_POOL = [
           "rpe": 5,
           "zone": 2,
           "posture": "aero",
-          "t": 480
+          "t": 600
         },
         {
           "phase": "De pie (Alivio)",
@@ -337,7 +339,7 @@ export const ROUTINES_POOL = [
           "rpe": 4.8,
           "zone": 2,
           "posture": "sentado",
-          "t": 870
+          "t": 1020
         },
         {
           "phase": "Aero Z2 sostenido",
@@ -345,7 +347,7 @@ export const ROUTINES_POOL = [
           "rpe": 5,
           "zone": 2,
           "posture": "aero",
-          "t": 480
+          "t": 660
         },
         {
           "phase": "De pie (Alivio)",
@@ -361,7 +363,7 @@ export const ROUTINES_POOL = [
           "rpe": 4.2,
           "zone": 2,
           "posture": "sentado",
-          "t": 330
+          "t": 480
         },
         {
           "phase": "Enfriamiento",
@@ -369,9 +371,10 @@ export const ROUTINES_POOL = [
           "rpe": 2,
           "zone": 1,
           "posture": "sentado",
-          "t": 300
+          "t": 360
         }
       ],
+      // Fase 3 (Semanas 9 a 12): 85 minutos (5.100 segundos) - Sobrecarga de volumen y saturación aeróbica
       "fase3": [
         {
           "phase": "Calentamiento",
@@ -379,7 +382,7 @@ export const ROUTINES_POOL = [
           "rpe": 3.5,
           "zone": 2,
           "posture": "sentado",
-          "t": 300
+          "t": 360
         },
         {
           "phase": "Fondo Z2 ritmo",
@@ -387,7 +390,7 @@ export const ROUTINES_POOL = [
           "rpe": 4.8,
           "zone": 2,
           "posture": "sentado",
-          "t": 480
+          "t": 720
         },
         {
           "phase": "Aero Z2 contrarreloj",
@@ -395,7 +398,7 @@ export const ROUTINES_POOL = [
           "rpe": 5,
           "zone": 2,
           "posture": "aero",
-          "t": 540
+          "t": 720
         },
         {
           "phase": "De pie (Alivio)",
@@ -406,12 +409,12 @@ export const ROUTINES_POOL = [
           "t": 90
         },
         {
-          "phase": "Fondo Z2",
+          "phase": "Fondo Z2 continuo",
           "cadence": 90,
           "rpe": 4.8,
           "zone": 2,
           "posture": "sentado",
-          "t": 450
+          "t": 840
         },
         {
           "phase": "Aero Z2 contrarreloj",
@@ -419,7 +422,7 @@ export const ROUTINES_POOL = [
           "rpe": 5,
           "zone": 2,
           "posture": "aero",
-          "t": 600
+          "t": 780
         },
         {
           "phase": "De pie (Alivio)",
@@ -435,7 +438,7 @@ export const ROUTINES_POOL = [
           "rpe": 5,
           "zone": 2,
           "posture": "aero",
-          "t": 480
+          "t": 660
         },
         {
           "phase": "Fondo Z2 suave",
@@ -443,7 +446,7 @@ export const ROUTINES_POOL = [
           "rpe": 3.8,
           "zone": 2,
           "posture": "sentado",
-          "t": 270
+          "t": 480
         },
         {
           "phase": "Enfriamiento",
@@ -451,7 +454,7 @@ export const ROUTINES_POOL = [
           "rpe": 2,
           "zone": 1,
           "posture": "sentado",
-          "t": 300
+          "t": 360
         }
       ]
     }
