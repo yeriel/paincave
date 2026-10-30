@@ -2,10 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Pain Cave</title>
   
-  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#0f172a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,38 +12,38 @@
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png">
 
-  <!-- Estilos y fuentes 100% locales y offline -->
+  <!-- Estilos y fuentes 100% locales -->
   <link rel="stylesheet" href="./assets/css/tailwind.min.css">
   <link rel="stylesheet" href="./assets/css/tabler-icons.min.css">
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-blue-500/30 min-h-screen">
+<body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-blue-500/30 min-h-screen overflow-x-hidden">
 
-  <div class="max-w-xl md:max-w-4xl mx-auto px-4 py-3 md:py-5 relative">
+  <div class="max-w-xl md:max-w-4xl mx-auto px-2.5 sm:px-4 py-2 sm:py-4 relative">
     
-    <!-- CABECERA COMPACTA -->
-    <header class="flex justify-between items-center mb-3 bg-slate-800/90 px-3.5 py-2 rounded-xl border border-slate-700/80 shadow-sm">
+    <!-- CABECERA COMPACTA MOBILE-FIRST -->
+    <header class="flex justify-between items-center mb-2.5 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700/80 shadow-sm">
       <div class="flex items-center gap-2 min-w-0">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" id="liveDot"></span>
-        <span class="text-sm font-black tracking-wider text-white uppercase truncate" id="sessionLabel">PAIN CAVE</span>
+        <span class="text-xs sm:text-sm font-black tracking-wider text-white uppercase truncate" id="sessionLabel">PAIN CAVE</span>
       </div>
-      <div class="flex items-center gap-1.5 shrink-0">
+      <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- Modo Pantalla Completa (Manillar) -->
-        <button onclick="window.painCaveApp.toggleFullscreen()" id="btnFullscreen" class="text-slate-400 hover:text-white transition-colors p-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Pantalla Completa">
-          <i class="ti ti-maximize text-lg"></i>
+        <button onclick="window.painCaveApp.toggleFullscreen()" id="btnFullscreen" class="text-slate-400 hover:text-white transition-colors p-1.5 sm:p-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Pantalla Completa">
+          <i class="ti ti-maximize text-base sm:text-lg"></i>
         </button>
         <!-- Conectar Pulsómetro Bluetooth -->
-        <button onclick="window.painCaveApp.toggleHRM()" id="btnBluetooth" class="text-slate-400 hover:text-blue-400 transition-colors p-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Pulsómetro BLE">
-          <i class="ti ti-bluetooth text-lg"></i>
+        <button onclick="window.painCaveApp.toggleHRM()" id="btnBluetooth" class="text-slate-400 hover:text-blue-400 transition-colors p-1.5 sm:p-2 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Pulsómetro BLE">
+          <i class="ti ti-bluetooth text-base sm:text-lg"></i>
         </button>
-        <!-- Seguimiento y Plan (Semana Actual) -->
-        <button onclick="window.painCaveApp.openTrackingModal('tracking')" id="btnHeaderTracker" class="flex items-center gap-1.5 text-blue-400 hover:text-blue-300 transition-colors px-2.5 py-1.5 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Seguimiento de Plan y Semanas">
-          <i class="ti ti-calendar-stats text-base"></i>
-          <span id="headerTrackerPill" class="text-[11px] font-mono font-bold">Sem 1</span>
+        <!-- Seguimiento y Plan -->
+        <button onclick="window.painCaveApp.openTrackingModal('tracking')" id="btnHeaderTracker" class="flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors px-2 py-1 sm:px-2.5 sm:py-1.5 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Seguimiento">
+          <i class="ti ti-calendar-stats text-sm sm:text-base"></i>
+          <span id="headerTrackerPill" class="text-[10px] sm:text-[11px] font-mono font-bold">Sem 1</span>
         </button>
         <!-- Perfil y Gamificación (Rango) -->
-        <button onclick="window.painCaveApp.showStatsModal('profile')" id="btnHeaderRank" class="flex items-center gap-1 text-slate-400 hover:text-white transition-colors px-2.5 py-1.5 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Rango y Gamificación">
-          <span id="miniRankText" class="text-[10px] uppercase font-bold text-orange-400">Novato</span>
-          <i class="ti ti-shield-chevron text-base"></i>
+        <button onclick="window.painCaveApp.showStatsModal('profile')" id="btnHeaderRank" class="flex items-center gap-1 text-slate-400 hover:text-white transition-colors px-2 py-1 sm:px-2.5 sm:py-1.5 bg-slate-800 rounded-lg border border-slate-700 active:scale-95 shadow-sm" title="Rango">
+          <span id="miniRankText" class="text-[9px] sm:text-[10px] uppercase font-bold text-orange-400">Novato</span>
+          <i class="ti ti-shield-chevron text-sm sm:text-base"></i>
         </button>
       </div>
     </header>
@@ -186,46 +185,46 @@
     <!-- SECCIÓN DE CATÁLOGO / POOL DE RUTINAS (Visible cuando no hay sesión activa) -->
     <section id="catalogSection" class="mt-2">
       
-      <!-- SELECTOR DE NIVEL ESTILO SEGMENTED CONTROL -->
-      <div class="flex items-center justify-between mb-3 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700">
+      <!-- SELECTOR DE FASES Y VOZ -->
+      <div class="flex items-center justify-between mb-2.5 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700">
         <div class="flex items-center gap-1">
-          <label class="flex items-center gap-1.5 cursor-pointer px-2 py-1">
+          <label class="flex items-center gap-1 cursor-pointer px-1.5 py-1">
             <input type="checkbox" id="voiceToggle" checked class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-0 cursor-pointer">
-            <span class="text-xs uppercase font-bold text-slate-400">Voz</span>
+            <span class="text-xs font-bold text-slate-400">Voz</span>
           </label>
           <button type="button" onclick="window.painCaveApp.testVoice()" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-700/60 transition-colors" title="Probar voz">
             <i class="ti ti-volume text-sm"></i>
           </button>
         </div>
         
-        <!-- Selector táctil de Fases de Progresión -->
-        <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-700/60" id="levelTabsContainer">
-          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm" data-level="fase1" onclick="window.painCaveApp.setLevel('fase1')">Fase 1 (S1-4)</button>
-          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="fase2" onclick="window.painCaveApp.setLevel('fase2')">Fase 2 (S5-8)</button>
-          <button class="level-tab px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="fase3" onclick="window.painCaveApp.setLevel('fase3')">Fase 3 (S9-12)</button>
+        <!-- Selector táctil de Fases -->
+        <div class="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-700/60" id="levelTabsContainer">
+          <button class="level-tab px-2 py-1 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm" data-level="fase1" onclick="window.painCaveApp.setLevel('fase1')">Fase 1</button>
+          <button class="level-tab px-2 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="fase2" onclick="window.painCaveApp.setLevel('fase2')">Fase 2</button>
+          <button class="level-tab px-2 py-1 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white" data-level="fase3" onclick="window.painCaveApp.setLevel('fase3')">Fase 3</button>
         </div>
       </div>
 
       <!-- BANNER DE ESTADO DEL MICROCICLO ROTATIVO -->
-      <div id="microcycleStatusBanner" class="mb-3 p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-between shadow-sm">
+      <div id="microcycleStatusBanner" class="mb-2.5 p-2 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-2 min-w-0">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
           <div class="truncate">
-            <span class="text-[10px] uppercase font-mono font-bold text-slate-400 block" id="microcycleBannerToday">Microciclo Rotativo 4D</span>
-            <span class="text-xs font-bold text-white truncate block" id="microcycleBannerNext">Mañana toca: Día 2 · Sweet Spot (158-170 BPM)</span>
+            <span class="text-[10px] uppercase font-mono font-bold text-slate-400 block" id="microcycleBannerToday">Ciclo Rotativo 4D</span>
+            <span class="text-xs font-bold text-white truncate block" id="microcycleBannerNext">Mañana: Día 2 · Sweet Spot</span>
           </div>
         </div>
-        <button type="button" onclick="window.painCaveApp.openStatsModal('tracking')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white transition-colors border border-blue-500/30 shrink-0 ml-2">
+        <button type="button" onclick="window.painCaveApp.openStatsModal('tracking')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white transition-colors border border-blue-500/30 shrink-0 ml-2">
           Ver Ciclo
         </button>
       </div>
 
       <!-- FILTROS DE CATEGORÍA DEL MICROCICLO ROTATIVO -->
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-1.5 mb-3 custom-scrollbar">
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Ciclo Completo (4D)</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Día 1: Fondo Z2 (60m)</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">Día 2: Sweet Spot</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Día 3: Recuperación</button>
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 mb-2.5 custom-scrollbar">
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Todos</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Día 1: Z2 (60m)</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">Día 2: Sweet Spot</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Día 3: Z1</button>
       </div>
 
       <!-- GRID LIMPIO DEL POOL DE RUTINAS -->
@@ -442,62 +441,6 @@
           </div>
           <div id="workoutHistoryContainer" class="max-h-44 overflow-y-auto custom-scrollbar space-y-1.5">
             <!-- Elementos de historial -->
-          </div>
-        </div>
-
-        <!-- 5. PERSONALIZACIÓN DEL PLAN (PENSADO A FUTURO) -->
-        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
-          <div class="flex justify-between items-center cursor-pointer select-none" onclick="window.painCaveApp.togglePlanConfigAccordion()">
-            <div class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-              <i class="ti ti-settings text-blue-400"></i> Personalizar Plan y Fases (Futuro)
-            </div>
-            <i id="planConfigAccordionChevron" class="ti ti-chevron-down text-sm text-slate-400 transition-transform"></i>
-          </div>
-
-          <div id="planConfigAccordionContent" class="hidden mt-3 pt-3 border-t border-slate-800 space-y-3">
-            <p class="text-[11px] text-slate-400 leading-relaxed">
-              Configura en qué semana o fase te encuentras, añade nuevas fases personalizadas o reinicia el ciclo cuando cumplas tus 3 fases actuales.
-            </p>
-
-            <!-- Ajuste manual de semana y fase -->
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Semana Activa:</label>
-                <div class="flex items-center gap-1">
-                  <input type="number" id="configWeekInput" min="1" max="52" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-1 px-2 text-xs font-mono font-bold text-white outline-none">
-                  <button onclick="window.painCaveApp.saveCurrentWeekFromInput()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold text-white">Fijar</button>
-                </div>
-              </div>
-              <div>
-                <label class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Fase Activa:</label>
-                <select id="configPhaseSelect" onchange="window.painCaveApp.saveCurrentPhaseFromSelect(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-1 px-2 text-xs text-white outline-none">
-                  <!-- Opciones de fases -->
-                </select>
-              </div>
-            </div>
-
-            <!-- Lista de Fases Configuradas -->
-            <div>
-              <div class="flex justify-between items-center mb-1.5">
-                <span class="text-[10px] uppercase font-bold text-slate-400">Estructura de Fases del Plan:</span>
-                <button onclick="window.painCaveApp.promptAddPhase()" class="text-[10px] font-bold text-blue-400 hover:text-blue-300 flex items-center gap-0.5">
-                  <i class="ti ti-plus"></i> Nueva Fase
-                </button>
-              </div>
-              <div id="configPhasesList" class="space-y-1">
-                <!-- Lista de fases -->
-              </div>
-            </div>
-
-            <!-- Acciones de Ciclo -->
-            <div class="flex gap-2 pt-1 border-t border-slate-800">
-              <button onclick="window.painCaveApp.startNewTrainingCycle()" class="flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-600/30 flex items-center justify-center gap-1">
-                <i class="ti ti-refresh"></i> Iniciar Nuevo Ciclo
-              </button>
-              <button onclick="window.painCaveApp.resetPlanProgress()" class="py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700 hover:text-white">
-                Reiniciar Sem 1
-              </button>
-            </div>
           </div>
         </div>
       </div>

@@ -1,10 +1,10 @@
 fase2
-Calentamiento Z1->Z2, 86, 3.5, 420
+Calentamiento, 86, 3.5, 420
 Activación Z3, 92, 6.2, 180
-Recuperación pre-bloque Z1, 80, 2.5, 120
-Serie 1 Umbral FTP Z4 (153-170 BPM), 90, 8.5, 480
-Recuperación activa Z1, 80, 2.5, 180
-Serie 2 Umbral FTP Z4 (153-170 BPM), 90, 8.5, 480
-Recuperación activa Z1, 80, 2.5, 180
-Serie 3 Umbral FTP Z4 (153-170 BPM), 90, 8.5, 480
-Enfriamiento regenerativo Z1, 78, 2.0, 480
+Recuperación Z1, 80, 2.5, 120
+Umbral FTP Z4, 90, 8.5, 480
+Recuperación Z1, 80, 2.5, 180
+Umbral FTP Z4, 90, 8.5, 480
+Recuperación Z1, 80, 2.5, 180
+Umbral FTP Z4, 90, 8.5, 480
+Enfriamiento, 78, 2.0, 480

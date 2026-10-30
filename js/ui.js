@@ -377,10 +377,10 @@ export class UIManager {
     const tomorrowCycle = overview.tomorrowCycle;
 
     if (todayEl && todayCycle) {
-      todayEl.textContent = `Hoy · ${todayCycle.name}`;
+      todayEl.textContent = `Hoy · ${todayCycle.shortName}`;
     }
     if (nextEl && tomorrowCycle) {
-      nextEl.textContent = `Mañana toca: ${tomorrowCycle.name}`;
+      nextEl.textContent = `Mañana: ${tomorrowCycle.shortName}`;
     }
   }
 
@@ -411,30 +411,30 @@ export class UIManager {
 
       let badgeHtml = '';
       if (isTodayRoutine) {
-        badgeHtml = `<span class="text-[9px] uppercase font-bold text-emerald-400 bg-emerald-950/90 px-1.5 py-0.5 rounded border border-emerald-500/40 flex items-center gap-1"><i class="ti ti-target"></i> Toca Hoy</span>`;
+        badgeHtml = `<span class="text-[9px] uppercase font-bold text-emerald-400 bg-emerald-950/90 px-1.5 py-0.5 rounded border border-emerald-500/40 flex items-center gap-1"><i class="ti ti-target"></i> Hoy</span>`;
       } else if (isTomorrowRoutine) {
-        badgeHtml = `<span class="text-[9px] uppercase font-bold text-amber-400 bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-500/40 flex items-center gap-1"><i class="ti ti-clock"></i> Toca Mañana</span>`;
+        badgeHtml = `<span class="text-[9px] uppercase font-bold text-amber-400 bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-500/40 flex items-center gap-1"><i class="ti ti-clock"></i> Mañana</span>`;
       }
 
       const card = document.createElement('button');
-      card.className = `p-3 rounded-xl border ${isTodayRoutine ? 'border-emerald-500/40 bg-emerald-950/20' : (isTomorrowRoutine ? 'border-amber-500/50 bg-amber-950/20' : `border-${routine.colorClass}-600/30`)} bg-slate-800/90 hover:bg-slate-750 text-left transition-all active:scale-[0.98] group flex flex-col justify-between shadow-sm`;
+      card.className = `p-2.5 sm:p-3 rounded-xl border ${isTodayRoutine ? 'border-emerald-500/40 bg-emerald-950/20' : (isTomorrowRoutine ? 'border-amber-500/50 bg-amber-950/20' : `border-${routine.colorClass}-600/30`)} bg-slate-800/90 hover:bg-slate-750 text-left transition-all active:scale-[0.98] group flex flex-col justify-between shadow-sm`;
       card.onclick = () => window.painCaveApp.openPreWorkoutModal(routine.id);
 
       card.innerHTML = `
         <div class="w-full">
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="text-sm font-black text-white group-hover:text-${routine.colorClass}-400 transition-colors truncate mr-1.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs sm:text-sm font-black text-white group-hover:text-${routine.colorClass}-400 transition-colors truncate mr-1.5">
               ${routine.title}
             </span>
             <div class="flex items-center gap-1 shrink-0">
               ${badgeHtml}
-              <span class="text-[11px] font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">
-                ${minutes} min
+              <span class="text-[10px] sm:text-[11px] font-mono font-bold text-slate-300 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
+                ${minutes}m
               </span>
             </div>
           </div>
-          <div class="text-[11px] text-slate-400 mb-2">
-            ${steps.length} bloques · ${routine.subtitle}
+          <div class="text-[11px] text-slate-400 mb-2 truncate">
+            ${routine.subtitle}
           </div>
         </div>
         <div class="w-full pt-1.5 border-t border-slate-700/60 flex items-center justify-between">
@@ -454,24 +454,24 @@ export class UIManager {
 
       let restBadge = '';
       if (isTodayRest) {
-        restBadge = `<span class="text-[9px] uppercase font-bold text-blue-400 bg-blue-950/90 px-1.5 py-0.5 rounded border border-blue-500/40">Toca Hoy</span>`;
+        restBadge = `<span class="text-[9px] uppercase font-bold text-blue-400 bg-blue-950/90 px-1.5 py-0.5 rounded border border-blue-500/40">Hoy</span>`;
       } else if (isTomorrowRest) {
-        restBadge = `<span class="text-[9px] uppercase font-bold text-amber-400 bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-500/40">Toca Mañana</span>`;
+        restBadge = `<span class="text-[9px] uppercase font-bold text-amber-400 bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-500/40">Mañana</span>`;
       } else {
-        restBadge = `<span class="text-[9px] uppercase font-mono font-bold text-slate-400 bg-slate-900/60 px-1.5 py-0.5 rounded border border-slate-800">Asimilación</span>`;
+        restBadge = `<span class="text-[9px] uppercase font-mono font-bold text-slate-400 bg-slate-900/60 px-1.5 py-0.5 rounded border border-slate-800">Relax</span>`;
       }
 
       const restCard = document.createElement('div');
-      restCard.className = `p-3 rounded-xl border ${isTodayRest ? 'border-blue-500/60' : 'border-slate-700/50'} bg-slate-800/40 text-left flex flex-col justify-between opacity-80`;
+      restCard.className = `p-2.5 sm:p-3 rounded-xl border ${isTodayRest ? 'border-blue-500/60 bg-blue-950/20' : 'border-slate-700/50'} bg-slate-800/40 text-left flex flex-col justify-between opacity-85`;
       restCard.innerHTML = `
         <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+          <span class="text-xs sm:text-sm font-black text-slate-300 flex items-center gap-1.5">
             <i class="ti ti-moon text-blue-400"></i> Día 4 · Descanso Total
           </span>
           ${restBadge}
         </div>
         <div class="text-[11px] text-slate-400">
-          Cero pedaleo. La adaptación mitocondrial y muscular se consolida durante el descanso completo.
+          Asimilación y descanso muscular completo.
         </div>
       `;
       container.appendChild(restCard);
@@ -684,9 +684,6 @@ export class UIManager {
 
     // 6. Historial de sesiones
     this.renderWorkoutHistory();
-
-    // 7. Panel de personalización
-    this.renderPlanCustomizationPanel();
   }
 
   renderProfileTab() {
@@ -869,58 +866,6 @@ export class UIManager {
       `;
       container.appendChild(item);
     });
-  }
-
-  renderPlanCustomizationPanel() {
-    const prog = trainingTracker.getCurrentProgress();
-    const phases = trainingTracker.getPhasesWithRanges();
-
-    // Input de semana activa
-    const weekInput = document.getElementById('configWeekInput');
-    if (weekInput) {
-      weekInput.value = prog.currentWeek;
-      weekInput.max = prog.totalWeeks;
-    }
-
-    // Select de fase activa
-    const phaseSelect = document.getElementById('configPhaseSelect');
-    if (phaseSelect) {
-      phaseSelect.innerHTML = '';
-      phases.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.id;
-        opt.textContent = `${p.name} (${p.subtitle}) · S${p.startWeek}-${p.endWeek}`;
-        if (p.id === prog.matchedPhase.id) opt.selected = true;
-        phaseSelect.appendChild(opt);
-      });
-    }
-
-    // Lista de fases configuradas
-    const phasesList = document.getElementById('configPhasesList');
-    if (phasesList) {
-      phasesList.innerHTML = '';
-      phases.forEach(phase => {
-        const row = document.createElement('div');
-        row.className = 'flex items-center justify-between p-2 rounded bg-slate-800 border border-slate-700/60 text-xs';
-        row.innerHTML = `
-          <div class="min-w-0 mr-2">
-            <span class="font-bold text-white">${phase.name}</span>
-            <span class="text-slate-400 text-[11px] block truncate">${phase.subtitle} · ${phase.weeks} sem (S${phase.startWeek}-${phase.endWeek})</span>
-          </div>
-          <div class="flex items-center gap-1 shrink-0">
-            <button onclick="window.painCaveApp.promptEditPhase('${phase.id}')" class="p-1 rounded text-slate-400 hover:text-blue-400 hover:bg-slate-700" title="Editar duración de semanas">
-              <i class="ti ti-edit text-xs"></i>
-            </button>
-            ${phases.length > 1 ? `
-              <button onclick="window.painCaveApp.deletePhase('${phase.id}')" class="p-1 rounded text-slate-400 hover:text-red-400 hover:bg-slate-700" title="Eliminar fase">
-                <i class="ti ti-trash text-xs"></i>
-              </button>
-            ` : ''}
-          </div>
-        `;
-        phasesList.appendChild(row);
-      });
-    }
   }
 
   resetDisplay() {

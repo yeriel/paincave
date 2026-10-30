@@ -1,8 +1,8 @@
 fase2
-Calentamiento Z1->Z2, 86, 3.5, 420
-Activación piramidal Z3, 92, 6.2, 180
-Recuperación pre-bloque Z1, 80, 2.5, 120
-Bloque 1: Sweet Spot (158-170 BPM), 90, 7.8, 900
-Recuperación activa Z1 (< 113 BPM), 80, 2.5, 240
-Bloque 2: Sweet Spot Aero (158-170 BPM), 90, 7.8, 900
-Enfriamiento regenerativo Z1, 78, 2.0, 360
+Calentamiento, 86, 3.5, 420
+Activación Z3, 92, 6.2, 180
+Recuperación Z1, 80, 2.5, 120
+Sweet Spot, 90, 7.8, 900
+Recuperación Z1, 80, 2.5, 240
+Sweet Spot Aero, 90, 7.8, 900
+Enfriamiento, 78, 2.0, 360

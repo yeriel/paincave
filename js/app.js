@@ -18,11 +18,18 @@ class PainCaveApp {
   }
 
   init() {
-    // Registro de Service Worker para PWA Offline
+    // Limpieza de Service Worker y cachés anteriores (modo web estándar sin PWA)
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      });
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (const reg of registrations) {
+          reg.unregister();
+        }
+      }).catch(() => {});
+      if ('caches' in window) {
+        caches.keys().then(keys => {
+          keys.forEach(key => caches.delete(key));
+        }).catch(() => {});
+      }
     }
 
     // Calibración inicial de FC Máx personalizada (189 BPM)
@@ -123,9 +130,9 @@ class PainCaveApp {
     // Actualizar botones de categoría
     document.querySelectorAll('.cat-pill').forEach(btn => {
       if (btn.dataset.category === category) {
-        btn.className = "cat-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors";
+        btn.className = "cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0";
       } else {
-        btn.className = "cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700";
+        btn.className = "cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0";
       }
     });
     ui.renderRoutinesPool(this.selectedLevel, this.activeCategory);
@@ -158,18 +165,28 @@ class PainCaveApp {
     const badgeEl = document.getElementById('preWorkoutDurationBadge');
     if (badgeEl) badgeEl.textContent = `${Math.round(totalSec / 60)} min · ${routine.steps.length} bloques`;
 
-    // Generar lista de fases
+    // Generar lista de fases limpia y concisa
     const listEl = document.getElementById('preWorkoutStepsList');
     listEl.innerHTML = '';
     routine.steps.forEach((st, idx) => {
       const item = document.createElement('div');
       item.className = 'flex items-center justify-between py-1.5 border-b border-slate-800 last:border-b-0 text-xs';
+      
+      const tags = [];
+      if (st.cadence) tags.push(`${st.cadence} RPM`);
+      if (st.zone === 'SS') tags.push('158-170 BPM');
+      else if (st.zone === 2) tags.push('113-132 BPM');
+      else if (st.zone === 1) tags.push('<113 BPM');
+      else if (st.zone === 4) tags.push('153-170 BPM');
+      if (st.posture === 'aero') tags.push('Aero');
+      else if (st.posture === 'de pie') tags.push('De pie');
+
       item.innerHTML = `
         <div class="truncate mr-2">
-          <span class="font-bold text-slate-300">${idx + 1}. ${st.phase}</span>
-          <span class="text-[10px] text-slate-400 block">${st.posture === 'aero' ? '🚴 Aero' : (st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado')} · ${st.cadence ? st.cadence + ' RPM · ' : ''}${st.zone ? (st.zone === 'SS' ? 'Sweet Spot' : 'Z' + st.zone) + ' (' + getZoneBpmRange(st.zone) + ' BPM) · ' : ''}RPE ${st.rpe || '—'}</span>
+          <span class="font-bold text-slate-200">${idx + 1}. ${st.phase}</span>
+          <span class="text-[10px] sm:text-[11px] text-slate-400 block font-mono">${tags.join(' · ')}</span>
         </div>
-        <span class="font-mono text-slate-400 shrink-0 font-semibold">${formatTime(st.t)}</span>
+        <span class="font-mono text-slate-300 shrink-0 font-semibold text-xs">${formatTime(st.t)}</span>
       `;
       listEl.appendChild(item);
     });
@@ -339,111 +356,12 @@ class PainCaveApp {
     ui.selectCalendarDate(dateStr);
   }
 
-  togglePlanConfigAccordion() {
-    const content = document.getElementById('planConfigAccordionContent');
-    const chevron = document.getElementById('planConfigAccordionChevron');
-    if (!content) return;
-    const isHidden = content.classList.contains('hidden');
-    content.classList.toggle('hidden', !isHidden);
-    if (chevron) {
-      chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-    }
-  }
-
-  saveCurrentWeekFromInput() {
-    const input = document.getElementById('configWeekInput');
-    if (!input) return;
-    const weekNum = parseInt(input.value);
-    if (isNaN(weekNum) || weekNum < 1) {
-      alert("Por favor introduce un número de semana válido (1 o mayor).");
-      return;
-    }
-    trainingTracker.setCurrentWeek(weekNum);
-    this.setLevel(trainingTracker.plan.currentPhaseId);
-    ui.renderTrainingTrackerWidget();
-    ui.renderTrackingTab();
-    ui.updateMiniRank();
-  }
-
-  saveCurrentPhaseFromSelect(phaseId) {
-    trainingTracker.setCurrentPhase(phaseId);
-    this.setLevel(phaseId);
-    ui.renderTrainingTrackerWidget();
-    ui.renderTrackingTab();
-    ui.updateMiniRank();
-  }
-
   alignCycleDay(cycleDay) {
     trainingTracker.setCycleAnchor(formatDateISO(new Date()), cycleDay);
     ui.renderRoutinesPool(this.selectedLevel, this.activeCategory);
     ui.updateMicrocycleBanner();
     if (ui.activeStatsTab === 'tracking') {
       ui.renderTrackingTab();
-    }
-  }
-
-  promptAddPhase() {
-    const name = prompt("Nombre de la nueva fase (ej: Fase 4):", `Fase ${trainingTracker.plan.phases.length + 1}`);
-    if (!name) return;
-    const subtitle = prompt("Subtítulo / Objetivo de la fase (ej: Especialización Pico FTP):", "Pico de Forma y Resistencia");
-    if (!subtitle) return;
-    const weeksStr = prompt("Duración en semanas (ej: 4):", "4");
-    const weeks = parseInt(weeksStr) || 4;
-
-    trainingTracker.addPhase({ name, subtitle, weeks });
-    ui.renderTrainingTrackerWidget();
-    ui.renderTrackingTab();
-    alert(`¡Fase "${name}" agregada con éxito!`);
-  }
-
-  promptEditPhase(phaseId) {
-    const phase = trainingTracker.plan.phases.find(p => p.id === phaseId);
-    if (!phase) return;
-    const newWeeks = prompt(`Modificar duración en semanas para "${phase.name}" (${phase.weeks} actuales):`, phase.weeks);
-    if (!newWeeks) return;
-    const weeks = parseInt(newWeeks);
-    if (isNaN(weeks) || weeks < 1) {
-      alert("Número de semanas inválido.");
-      return;
-    }
-    trainingTracker.updatePhase(phaseId, { weeks });
-    ui.renderTrainingTrackerWidget();
-    ui.renderTrackingTab();
-  }
-
-  deletePhase(phaseId) {
-    const phase = trainingTracker.plan.phases.find(p => p.id === phaseId);
-    if (!phase) return;
-    if (confirm(`¿Estás seguro de eliminar la "${phase.name}"?`)) {
-      try {
-        trainingTracker.removePhase(phaseId);
-        ui.renderTrainingTrackerWidget();
-        ui.renderTrackingTab();
-      } catch (e) {
-        alert(e.message);
-      }
-    }
-  }
-
-  startNewTrainingCycle() {
-    if (confirm("¿Iniciar un nuevo ciclo de entrenamiento? Se mantendrá intacto tu historial de sesiones y XP, y el plan avanzará al siguiente ciclo desde la Semana 1.")) {
-      const cycleName = prompt("Nombre del nuevo ciclo:", `Ciclo ${trainingTracker.plan.cycleNumber + 1}`);
-      trainingTracker.startNewCycle(cycleName);
-      this.setLevel(trainingTracker.plan.phases[0].id);
-      ui.renderTrainingTrackerWidget();
-      ui.renderTrackingTab();
-      ui.updateMiniRank();
-      alert("¡Nuevo ciclo de entrenamiento iniciado con éxito!");
-    }
-  }
-
-  resetPlanProgress() {
-    if (confirm("¿Deseas reiniciar la progresión a la Semana 1? (No se borrarán tus sesiones realizadas ni tu rango).")) {
-      trainingTracker.resetProgress();
-      this.setLevel(trainingTracker.plan.phases[0].id);
-      ui.renderTrainingTrackerWidget();
-      ui.renderTrackingTab();
-      ui.updateMiniRank();
     }
   }
 

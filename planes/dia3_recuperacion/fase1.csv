@@ -1,5 +1,5 @@
 fase1
-Calentamiento suave Z1, 78, 2.0, 300
-Rodaje ágil de cadencia Z1, 82, 2.5, 720
-Soltura de piernas suave Z1, 85, 2.0, 720
-Enfriamiento y desaceleración Z1, 75, 1.5, 360
+Calentamiento, 78, 2.0, 300
+Recuperación Z1, 82, 2.5, 720
+Soltura de piernas, 85, 2.0, 720
+Enfriamiento, 75, 1.5, 360

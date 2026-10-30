@@ -1,6 +1,6 @@
 fase3
-Calentamiento suave Z1, 80, 2.0, 360
-Rodaje ágil sin carga Z1, 85, 2.2, 900
-Z2 muy suave de flujo sanguíneo, 88, 3.5, 600
-Desconexión regenerativa Z1, 80, 1.8, 420
-Enfriamiento desacelerado Z1, 75, 1.5, 240
+Calentamiento, 80, 2.0, 360
+Recuperación Z1, 85, 2.2, 900
+Z2 muy suave, 88, 3.5, 600
+Soltura de piernas, 80, 1.8, 420
+Enfriamiento, 75, 1.5, 240

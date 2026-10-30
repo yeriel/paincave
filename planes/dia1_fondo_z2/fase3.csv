@@ -1,11 +1,11 @@
 fase3
-Calentamiento Z1->Z2, 88, 3.5, 300
-Rodaje de ritmo Z2 (113-132 BPM), 92, 4.8, 480
-Bloque Aero Z2 contrarreloj, 92, 5.0, 540
-Alivio activo de pie, 75, 4.0, 90
-Rodaje base Z2 sostenido, 90, 4.8, 450
-Bloque Aero Z2 contrarreloj, 92, 5.0, 600
-Alivio activo de pie, 75, 4.0, 90
-Bloque Aero Z2 final, 90, 5.0, 480
-Rodaje suave Z2, 85, 3.8, 270
-Enfriamiento Z1 regenerativo, 80, 2.0, 300
+Calentamiento, 88, 3.5, 300
+Fondo Z2 ritmo, 92, 4.8, 480
+Aero Z2 contrarreloj, 92, 5.0, 540
+De pie (Alivio), 75, 4.0, 90
+Fondo Z2, 90, 4.8, 450
+Aero Z2 contrarreloj, 92, 5.0, 600
+De pie (Alivio), 75, 4.0, 90
+Aero Z2 final, 90, 5.0, 480
+Fondo Z2 suave, 85, 3.8, 270
+Enfriamiento, 80, 2.0, 300

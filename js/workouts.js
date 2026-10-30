@@ -64,16 +64,16 @@ export function parseStep(step) {
     }
 
     let instruction = 'Pedaleo fluido sentado';
-    if (zone === 'SS') instruction = 'Resistencia media-alta: busca 158-170 BPM';
-    else if (zone === 4) instruction = 'Umbral: ardor claro en piernas (153-170 BPM)';
-    else if (zone === 2) instruction = 'Resistencia básica: ritmo fluido (113-132 BPM)';
-    else if (zone === 1) instruction = 'Regenerativo suave: soltar piernas (< 113 BPM)';
-    if (posture === 'aero') instruction += ' · Codos a 90°';
-    else if (posture === 'de pie') instruction += ' · ¡De pie!';
+    if (zone === 'SS') instruction = 'Sweet Spot: busca 158-170 BPM';
+    else if (zone === 4) instruction = 'Umbral: 153-170 BPM';
+    else if (zone === 2) instruction = 'Zona 2: ritmo fluido (113-132 BPM)';
+    else if (zone === 1) instruction = 'Recuperación suave (< 113 BPM)';
+    if (posture === 'aero') instruction += ' · Aero';
+    else if (posture === 'de pie') instruction += ' · De pie';
 
     return {
       phase: step.phase,
-      desc: step.desc || `${step.phase}${cadence ? ` [Cadencia ${cadence} RPM]` : ''} [${zone === 'SS' ? 'Sweet Spot' : `Zona ${zone}`}] [RPE ${rpe}]`,
+      desc: step.desc || `${step.phase}${cadence ? ` · ${cadence} RPM` : ''}`,
       t: step.t,
       cadence,
       rpe,
@@ -114,12 +114,12 @@ export function parseStep(step) {
   }
 
   let instruction = 'Pedaleo fluido sentado';
-  if (zone === 'SS') instruction = 'Resistencia media-alta: busca 158-170 BPM';
-  else if (zone === 4) instruction = 'Umbral: ardor claro en piernas (153-170 BPM)';
-  else if (zone === 2) instruction = 'Resistencia básica: ritmo fluido (113-132 BPM)';
-  else if (zone === 1) instruction = 'Regenerativo suave: soltar piernas (< 113 BPM)';
-  if (posture === 'aero') instruction += ' · Codos a 90°';
-  else if (posture === 'de pie') instruction += ' · ¡De pie!';
+  if (zone === 'SS') instruction = 'Sweet Spot: busca 158-170 BPM';
+  else if (zone === 4) instruction = 'Umbral: 153-170 BPM';
+  else if (zone === 2) instruction = 'Zona 2: ritmo fluido (113-132 BPM)';
+  else if (zone === 1) instruction = 'Recuperación suave (< 113 BPM)';
+  if (posture === 'aero') instruction += ' · Aero';
+  else if (posture === 'de pie') instruction += ' · De pie';
 
   return {
     phase: phase || 'Fase activa',
@@ -191,7 +191,7 @@ export function parseCSV(content) {
 
     steps.push({
       phase,
-      desc: `${phase}${cadence ? ` [Cadencia ${cadence} RPM]` : ''} [${zone === 'SS' ? 'Sweet Spot' : `Zona ${zone}`}] [RPE ${rpe}]`,
+      desc: `${phase}${cadence ? ` · ${cadence} RPM` : ''}`,
       t: dur,
       cadence,
       rpe,
@@ -216,14 +216,14 @@ export const ROUTINES_POOL = [
     "id": "dia1_fondo_z2",
     "day": "Día 1",
     "category": "fondo",
-    "title": "Día 1 · Fondo Z2 & Aero (60 min)",
-    "subtitle": "Resistencia base 113-132 BPM (60 min) + adaptación aero",
+    "title": "Día 1 · Fondo Z2 (60m)",
+    "subtitle": "Base aeróbica (113-132 BPM) con bloques aero",
     "icon": "ti-wind",
     "colorClass": "cyan",
     "levels": {
       "fase1": [
         {
-          "phase": "Calentamiento Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 85,
           "rpe": 3,
           "zone": 1,
@@ -231,7 +231,7 @@ export const ROUTINES_POOL = [
           "t": 360
         },
         {
-          "phase": "Rodaje base Z2 (113-132 BPM)",
+          "phase": "Fondo Z2",
           "cadence": 88,
           "rpe": 4.5,
           "zone": 2,
@@ -239,7 +239,7 @@ export const ROUTINES_POOL = [
           "t": 840
         },
         {
-          "phase": "Bloque Aero Z2 técnico",
+          "phase": "Aero Z2",
           "cadence": 90,
           "rpe": 5,
           "zone": 2,
@@ -247,7 +247,7 @@ export const ROUTINES_POOL = [
           "t": 300
         },
         {
-          "phase": "Alivio articular de pie",
+          "phase": "De pie (Alivio)",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
@@ -255,7 +255,7 @@ export const ROUTINES_POOL = [
           "t": 90
         },
         {
-          "phase": "Fondo Z2 continuo sentado",
+          "phase": "Fondo Z2",
           "cadence": 90,
           "rpe": 4.5,
           "zone": 2,
@@ -263,7 +263,7 @@ export const ROUTINES_POOL = [
           "t": 1110
         },
         {
-          "phase": "Bloque Aero Z2 técnico",
+          "phase": "Aero Z2",
           "cadence": 90,
           "rpe": 5,
           "zone": 2,
@@ -271,7 +271,7 @@ export const ROUTINES_POOL = [
           "t": 360
         },
         {
-          "phase": "Alivio articular de pie",
+          "phase": "De pie (Alivio)",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
@@ -279,7 +279,7 @@ export const ROUTINES_POOL = [
           "t": 60
         },
         {
-          "phase": "Rodaje suave Z2",
+          "phase": "Fondo Z2 suave",
           "cadence": 88,
           "rpe": 4,
           "zone": 2,
@@ -287,7 +287,7 @@ export const ROUTINES_POOL = [
           "t": 240
         },
         {
-          "phase": "Enfriamiento Z1 regenerativo",
+          "phase": "Enfriamiento",
           "cadence": 82,
           "rpe": 2,
           "zone": 1,
@@ -297,15 +297,15 @@ export const ROUTINES_POOL = [
       ],
       "fase2": [
         {
-          "phase": "Calentamiento activo Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 86,
           "rpe": 3.5,
-          "zone": 1,
+          "zone": 2,
           "posture": "sentado",
           "t": 360
         },
         {
-          "phase": "Rodaje base Z2 (113-132 BPM)",
+          "phase": "Fondo Z2",
           "cadence": 90,
           "rpe": 4.5,
           "zone": 2,
@@ -313,7 +313,7 @@ export const ROUTINES_POOL = [
           "t": 600
         },
         {
-          "phase": "Bloque Aero Z2 sostenido",
+          "phase": "Aero Z2 sostenido",
           "cadence": 90,
           "rpe": 5,
           "zone": 2,
@@ -321,31 +321,7 @@ export const ROUTINES_POOL = [
           "t": 480
         },
         {
-          "phase": "Alivio y apertura de cadera",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 90
-        },
-        {
-          "phase": "Rodaje crucero Z2 continuo",
-          "cadence": 92,
-          "rpe": 4.8,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 870
-        },
-        {
-          "phase": "Bloque Aero Z2 sostenido",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 480
-        },
-        {
-          "phase": "Alivio articular de pie",
+          "phase": "De pie (Alivio)",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
@@ -353,7 +329,31 @@ export const ROUTINES_POOL = [
           "t": 90
         },
         {
-          "phase": "Rodaje final Z2",
+          "phase": "Fondo Z2 continuo",
+          "cadence": 92,
+          "rpe": 4.8,
+          "zone": 2,
+          "posture": "sentado",
+          "t": 870
+        },
+        {
+          "phase": "Aero Z2 sostenido",
+          "cadence": 90,
+          "rpe": 5,
+          "zone": 2,
+          "posture": "aero",
+          "t": 480
+        },
+        {
+          "phase": "De pie (Alivio)",
+          "cadence": 75,
+          "rpe": 4,
+          "zone": 2,
+          "posture": "de pie",
+          "t": 90
+        },
+        {
+          "phase": "Fondo Z2 suave",
           "cadence": 88,
           "rpe": 4.2,
           "zone": 2,
@@ -361,7 +361,7 @@ export const ROUTINES_POOL = [
           "t": 330
         },
         {
-          "phase": "Enfriamiento Z1 regenerativo",
+          "phase": "Enfriamiento",
           "cadence": 80,
           "rpe": 2,
           "zone": 1,
@@ -371,15 +371,15 @@ export const ROUTINES_POOL = [
       ],
       "fase3": [
         {
-          "phase": "Calentamiento Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 88,
           "rpe": 3.5,
-          "zone": 1,
+          "zone": 2,
           "posture": "sentado",
           "t": 300
         },
         {
-          "phase": "Rodaje de ritmo Z2 (113-132 BPM)",
+          "phase": "Fondo Z2 ritmo",
           "cadence": 92,
           "rpe": 4.8,
           "zone": 2,
@@ -387,7 +387,7 @@ export const ROUTINES_POOL = [
           "t": 480
         },
         {
-          "phase": "Bloque Aero Z2 contrarreloj",
+          "phase": "Aero Z2 contrarreloj",
           "cadence": 92,
           "rpe": 5,
           "zone": 2,
@@ -395,7 +395,7 @@ export const ROUTINES_POOL = [
           "t": 540
         },
         {
-          "phase": "Alivio activo de pie",
+          "phase": "De pie (Alivio)",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
@@ -403,7 +403,7 @@ export const ROUTINES_POOL = [
           "t": 90
         },
         {
-          "phase": "Rodaje base Z2 sostenido",
+          "phase": "Fondo Z2",
           "cadence": 90,
           "rpe": 4.8,
           "zone": 2,
@@ -411,7 +411,7 @@ export const ROUTINES_POOL = [
           "t": 450
         },
         {
-          "phase": "Bloque Aero Z2 contrarreloj",
+          "phase": "Aero Z2 contrarreloj",
           "cadence": 92,
           "rpe": 5,
           "zone": 2,
@@ -419,7 +419,7 @@ export const ROUTINES_POOL = [
           "t": 600
         },
         {
-          "phase": "Alivio activo de pie",
+          "phase": "De pie (Alivio)",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
@@ -427,7 +427,7 @@ export const ROUTINES_POOL = [
           "t": 90
         },
         {
-          "phase": "Bloque Aero Z2 final",
+          "phase": "Aero Z2 final",
           "cadence": 90,
           "rpe": 5,
           "zone": 2,
@@ -435,7 +435,7 @@ export const ROUTINES_POOL = [
           "t": 480
         },
         {
-          "phase": "Rodaje suave Z2",
+          "phase": "Fondo Z2 suave",
           "cadence": 85,
           "rpe": 3.8,
           "zone": 2,
@@ -443,7 +443,7 @@ export const ROUTINES_POOL = [
           "t": 270
         },
         {
-          "phase": "Enfriamiento Z1 regenerativo",
+          "phase": "Enfriamiento",
           "cadence": 80,
           "rpe": 2,
           "zone": 1,
@@ -457,22 +457,22 @@ export const ROUTINES_POOL = [
     "id": "dia2_sweet_spot",
     "day": "Día 2",
     "category": "calidad",
-    "title": "Día 2 · Calidad Sweet Spot (158-170 BPM)",
-    "subtitle": "Intervalos submáximos 84-90% FC Máx · Esfuerzo cómodamente duro",
+    "title": "Día 2 · Sweet Spot",
+    "subtitle": "Intervalos de calidad sostenida (158-170 BPM)",
     "icon": "ti-flame",
     "colorClass": "amber",
     "levels": {
       "fase1": [
         {
-          "phase": "Calentamiento Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 85,
           "rpe": 3.5,
-          "zone": 1,
+          "zone": 2,
           "posture": "sentado",
           "t": 420
         },
         {
-          "phase": "Activación neuromuscular Z3",
+          "phase": "Activación Z3",
           "cadence": 90,
           "rpe": 6,
           "zone": 3,
@@ -480,7 +480,7 @@ export const ROUTINES_POOL = [
           "t": 120
         },
         {
-          "phase": "Recuperación pre-bloque Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -488,7 +488,7 @@ export const ROUTINES_POOL = [
           "t": 120
         },
         {
-          "phase": "Bloque 1: Sweet Spot (158-170 BPM)",
+          "phase": "Sweet Spot",
           "cadence": 88,
           "rpe": 7.8,
           "zone": "SS",
@@ -496,7 +496,7 @@ export const ROUTINES_POOL = [
           "t": 720
         },
         {
-          "phase": "Recuperación activa Z1 (< 113 BPM)",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -504,7 +504,7 @@ export const ROUTINES_POOL = [
           "t": 240
         },
         {
-          "phase": "Bloque 2: Sweet Spot Aero (158-170 BPM)",
+          "phase": "Sweet Spot Aero",
           "cadence": 90,
           "rpe": 7.8,
           "zone": "SS",
@@ -512,7 +512,7 @@ export const ROUTINES_POOL = [
           "t": 720
         },
         {
-          "phase": "Enfriamiento regenerativo Z1",
+          "phase": "Enfriamiento",
           "cadence": 78,
           "rpe": 2,
           "zone": 1,
@@ -522,15 +522,15 @@ export const ROUTINES_POOL = [
       ],
       "fase2": [
         {
-          "phase": "Calentamiento Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 86,
           "rpe": 3.5,
-          "zone": 1,
+          "zone": 2,
           "posture": "sentado",
           "t": 420
         },
         {
-          "phase": "Activación piramidal Z3",
+          "phase": "Activación Z3",
           "cadence": 92,
           "rpe": 6.2,
           "zone": 3,
@@ -538,7 +538,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Recuperación pre-bloque Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -546,7 +546,7 @@ export const ROUTINES_POOL = [
           "t": 120
         },
         {
-          "phase": "Bloque 1: Sweet Spot (158-170 BPM)",
+          "phase": "Sweet Spot",
           "cadence": 90,
           "rpe": 7.8,
           "zone": "SS",
@@ -554,7 +554,7 @@ export const ROUTINES_POOL = [
           "t": 900
         },
         {
-          "phase": "Recuperación activa Z1 (< 113 BPM)",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -562,7 +562,7 @@ export const ROUTINES_POOL = [
           "t": 240
         },
         {
-          "phase": "Bloque 2: Sweet Spot Aero (158-170 BPM)",
+          "phase": "Sweet Spot Aero",
           "cadence": 90,
           "rpe": 7.8,
           "zone": "SS",
@@ -570,7 +570,7 @@ export const ROUTINES_POOL = [
           "t": 900
         },
         {
-          "phase": "Enfriamiento regenerativo Z1",
+          "phase": "Enfriamiento",
           "cadence": 78,
           "rpe": 2,
           "zone": 1,
@@ -580,15 +580,15 @@ export const ROUTINES_POOL = [
       ],
       "fase3": [
         {
-          "phase": "Calentamiento dinámico Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 88,
           "rpe": 3.5,
-          "zone": 1,
+          "zone": 2,
           "posture": "sentado",
           "t": 420
         },
         {
-          "phase": "Activación piramidal Z3",
+          "phase": "Activación Z3",
           "cadence": 92,
           "rpe": 6.5,
           "zone": 3,
@@ -596,7 +596,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Recuperación pre-bloque Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -604,7 +604,7 @@ export const ROUTINES_POOL = [
           "t": 120
         },
         {
-          "phase": "Bloque 1: Sweet Spot Master (158-170 BPM)",
+          "phase": "Sweet Spot",
           "cadence": 90,
           "rpe": 7.8,
           "zone": "SS",
@@ -612,7 +612,7 @@ export const ROUTINES_POOL = [
           "t": 1200
         },
         {
-          "phase": "Recuperación activa Z1 (< 113 BPM)",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -620,7 +620,7 @@ export const ROUTINES_POOL = [
           "t": 240
         },
         {
-          "phase": "Bloque 2: Sweet Spot Aero Master (158-170 BPM)",
+          "phase": "Sweet Spot Aero",
           "cadence": 90,
           "rpe": 7.8,
           "zone": "SS",
@@ -628,7 +628,7 @@ export const ROUTINES_POOL = [
           "t": 1200
         },
         {
-          "phase": "Enfriamiento regenerativo Z1",
+          "phase": "Enfriamiento",
           "cadence": 78,
           "rpe": 2,
           "zone": 1,
@@ -642,14 +642,14 @@ export const ROUTINES_POOL = [
     "id": "dia3_recuperacion",
     "day": "Día 3",
     "category": "recuperacion",
-    "title": "Día 3 · Recuperación Activa Z1",
-    "subtitle": "Regenerativo suave (< 113 BPM) · Soltar piernas y disipar lactato",
+    "title": "Día 3 · Recuperación",
+    "subtitle": "Regenerativo suave (< 113 BPM) para soltar piernas",
     "icon": "ti-heart-rate-monitor",
     "colorClass": "emerald",
     "levels": {
       "fase1": [
         {
-          "phase": "Calentamiento suave Z1",
+          "phase": "Calentamiento",
           "cadence": 78,
           "rpe": 2,
           "zone": 1,
@@ -657,7 +657,7 @@ export const ROUTINES_POOL = [
           "t": 300
         },
         {
-          "phase": "Rodaje ágil de cadencia Z1",
+          "phase": "Recuperación Z1",
           "cadence": 82,
           "rpe": 2.5,
           "zone": 1,
@@ -665,7 +665,7 @@ export const ROUTINES_POOL = [
           "t": 720
         },
         {
-          "phase": "Soltura de piernas suave Z1",
+          "phase": "Soltura de piernas",
           "cadence": 85,
           "rpe": 2,
           "zone": 1,
@@ -673,7 +673,7 @@ export const ROUTINES_POOL = [
           "t": 720
         },
         {
-          "phase": "Enfriamiento y desaceleración Z1",
+          "phase": "Enfriamiento",
           "cadence": 75,
           "rpe": 1.5,
           "zone": 1,
@@ -683,7 +683,7 @@ export const ROUTINES_POOL = [
       ],
       "fase2": [
         {
-          "phase": "Calentamiento suave Z1",
+          "phase": "Calentamiento",
           "cadence": 80,
           "rpe": 2,
           "zone": 1,
@@ -691,7 +691,7 @@ export const ROUTINES_POOL = [
           "t": 360
         },
         {
-          "phase": "Rodaje regenerativo Z1",
+          "phase": "Recuperación Z1",
           "cadence": 84,
           "rpe": 2.5,
           "zone": 1,
@@ -699,7 +699,7 @@ export const ROUTINES_POOL = [
           "t": 840
         },
         {
-          "phase": "Z2 muy suave de activación capilar",
+          "phase": "Z2 muy suave",
           "cadence": 86,
           "rpe": 3.5,
           "zone": 2,
@@ -707,15 +707,15 @@ export const ROUTINES_POOL = [
           "t": 600
         },
         {
-          "phase": "Soltura regenerativa Z1",
+          "phase": "Soltura de piernas",
           "cadence": 82,
           "rpe": 2,
           "zone": 1,
-          "posture": "sentado",
+          "posture": "de pie",
           "t": 360
         },
         {
-          "phase": "Enfriamiento final Z1",
+          "phase": "Enfriamiento",
           "cadence": 75,
           "rpe": 1.5,
           "zone": 1,
@@ -725,7 +725,7 @@ export const ROUTINES_POOL = [
       ],
       "fase3": [
         {
-          "phase": "Calentamiento suave Z1",
+          "phase": "Calentamiento",
           "cadence": 80,
           "rpe": 2,
           "zone": 1,
@@ -733,7 +733,7 @@ export const ROUTINES_POOL = [
           "t": 360
         },
         {
-          "phase": "Rodaje ágil sin carga Z1",
+          "phase": "Recuperación Z1",
           "cadence": 85,
           "rpe": 2.2,
           "zone": 1,
@@ -741,7 +741,7 @@ export const ROUTINES_POOL = [
           "t": 900
         },
         {
-          "phase": "Z2 muy suave de flujo sanguíneo",
+          "phase": "Z2 muy suave",
           "cadence": 88,
           "rpe": 3.5,
           "zone": 2,
@@ -749,15 +749,15 @@ export const ROUTINES_POOL = [
           "t": 600
         },
         {
-          "phase": "Desconexión regenerativa Z1",
+          "phase": "Soltura de piernas",
           "cadence": 80,
           "rpe": 1.8,
           "zone": 1,
-          "posture": "sentado",
+          "posture": "de pie",
           "t": 420
         },
         {
-          "phase": "Enfriamiento desacelerado Z1",
+          "phase": "Enfriamiento",
           "cadence": 75,
           "rpe": 1.5,
           "zone": 1,
@@ -769,19 +769,19 @@ export const ROUTINES_POOL = [
   },
   {
     "id": "opcional_umbral_z4",
-    "day": "Calidad Opcional",
+    "day": "Opcional",
     "category": "calidad",
-    "title": "Alternativa · Umbral FTP Z4 (153-170 BPM)",
-    "subtitle": "Intervalos de umbral de lactato sostenido (153-170 BPM)",
+    "title": "Alternativa · Umbral Z4",
+    "subtitle": "Intervalos en umbral de lactato (153-170 BPM)",
     "icon": "ti-bolt",
     "colorClass": "rose",
     "levels": {
       "fase1": [
         {
-          "phase": "Calentamiento Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 85,
           "rpe": 3.5,
-          "zone": 1,
+          "zone": 2,
           "posture": "sentado",
           "t": 420
         },
@@ -794,7 +794,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Recuperación pre-bloque Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -802,7 +802,7 @@ export const ROUTINES_POOL = [
           "t": 120
         },
         {
-          "phase": "Serie 1 Umbral FTP Z4 (153-170 BPM)",
+          "phase": "Umbral FTP Z4",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
@@ -810,7 +810,7 @@ export const ROUTINES_POOL = [
           "t": 360
         },
         {
-          "phase": "Recuperación activa Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -818,7 +818,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Serie 2 Umbral FTP Z4 (153-170 BPM)",
+          "phase": "Umbral FTP Z4",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
@@ -826,7 +826,7 @@ export const ROUTINES_POOL = [
           "t": 360
         },
         {
-          "phase": "Recuperación activa Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -834,7 +834,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Serie 3 Umbral FTP Z4 (153-170 BPM)",
+          "phase": "Umbral FTP Z4",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
@@ -842,7 +842,7 @@ export const ROUTINES_POOL = [
           "t": 360
         },
         {
-          "phase": "Enfriamiento regenerativo Z1",
+          "phase": "Enfriamiento",
           "cadence": 78,
           "rpe": 2,
           "zone": 1,
@@ -852,10 +852,10 @@ export const ROUTINES_POOL = [
       ],
       "fase2": [
         {
-          "phase": "Calentamiento Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 86,
           "rpe": 3.5,
-          "zone": 1,
+          "zone": 2,
           "posture": "sentado",
           "t": 420
         },
@@ -868,7 +868,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Recuperación pre-bloque Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -876,7 +876,7 @@ export const ROUTINES_POOL = [
           "t": 120
         },
         {
-          "phase": "Serie 1 Umbral FTP Z4 (153-170 BPM)",
+          "phase": "Umbral FTP Z4",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
@@ -884,7 +884,7 @@ export const ROUTINES_POOL = [
           "t": 480
         },
         {
-          "phase": "Recuperación activa Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -892,7 +892,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Serie 2 Umbral FTP Z4 (153-170 BPM)",
+          "phase": "Umbral FTP Z4",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
@@ -900,7 +900,7 @@ export const ROUTINES_POOL = [
           "t": 480
         },
         {
-          "phase": "Recuperación activa Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -908,7 +908,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Serie 3 Umbral FTP Z4 (153-170 BPM)",
+          "phase": "Umbral FTP Z4",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
@@ -916,7 +916,7 @@ export const ROUTINES_POOL = [
           "t": 480
         },
         {
-          "phase": "Enfriamiento regenerativo Z1",
+          "phase": "Enfriamiento",
           "cadence": 78,
           "rpe": 2,
           "zone": 1,
@@ -926,10 +926,10 @@ export const ROUTINES_POOL = [
       ],
       "fase3": [
         {
-          "phase": "Calentamiento Z1->Z2",
+          "phase": "Calentamiento",
           "cadence": 88,
           "rpe": 3.5,
-          "zone": 1,
+          "zone": 2,
           "posture": "sentado",
           "t": 420
         },
@@ -942,7 +942,7 @@ export const ROUTINES_POOL = [
           "t": 180
         },
         {
-          "phase": "Recuperación pre-bloque Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -950,7 +950,7 @@ export const ROUTINES_POOL = [
           "t": 120
         },
         {
-          "phase": "Serie 1 Umbral FTP Z4 Sostenido (153-170 BPM)",
+          "phase": "Umbral FTP Z4",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
@@ -958,7 +958,7 @@ export const ROUTINES_POOL = [
           "t": 900
         },
         {
-          "phase": "Recuperación activa Z1",
+          "phase": "Recuperación Z1",
           "cadence": 80,
           "rpe": 2.5,
           "zone": 1,
@@ -966,7 +966,7 @@ export const ROUTINES_POOL = [
           "t": 300
         },
         {
-          "phase": "Serie 2 Umbral FTP Z4 Sostenido (153-170 BPM)",
+          "phase": "Umbral FTP Z4",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
@@ -974,7 +974,7 @@ export const ROUTINES_POOL = [
           "t": 900
         },
         {
-          "phase": "Enfriamiento regenerativo Z1",
+          "phase": "Enfriamiento",
           "cadence": 78,
           "rpe": 2,
           "zone": 1,

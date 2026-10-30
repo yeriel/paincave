@@ -10,7 +10,7 @@ class SoundEngine {
     this.selectedVoice = null;
     this.voicesLoaded = false;
 
-    if ('speechSynthesis' in window) {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       this.initVoices();
       window.speechSynthesis.onvoiceschanged = () => this.initVoices();
     }
@@ -172,36 +172,32 @@ class SoundEngine {
 
   formatCoachCue(step, isStart = false) {
     if (!step) return '';
-    let name = step.phase
-      .replace(/\(.*?\)/g, '')
-      .replace(/bloque\s*\d+:?\s*/i, '')
-      .trim();
+    const prefix = isStart ? 'Iniciamos: ' : 'Próximo: ';
+    const pLower = (step.phase || '').toLowerCase();
 
-    let postureStr = '';
-    const nameLower = (step.phase || '').toLowerCase();
-    if (step.posture === 'aero' && !nameLower.includes('aero')) {
-      postureStr = ', en posición aero';
-    } else if (step.posture === 'de pie' && !nameLower.includes('de pie')) {
-      postureStr = ', de pie';
+    let cue = '';
+    if (pLower.includes('calentamiento')) {
+      cue = `Calentamiento${step.cadence ? `, ${step.cadence} RPM` : ''}`;
+    } else if (pLower.includes('enfriamiento')) {
+      cue = 'Enfriamiento, soltar piernas';
+    } else if (pLower.includes('sweet spot') || pLower.includes('sweetspot') || step.zone === 'SS') {
+      const aero = step.posture === 'aero' ? ' aero' : '';
+      cue = `Sweet Spot${aero}, 158 a 170 pulsaciones`;
+    } else if (pLower.includes('umbral') || step.zone === 4) {
+      cue = 'Umbral, 153 a 170 pulsaciones';
+    } else if (step.posture === 'de pie' || pLower.includes('de pie')) {
+      cue = `De pie, cadencia ${step.cadence || 75}`;
+    } else if (step.posture === 'aero' || pLower.includes('aero')) {
+      cue = `Posición aero, ${step.cadence || 90} RPM`;
+    } else if (step.zone === 1 || pLower.includes('recuperaci') || pLower.includes('regenerativo')) {
+      cue = 'Recuperación suave';
+    } else if (step.zone === 2 || pLower.includes('fondo') || pLower.includes('z2')) {
+      cue = `Zona 2, ${step.cadence || 88} RPM`;
+    } else {
+      cue = `${step.phase.replace(/\(.*?\)/g, '').trim()}${step.cadence ? `, ${step.cadence} RPM` : ''}`;
     }
-    const cadenceStr = step.cadence ? `, a ${step.cadence} RPM` : '';
 
-    let targetCue = '';
-    const z = String(step.zone || '').toUpperCase();
-    if (z === 'SS' || nameLower.includes('sweet spot') || nameLower.includes('sweetspot')) {
-      targetCue = ', busca Sweet Spot entre 158 y 170 pulsaciones';
-    } else if (z === '4' || nameLower.includes('umbral')) {
-      targetCue = ', busca umbral entre 153 y 170 pulsaciones';
-    } else if (z === '2' || nameLower.includes('fondo') || nameLower.includes('z2')) {
-      targetCue = ', zona 2 aeróbica entre 113 y 132 pulsaciones';
-    } else if (z === '1' || nameLower.includes('recuperaci') || nameLower.includes('regenerativo')) {
-      targetCue = ', pedaleo suave por debajo de 113 pulsaciones';
-    }
-
-    if (isStart) {
-      return `Comenzamos: ${name}${postureStr}${cadenceStr}${targetCue}.`;
-    }
-    return `En diez segundos: ${name}${postureStr}${cadenceStr}${targetCue}.`;
+    return `${prefix}${cue}.`;
   }
 
   announce(text) {
