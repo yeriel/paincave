@@ -368,27 +368,12 @@ export class UIManager {
 
   // Render del Pool de Rutinas (Limpio y directo)
   updateMicrocycleBanner() {
-    const todayEl = document.getElementById('microcycleBannerToday');
-    const nextEl = document.getElementById('microcycleBannerNext');
-    if (!todayEl && !nextEl) return;
-
-    const overview = trainingTracker.getWeekOverview();
-    const todayCycle = overview.todayCycle;
-    const tomorrowCycle = overview.tomorrowCycle;
-
-    if (todayEl && todayCycle) {
-      todayEl.textContent = `Hoy · ${todayCycle.shortName}`;
-    }
-    if (nextEl && tomorrowCycle) {
-      nextEl.textContent = `Mañana: ${tomorrowCycle.shortName}`;
-    }
+    // No-op: banner removido para evitar redundancia (KISS)
   }
 
   renderRoutinesPool(selectedLevel = 'fase1', activeCategory = 'todos') {
     const container = document.getElementById('routinesPoolGrid');
     if (!container) return;
-
-    this.updateMicrocycleBanner();
 
     container.innerHTML = '';
 
@@ -594,30 +579,15 @@ export class UIManager {
     const prog = trainingTracker.getCurrentProgress();
     const weekOverview = trainingTracker.getWeekOverview();
 
-    // 1. Tarjeta: ¿En qué fase estoy?
+    // 1. Resumen compacto del plan
     const phaseName = document.getElementById('modalTrackPhaseName');
     if (phaseName) phaseName.textContent = `${prog.matchedPhase.name} (${prog.matchedPhase.subtitle})`;
 
     const phaseSub = document.getElementById('modalTrackPhaseSub');
-    if (phaseSub) phaseSub.textContent = `Semanas ${prog.matchedPhase.startWeek} a ${prog.matchedPhase.endWeek} · ${prog.matchedPhase.description}`;
+    if (phaseSub) phaseSub.textContent = `Semana ${prog.weekInPhase} de ${prog.totalWeeksInPhase} · Semanas ${prog.matchedPhase.startWeek}-${prog.matchedPhase.endWeek}`;
 
-    const phaseWeekIn = document.getElementById('modalTrackPhaseWeekIn');
-    if (phaseWeekIn) phaseWeekIn.textContent = `Semana ${prog.weekInPhase} de ${prog.totalWeeksInPhase}`;
-
-    const phasePct = document.getElementById('modalTrackPhasePct');
-    if (phasePct) phasePct.textContent = `${prog.phaseProgressPct}%`;
-
-    const phaseBar = document.getElementById('modalTrackPhaseBar');
-    if (phaseBar) phaseBar.style.width = `${prog.phaseProgressPct}%`;
-
-    // 2. Tarjeta: ¿Cuántas semanas llevo?
     const totalWeeksTitle = document.getElementById('modalTrackTotalWeeksTitle');
     if (totalWeeksTitle) totalWeeksTitle.textContent = `Semana ${prog.currentWeek} de ${prog.totalWeeks}`;
-
-    const activeWeeksLabel = document.getElementById('modalTrackActiveWeeksLabel');
-    if (activeWeeksLabel) {
-      activeWeeksLabel.textContent = `${prog.totalActiveWeeks} ${prog.totalActiveWeeks === 1 ? 'semana registrada' : 'semanas registradas'} (${prog.totalWorkouts} sesiones totales)`;
-    }
 
     const overallPct = document.getElementById('modalTrackOverallPct');
     if (overallPct) overallPct.textContent = `${prog.overallProgressPct}%`;
@@ -625,64 +595,61 @@ export class UIManager {
     const overallBar = document.getElementById('modalTrackOverallBar');
     if (overallBar) overallBar.style.width = `${prog.overallProgressPct}%`;
 
-    // 3. Tarjeta: Esta Semana
     const thisWeekDays = document.getElementById('modalTrackThisWeekDays');
-    if (thisWeekDays) thisWeekDays.textContent = `${weekOverview.completedDaysCount} / ${weekOverview.targetDaysCount} Sesiones`;
+    if (thisWeekDays) thisWeekDays.textContent = `${weekOverview.completedDaysCount} Sesiones`;
 
     const thisWeekMinutes = document.getElementById('modalTrackThisWeekMinutes');
-    if (thisWeekMinutes) thisWeekMinutes.textContent = `${weekOverview.totalMinutesThisWeek} min pedaleados`;
+    if (thisWeekMinutes) thisWeekMinutes.textContent = `${weekOverview.totalMinutesThisWeek} min`;
 
-    // 4. Lista de días de la semana actual
-    const weekRangeLabel = document.getElementById('modalTrackWeekRange');
-    if (weekRangeLabel) {
-      const first = weekOverview.days[0].date;
-      const last = weekOverview.days[6].date;
-      weekRangeLabel.textContent = `${first.slice(5)} al ${last.slice(5)}`;
-    }
+    const totalHistoryBadge = document.getElementById('modalTrackTotalHistoryBadge');
+    if (totalHistoryBadge) totalHistoryBadge.textContent = `${prog.totalWorkouts} sesiones`;
 
-    const weekDaysList = document.getElementById('modalTrackWeekDaysList');
-    if (weekDaysList) {
-      weekDaysList.innerHTML = '';
-      weekOverview.days.forEach(day => {
-        const row = document.createElement('div');
-        row.className = `flex items-center justify-between p-2 rounded-lg border text-xs transition-colors ${
-          day.isCompleted 
-            ? 'border-emerald-600/40 bg-emerald-950/20' 
-            : (day.isToday ? 'border-blue-500/60 bg-blue-950/30' : 'border-slate-800 bg-slate-900/40')
-        }`;
+    // 2. Píldoras del Ciclo Rotativo (4 Días)
+    const cycleContainer = document.getElementById('modalCyclePillsContainer');
+    if (cycleContainer) {
+      cycleContainer.innerHTML = '';
+      const todayCycleDay = weekOverview.todayCycle?.cycleDay || 1;
+      const tomorrowCycleDay = weekOverview.tomorrowCycle?.cycleDay || 2;
 
-        let statusBadge = '';
-        if (day.isCompleted) {
-          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-900/80 text-emerald-300 border border-emerald-700/50 flex items-center gap-1"><i class="ti ti-check"></i> Hecho (${day.totalDuration} min)</span>`;
-        } else if (day.isToday) {
-          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-900/80 text-blue-300 border border-blue-600/50">Toca Hoy</span>`;
-        } else if (day.isRest) {
-          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400">Descanso</span>`;
-        } else {
-          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold text-slate-500">Pendiente</span>`;
+      ROTATING_CYCLE_DAYS.forEach(d => {
+        const isToday = (d.cycleDay === todayCycleDay);
+        const isTomorrow = (d.cycleDay === tomorrowCycleDay);
+
+        let borderClass = 'border-slate-800 bg-slate-850';
+        let badgeHtml = '';
+        if (isToday) {
+          borderClass = 'border-emerald-500/60 bg-emerald-950/30 ring-1 ring-emerald-500/40';
+          badgeHtml = `<span class="text-[8px] font-black uppercase text-emerald-400 bg-emerald-900/80 px-1 rounded">Hoy</span>`;
+        } else if (isTomorrow) {
+          borderClass = 'border-amber-500/50 bg-amber-950/20';
+          badgeHtml = `<span class="text-[8px] font-black uppercase text-amber-400 bg-amber-900/80 px-1 rounded">Mañana</span>`;
         }
 
-        const sessionSummary = day.workouts.length > 0
-          ? day.workouts.map(w => w.session).join(' + ')
-          : day.expectedTitle;
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = `p-2 rounded-lg border ${borderClass} hover:border-slate-600 transition-all text-left flex flex-col justify-between cursor-pointer active:scale-95`;
+        pill.title = 'Toca para alinear este día como HOY en el ciclo';
+        pill.onclick = () => window.painCaveApp.alignCycleDay(d.cycleDay);
 
-        row.innerHTML = `
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="font-bold text-slate-300 w-14 shrink-0">${day.dayName}</span>
-            <span class="text-[11px] text-slate-400 truncate">${sessionSummary}</span>
+        pill.innerHTML = `
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[9px] font-bold text-slate-400 uppercase font-mono">Día ${d.cycleDay}</span>
+            ${badgeHtml}
           </div>
-          <div class="shrink-0 ml-2">${statusBadge}</div>
+          <div class="text-[11px] font-bold ${isToday ? 'text-white' : 'text-slate-300'} truncate">
+            ${d.shortName.replace(/Día \d+: /, '')}
+          </div>
         `;
-        weekDaysList.appendChild(row);
+        cycleContainer.appendChild(pill);
       });
     }
 
-    // 5. Calendario y detalle del día seleccionado
+    // 3. Calendario y detalle del día seleccionado
     const dateToSelect = selectedDate || this.selectedCalendarDate || formatDateISO(new Date());
     this.renderCalendar(dateToSelect);
     this.renderDayDetail(dateToSelect);
 
-    // 6. Historial de sesiones
+    // 4. Historial de sesiones
     this.renderWorkoutHistory();
   }
 

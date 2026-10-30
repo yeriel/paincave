@@ -359,7 +359,6 @@ class PainCaveApp {
   alignCycleDay(cycleDay) {
     trainingTracker.setCycleAnchor(formatDateISO(new Date()), cycleDay);
     ui.renderRoutinesPool(this.selectedLevel, this.activeCategory);
-    ui.updateMicrocycleBanner();
     if (ui.activeStatsTab === 'tracking') {
       ui.renderTrackingTab();
     }

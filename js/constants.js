@@ -5,23 +5,12 @@
 export const DEFAULT_MAX_HR = 189;
 
 export const RANKS = [
-  { max: 1000, title: "Novato" },
-  { max: 3000, title: "Dominguero" },
-  { max: 7000, title: "Cicloturista" },
-  { max: 15000, title: "Aficionado" },
-  { max: 25000, title: "Rodador" },
-  { max: 40000, title: "Aguador" },
-  { max: 60000, title: "Gregario" },
-  { max: 85000, title: "Lanzador" },
-  { max: 120000, title: "Cazaetapas" },
-  { max: 160000, title: "Clasicómano" },
-  { max: 210000, title: "Escalador Puro" },
-  { max: 270000, title: "Contrarrelojista" },
-  { max: 350000, title: "Capo de Escuadra" },
-  { max: 450000, title: "Leyenda del Tour" },
-  { max: 550000, title: "Maillot Verde" },
-  { max: 700000, title: "Maillot a Lunares" },
-  { max: Infinity, title: "Maillot Amarillo" }
+  { max: 2500, title: "Novato" },
+  { max: 8000, title: "Principiante" },
+  { max: 20000, title: "Intermedio" },
+  { max: 45000, title: "Avanzado" },
+  { max: 90000, title: "Élite" },
+  { max: Infinity, title: "Pro" }
 ];
 
 export const LEVEL_XP_MULTIPLIERS = {

@@ -205,20 +205,6 @@
         </div>
       </div>
 
-      <!-- BANNER DE ESTADO DEL MICROCICLO ROTATIVO -->
-      <div id="microcycleStatusBanner" class="mb-2.5 p-2 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-between shadow-sm">
-        <div class="flex items-center gap-2 min-w-0">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
-          <div class="truncate">
-            <span class="text-[10px] uppercase font-mono font-bold text-slate-400 block" id="microcycleBannerToday">Ciclo Rotativo 4D</span>
-            <span class="text-xs font-bold text-white truncate block" id="microcycleBannerNext">Mañana: Día 2 · Sweet Spot</span>
-          </div>
-        </div>
-        <button type="button" onclick="window.painCaveApp.openStatsModal('tracking')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white transition-colors border border-blue-500/30 shrink-0 ml-2">
-          Ver Ciclo
-        </button>
-      </div>
-
       <!-- FILTROS DE CATEGORÍA DEL MICROCICLO ROTATIVO -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 mb-2.5 custom-scrollbar">
         <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Todos</button>
@@ -333,88 +319,68 @@
     <!-- MODAL ESTADÍSTICAS & TRACKING -->
     <div id="statsModal" class="hidden text-center bg-slate-800 border border-slate-700 p-4 sm:p-5 rounded-2xl w-full max-w-lg shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
       <!-- SELECTOR DE PESTAÑAS -->
-      <div class="flex p-1 bg-slate-900 rounded-xl border border-slate-700/80 mb-3.5">
+      <div class="flex p-1 bg-slate-900 rounded-xl border border-slate-700/80 mb-3">
         <button id="modalTabTrackingBtn" onclick="window.painCaveApp.switchStatsTab('tracking')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5">
-          <i class="ti ti-chart-bar text-sm"></i> Seguimiento del Plan
+          <i class="ti ti-chart-bar text-sm"></i> Seguimiento
         </button>
         <button id="modalTabProfileBtn" onclick="window.painCaveApp.switchStatsTab('profile')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
-          <i class="ti ti-trophy text-sm"></i> Perfil & Gamificación
+          <i class="ti ti-trophy text-sm"></i> Perfil & Zonas
         </button>
       </div>
 
       <!-- PESTAÑA 1: SEGUIMIENTO DEL PLAN -->
-      <div id="modalTabTrackingContent" class="space-y-3 text-left">
-        <!-- 1. RESUMEN: ¿QUÉ FASE? ¿CUÁNTAS SEMANAS? ¿QUÉ DÍA? -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <!-- Tarjeta 1: Fase Actual -->
-          <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80 flex flex-col justify-between">
-            <div>
-              <div class="text-[9px] font-black uppercase tracking-wider text-slate-400 mb-0.5">¿En qué fase estoy?</div>
-              <div id="modalTrackPhaseName" class="text-xs sm:text-sm font-black text-white truncate">Fase 1 (Cimientos)</div>
-              <div id="modalTrackPhaseSub" class="text-[10px] text-slate-400 truncate">Semanas 1 a 4</div>
-            </div>
-            <div class="mt-2">
-              <div class="flex justify-between text-[9px] font-mono text-slate-400 mb-0.5">
-                <span id="modalTrackPhaseWeekIn">Semana 1/4</span>
-                <span id="modalTrackPhasePct">25%</span>
-              </div>
-              <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                <div id="modalTrackPhaseBar" class="h-full bg-blue-500 rounded-full transition-all" style="width: 25%"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tarjeta 2: Semanas Llevadas -->
-          <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80 flex flex-col justify-between">
-            <div>
-              <div class="text-[9px] font-black uppercase tracking-wider text-slate-400 mb-0.5">¿Cuántas semanas llevo?</div>
-              <div id="modalTrackTotalWeeksTitle" class="text-xs sm:text-sm font-black text-emerald-400 truncate">Semana 1 de 12</div>
-              <div id="modalTrackActiveWeeksLabel" class="text-[10px] text-slate-400">1 semana activa</div>
-            </div>
-            <div class="mt-2">
-              <div class="flex justify-between text-[9px] font-mono text-slate-400 mb-0.5">
-                <span>Ciclo Global</span>
-                <span id="modalTrackOverallPct">8%</span>
-              </div>
-              <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                <div id="modalTrackOverallBar" class="h-full bg-emerald-500 rounded-full transition-all" style="width: 8%"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tarjeta 3: Esta Semana -->
-          <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80 flex flex-col justify-between">
-            <div>
-              <div class="text-[9px] font-black uppercase tracking-wider text-slate-400 mb-0.5">Esta Semana</div>
-              <div id="modalTrackThisWeekDays" class="text-xs sm:text-sm font-black text-amber-400 truncate">0 / 6 Sesiones</div>
-              <div id="modalTrackThisWeekMinutes" class="text-[10px] text-slate-400">0 min pedaleados</div>
-            </div>
-            <div class="mt-2 text-[10px] font-semibold text-slate-400 flex items-center gap-1">
-              <i class="ti ti-flame text-orange-400"></i> Microciclo 6+1
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. DESGLOSE DE LA SEMANA ACTUAL (¿Qué día hice?) -->
+      <div id="modalTabTrackingContent" class="space-y-2.5 text-left">
+        <!-- 1. RESUMEN COMPACTO DEL PLAN -->
         <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
-          <div class="flex justify-between items-center mb-2">
-            <div class="text-xs font-bold text-white flex items-center gap-1.5">
-              <i class="ti ti-calendar-check text-blue-400"></i> ¿Qué día hice esta semana?
+          <div class="flex items-center justify-between mb-1.5">
+            <div>
+              <span id="modalTrackPhaseName" class="text-xs sm:text-sm font-black text-white">Fase 1 (Cimientos)</span>
+              <span id="modalTrackPhaseSub" class="text-[10px] text-slate-400 block">Semanas 1 a 4</span>
             </div>
-            <span class="text-[10px] font-mono text-slate-400" id="modalTrackWeekRange">Semana actual</span>
+            <div class="text-right">
+              <span id="modalTrackTotalWeeksTitle" class="text-xs font-black text-emerald-400 block">Semana 1 de 12</span>
+              <span id="modalTrackOverallPct" class="text-[10px] font-mono text-slate-400">8%</span>
+            </div>
           </div>
-          <div id="modalTrackWeekDaysList" class="space-y-1.5">
-            <!-- Renderizado dinámicamente -->
+          <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden mb-2">
+            <div id="modalTrackOverallBar" class="h-full bg-emerald-500 rounded-full transition-all" style="width: 8%"></div>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-slate-800/80 text-center">
+            <div class="bg-slate-800/60 p-1.5 rounded-lg">
+              <span class="text-[9px] uppercase text-slate-400 font-bold block">Esta Sem.</span>
+              <span id="modalTrackThisWeekDays" class="text-xs font-bold text-white">0 Sesiones</span>
+            </div>
+            <div class="bg-slate-800/60 p-1.5 rounded-lg">
+              <span class="text-[9px] uppercase text-slate-400 font-bold block">Tiempo</span>
+              <span id="modalTrackThisWeekMinutes" class="text-xs font-bold text-blue-400">0 min</span>
+            </div>
+            <div class="bg-slate-800/60 p-1.5 rounded-lg">
+              <span class="text-[9px] uppercase text-slate-400 font-bold block">Total</span>
+              <span id="modalTrackTotalHistoryBadge" class="text-xs font-bold text-emerald-400">0 sesiones</span>
+            </div>
           </div>
         </div>
 
-        <!-- 3. CALENDARIO INTERACTIVO & DETALLE POR DÍA -->
+        <!-- 2. ESTADO DEL CICLO ROTATIVO (4 DÍAS) -->
+        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i class="ti ti-repeat text-blue-400"></i> Ciclo Rotativo (4 Días)
+            </span>
+            <span class="text-[9px] text-slate-400">Toca para alinear</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5" id="modalCyclePillsContainer">
+            <!-- Rellenado dinámicamente -->
+          </div>
+        </div>
+
+        <!-- 3. CALENDARIO INTERACTIVO & DETALLE -->
         <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
           <div class="flex justify-between items-center mb-2">
             <div class="text-xs font-bold text-white" id="calendarMonthLabel">Mes Actual</div>
-            <span class="text-[10px] text-slate-400">Toca un día para ver detalle</span>
+            <span class="text-[9px] text-slate-400">Toca un día para ver detalle</span>
           </div>
-          <div class="grid grid-cols-7 gap-1 mb-1 text-center">
+          <div class="grid grid-cols-7 gap-1 mb-1 text-center font-mono">
             <div class="text-[8px] font-bold text-slate-500 uppercase">L</div>
             <div class="text-[8px] font-bold text-slate-500 uppercase">M</div>
             <div class="text-[8px] font-bold text-slate-500 uppercase">X</div>
@@ -423,23 +389,20 @@
             <div class="text-[8px] font-bold text-slate-500 uppercase">S</div>
             <div class="text-[8px] font-bold text-slate-500 uppercase">D</div>
           </div>
-          <div id="calendarGrid" class="grid grid-cols-7 gap-1 mb-2.5"></div>
+          <div id="calendarGrid" class="grid grid-cols-7 gap-1 mb-2"></div>
 
           <!-- Tarjeta de Detalle del Día Seleccionado -->
-          <div id="calendarDayDetailBox" class="bg-slate-800/80 rounded-lg p-2.5 border border-slate-700/80 text-xs">
-            <div class="text-slate-400 text-center py-1">Selecciona una fecha del calendario para ver los detalles.</div>
+          <div id="calendarDayDetailBox" class="bg-slate-800/80 rounded-lg p-2 border border-slate-700/80 text-xs">
+            <div class="text-slate-400 text-center py-1">Selecciona una fecha del calendario.</div>
           </div>
         </div>
 
-        <!-- 4. HISTORIAL DE SESIONES REGISTRADAS -->
+        <!-- 4. HISTORIAL RECIENTE -->
         <div class="bg-slate-900 rounded-xl p-3 border border-slate-700/80">
-          <div class="flex justify-between items-center mb-2">
-            <div class="text-xs font-bold text-white flex items-center gap-1.5">
-              <i class="ti ti-history text-slate-400"></i> Historial de Sesiones Registradas
-            </div>
-            <span id="modalTrackTotalHistoryBadge" class="text-[10px] font-mono text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">0 sesiones</span>
+          <div class="text-xs font-bold text-white mb-2 flex items-center gap-1.5">
+            <i class="ti ti-history text-slate-400"></i> Historial Reciente
           </div>
-          <div id="workoutHistoryContainer" class="max-h-44 overflow-y-auto custom-scrollbar space-y-1.5">
+          <div id="workoutHistoryContainer" class="max-h-36 overflow-y-auto custom-scrollbar space-y-1.5">
             <!-- Elementos de historial -->
           </div>
         </div>
