@@ -7,7 +7,7 @@ import { gamification } from './gamification.js';
 import { getZoneBpmRange, ROUTINES_POOL } from './workouts.js';
 import { exportToTCX } from './exporter.js';
 import { soundEngine } from './audio.js';
-import { trainingTracker, formatDateISO } from './trainingTracker.js';
+import { trainingTracker, formatDateISO, getCycleDayForDate, ROTATING_CYCLE_DAYS } from './trainingTracker.js';
 
 const CIRC = 2 * Math.PI * 90; // Radio SVG 90px (~565.48)
 
@@ -367,11 +367,34 @@ export class UIManager {
   }
 
   // Render del Pool de Rutinas (Limpio y directo)
+  updateMicrocycleBanner() {
+    const todayEl = document.getElementById('microcycleBannerToday');
+    const nextEl = document.getElementById('microcycleBannerNext');
+    if (!todayEl && !nextEl) return;
+
+    const overview = trainingTracker.getWeekOverview();
+    const todayCycle = overview.todayCycle;
+    const tomorrowCycle = overview.tomorrowCycle;
+
+    if (todayEl && todayCycle) {
+      todayEl.textContent = `Hoy · ${todayCycle.name}`;
+    }
+    if (nextEl && tomorrowCycle) {
+      nextEl.textContent = `Mañana toca: ${tomorrowCycle.name}`;
+    }
+  }
+
   renderRoutinesPool(selectedLevel = 'fase1', activeCategory = 'todos') {
     const container = document.getElementById('routinesPoolGrid');
     if (!container) return;
 
+    this.updateMicrocycleBanner();
+
     container.innerHTML = '';
+
+    const weekOverview = trainingTracker.getWeekOverview();
+    const todayCycle = weekOverview.todayCycle;
+    const tomorrowCycle = weekOverview.tomorrowCycle;
 
     const filtered = ROUTINES_POOL.filter(r => {
       return activeCategory === 'todos' || r.category === activeCategory;
@@ -383,19 +406,32 @@ export class UIManager {
       const minutes = Math.round(totalSec / 60);
       const miniSvg = generateMiniProfileSvg(steps);
 
+      const isTodayRoutine = (todayCycle && todayCycle.routineId === routine.id);
+      const isTomorrowRoutine = (tomorrowCycle && tomorrowCycle.routineId === routine.id);
+
+      let badgeHtml = '';
+      if (isTodayRoutine) {
+        badgeHtml = `<span class="text-[9px] uppercase font-bold text-emerald-400 bg-emerald-950/90 px-1.5 py-0.5 rounded border border-emerald-500/40 flex items-center gap-1"><i class="ti ti-target"></i> Toca Hoy</span>`;
+      } else if (isTomorrowRoutine) {
+        badgeHtml = `<span class="text-[9px] uppercase font-bold text-amber-400 bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-500/40 flex items-center gap-1"><i class="ti ti-clock"></i> Toca Mañana</span>`;
+      }
+
       const card = document.createElement('button');
-      card.className = `p-3 rounded-xl border border-${routine.colorClass}-600/30 bg-slate-800/90 hover:bg-slate-750 text-left transition-all active:scale-[0.98] group flex flex-col justify-between shadow-sm`;
+      card.className = `p-3 rounded-xl border ${isTodayRoutine ? 'border-emerald-500/40 bg-emerald-950/20' : (isTomorrowRoutine ? 'border-amber-500/50 bg-amber-950/20' : `border-${routine.colorClass}-600/30`)} bg-slate-800/90 hover:bg-slate-750 text-left transition-all active:scale-[0.98] group flex flex-col justify-between shadow-sm`;
       card.onclick = () => window.painCaveApp.openPreWorkoutModal(routine.id);
 
       card.innerHTML = `
         <div class="w-full">
           <div class="flex items-center justify-between mb-1.5">
-            <span class="text-sm font-black text-white group-hover:text-${routine.colorClass}-400 transition-colors">
+            <span class="text-sm font-black text-white group-hover:text-${routine.colorClass}-400 transition-colors truncate mr-1.5">
               ${routine.title}
             </span>
-            <span class="text-[11px] font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">
-              ${minutes} min
-            </span>
+            <div class="flex items-center gap-1 shrink-0">
+              ${badgeHtml}
+              <span class="text-[11px] font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">
+                ${minutes} min
+              </span>
+            </div>
           </div>
           <div class="text-[11px] text-slate-400 mb-2">
             ${steps.length} bloques · ${routine.subtitle}
@@ -411,24 +447,34 @@ export class UIManager {
       container.appendChild(card);
     });
 
-    // Tarjeta informativa de Domingo (Descanso total) si estamos viendo todos los días
-    if (activeCategory === 'todos') {
-      const sundayCard = document.createElement('div');
-      sundayCard.className = 'p-3 rounded-xl border border-slate-700/50 bg-slate-800/40 text-left flex flex-col justify-between opacity-75';
-      sundayCard.innerHTML = `
+    // Tarjeta informativa de Día 4 (Descanso total) si estamos viendo ciclo completo o descanso
+    if (activeCategory === 'todos' || activeCategory === 'descanso') {
+      const isTodayRest = (todayCycle && todayCycle.isRest);
+      const isTomorrowRest = (tomorrowCycle && tomorrowCycle.isRest);
+
+      let restBadge = '';
+      if (isTodayRest) {
+        restBadge = `<span class="text-[9px] uppercase font-bold text-blue-400 bg-blue-950/90 px-1.5 py-0.5 rounded border border-blue-500/40">Toca Hoy</span>`;
+      } else if (isTomorrowRest) {
+        restBadge = `<span class="text-[9px] uppercase font-bold text-amber-400 bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-500/40">Toca Mañana</span>`;
+      } else {
+        restBadge = `<span class="text-[9px] uppercase font-mono font-bold text-slate-400 bg-slate-900/60 px-1.5 py-0.5 rounded border border-slate-800">Asimilación</span>`;
+      }
+
+      const restCard = document.createElement('div');
+      restCard.className = `p-3 rounded-xl border ${isTodayRest ? 'border-blue-500/60' : 'border-slate-700/50'} bg-slate-800/40 text-left flex flex-col justify-between opacity-80`;
+      restCard.innerHTML = `
         <div class="flex items-center justify-between mb-1">
           <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-            <i class="ti ti-moon text-blue-400"></i> Domingo · Descanso Total
+            <i class="ti ti-moon text-blue-400"></i> Día 4 · Descanso Total
           </span>
-          <span class="text-[10px] uppercase font-mono font-bold text-slate-400 bg-slate-900/60 px-1.5 py-0.5 rounded border border-slate-800">
-            Asimilación
-          </span>
+          ${restBadge}
         </div>
         <div class="text-[11px] text-slate-400">
-          Cero pedaleo. La adaptación mitocondrial y muscular se consolida durante el descanso.
+          Cero pedaleo. La adaptación mitocondrial y muscular se consolida durante el descanso completo.
         </div>
       `;
-      container.appendChild(sundayCard);
+      container.appendChild(restCard);
     }
   }
 
@@ -610,7 +656,7 @@ export class UIManager {
           statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-900/80 text-emerald-300 border border-emerald-700/50 flex items-center gap-1"><i class="ti ti-check"></i> Hecho (${day.totalDuration} min)</span>`;
         } else if (day.isToday) {
           statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-900/80 text-blue-300 border border-blue-600/50">Toca Hoy</span>`;
-        } else if (day.dayIndex === 6) {
+        } else if (day.isRest) {
           statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400">Descanso</span>`;
         } else {
           statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold text-slate-500">Pendiente</span>`;
@@ -721,13 +767,22 @@ export class UIManager {
     const workouts = trainingTracker.getWorkoutsForDate(dateStr);
 
     if (workouts.length === 0) {
+      const anchorDate = trainingTracker.plan.cycleAnchorDate || '2026-10-29';
+      const anchorDay = trainingTracker.plan.cycleAnchorDay || 1;
+      const cycleDay = getCycleDayForDate(dateStr, anchorDate, anchorDay);
+      const isRest = cycleDay.isRest;
+
       box.innerHTML = `
         <div class="flex items-center justify-between text-slate-400">
           <div>
             <span class="font-bold text-slate-300">${dayName}, ${dateStr}</span>
-            <span class="block text-[11px] text-slate-500 mt-0.5">Día de descanso o sin entrenamientos registrados.</span>
+            <span class="block text-[11px] ${isRest ? 'text-slate-400' : 'text-blue-300 font-semibold'} mt-0.5">
+              ${isRest ? '🛌 Programado: Descanso Total (Asimilación)' : `🚴 Programado: ${cycleDay.name}`}
+            </span>
           </div>
-          <span class="text-[10px] uppercase font-mono px-2 py-0.5 bg-slate-900 rounded border border-slate-700 text-slate-400">Sin sesión</span>
+          <span class="text-[10px] uppercase font-mono px-2 py-0.5 bg-slate-900 rounded border border-slate-700 ${isRest ? 'text-slate-400' : 'text-blue-400 font-bold'}">
+            ${cycleDay.shortName}
+          </span>
         </div>
       `;
       return;

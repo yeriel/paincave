@@ -6,9 +6,11 @@
 import { gamification } from './gamification.js';
 
 export const DEFAULT_PLAN_CONFIG = {
-  id: 'plan_spinning_progresivo',
-  name: 'Plan Personalizado Spinning',
+  id: 'plan_spinning_rotativo_4d',
+  name: 'Plan Rotativo 4D Spinning',
   startDate: null,
+  cycleAnchorDate: '2026-10-29',
+  cycleAnchorDay: 1, // 2026-10-29 fue Día 1 (Fondo Z2), por lo que mañana 2026-10-30 es Día 2 (Sweet Spot)
   currentWeek: 1,
   currentPhaseId: 'fase1',
   cycleNumber: 1,
@@ -16,39 +18,88 @@ export const DEFAULT_PLAN_CONFIG = {
     {
       id: 'fase1',
       name: 'Fase 1',
-      subtitle: 'Cimientos Aeróbicos',
+      subtitle: 'Cimientos y Sweet Spot (S1-4)',
       weeks: 4,
-      description: 'Base aeróbica Z2, adaptación postural al manillar/sillín y cadencia fluida.',
+      description: 'Fondo Z2 de 60 min (113-132 BPM), adaptación postural aero y Sweet Spot 2x12 min (158-170 BPM).',
       colorClass: 'blue'
     },
     {
       id: 'fase2',
       name: 'Fase 2',
-      subtitle: 'Densidad y Sweet Spot',
+      subtitle: 'Densidad y Extensión Sweet Spot (S5-8)',
       weeks: 4,
-      description: 'Aumento de densidad en Sweet Spot (88-93% FTP) y umbral Z4 sostenido.',
+      description: 'Z2 de 60 min con bloques aero sostenidos y Sweet Spot 2x15 min con alta cadencia.',
       colorClass: 'amber'
     },
     {
       id: 'fase3',
       name: 'Fase 3',
-      subtitle: 'Dominio Aero y Umbral FTP',
+      subtitle: 'Dominio Aero y Sweet Spot 2x20 (S9-12)',
       weeks: 4,
-      description: 'Bloques aero extendidos, resistencia a la fatiga neuromuscular y picos de potencia.',
+      description: 'Z2 de 60 min con triple bloque aero y Sweet Spot 2x20 min (60 min totales de calidad).',
       colorClass: 'rose'
     }
   ]
 };
 
-export const WEEK_DAYS_ROUTINES = [
-  { dayIndex: 0, dayName: 'Lunes', shortName: 'Lun', routineId: 'lunes_fondo_aero', expectedTitle: 'Fondo Aero Z2', category: 'fondo' },
-  { dayIndex: 1, dayName: 'Martes', shortName: 'Mar', routineId: 'martes_sweet_spot', expectedTitle: 'Sweet Spot (SST)', category: 'calidad' },
-  { dayIndex: 2, dayName: 'Miércoles', shortName: 'Mié', routineId: 'miercoles_recuperacion', expectedTitle: 'Recuperación Z1', category: 'recuperacion' },
-  { dayIndex: 3, dayName: 'Jueves', shortName: 'Jue', routineId: 'jueves_fondo_z2', expectedTitle: 'Base Z2 Ágil', category: 'fondo' },
-  { dayIndex: 4, dayName: 'Viernes', shortName: 'Vie', routineId: 'viernes_umbral_z4', expectedTitle: 'Umbral FTP Z4', category: 'calidad' },
-  { dayIndex: 5, dayName: 'Sábado', shortName: 'Sáb', routineId: 'sabado_fondo_extendido', expectedTitle: 'Fondo Largo Z2', category: 'fondo' },
-  { dayIndex: 6, dayName: 'Domingo', shortName: 'Dom', routineId: null, expectedTitle: 'Descanso Total', category: 'descanso' }
+export const ROTATING_CYCLE_DAYS = [
+  {
+    cycleDay: 1,
+    cycleIndex: 0,
+    routineId: 'dia1_fondo_z2',
+    name: 'Día 1 · Fondo Z2 & Aero (60 min)',
+    shortName: 'Día 1: Fondo Z2',
+    category: 'fondo',
+    description: 'Resistencia base 113-132 BPM (60 min) con bloques aero',
+    isRest: false
+  },
+  {
+    cycleDay: 2,
+    cycleIndex: 1,
+    routineId: 'dia2_sweet_spot',
+    name: 'Día 2 · Calidad Sweet Spot (158-170 BPM)',
+    shortName: 'Día 2: Sweet Spot',
+    category: 'calidad',
+    description: 'Intervalos submáximos 84-90% FC Máx (158-170 BPM)',
+    isRest: false
+  },
+  {
+    cycleDay: 3,
+    cycleIndex: 2,
+    routineId: 'dia3_recuperacion',
+    name: 'Día 3 · Recuperación Activa Z1',
+    shortName: 'Día 3: Recuperación',
+    category: 'recuperacion',
+    description: 'Regenerativo suave < 113 BPM para soltar piernas',
+    isRest: false
+  },
+  {
+    cycleDay: 4,
+    cycleIndex: 3,
+    routineId: null,
+    name: 'Día 4 · Descanso Total',
+    shortName: 'Día 4: Descanso',
+    category: 'descanso',
+    description: 'Cero pedaleo. Asimilación y regeneración neuromuscular',
+    isRest: true
+  }
 ];
+
+export const WEEK_DAYS_ROUTINES = ROTATING_CYCLE_DAYS;
+
+export function getCycleDayForDate(dateStr, anchorDate = '2026-10-29', anchorCycleDay = 1) {
+  try {
+    const [y1, m1, d1] = anchorDate.split('-').map(Number);
+    const [y2, m2, d2] = dateStr.split('-').map(Number);
+    const t1 = Date.UTC(y1, m1 - 1, d1);
+    const t2 = Date.UTC(y2, m2 - 1, d2);
+    const diffDays = Math.round((t2 - t1) / (1000 * 60 * 60 * 24));
+    const offset = ((anchorCycleDay - 1 + diffDays) % 4 + 4) % 4;
+    return ROTATING_CYCLE_DAYS[offset];
+  } catch (e) {
+    return ROTATING_CYCLE_DAYS[0];
+  }
+}
 
 export function getMondayOfDate(d) {
   const date = new Date(d);
@@ -76,6 +127,9 @@ class TrainingTracker {
 
   loadPlan() {
     try {
+      if (typeof localStorage === 'undefined') {
+        return JSON.parse(JSON.stringify(DEFAULT_PLAN_CONFIG));
+      }
       const raw = localStorage.getItem(this.storageKey);
       if (!raw) {
         const initial = JSON.parse(JSON.stringify(DEFAULT_PLAN_CONFIG));
@@ -91,6 +145,16 @@ class TrainingTracker {
       if (!parsed.startDate) {
         parsed.startDate = formatDateISO(new Date());
       }
+      if (!parsed.cycleAnchorDate) {
+        parsed.cycleAnchorDate = DEFAULT_PLAN_CONFIG.cycleAnchorDate;
+        parsed.cycleAnchorDay = DEFAULT_PLAN_CONFIG.cycleAnchorDay;
+      }
+      // Actualizar a microciclo rotativo de 4 días si el plan tenía formato antiguo
+      if (parsed.phases && parsed.phases[0] && !parsed.phases[0].description.includes('60 min')) {
+        parsed.phases = JSON.parse(JSON.stringify(DEFAULT_PLAN_CONFIG.phases));
+        parsed.name = DEFAULT_PLAN_CONFIG.name;
+        this.savePlan(parsed);
+      }
       return parsed;
     } catch (e) {
       console.error("Error loading training plan:", e);
@@ -100,7 +164,9 @@ class TrainingTracker {
 
   savePlan(planData = this.plan) {
     this.plan = planData;
-    localStorage.setItem(this.storageKey, JSON.stringify(this.plan));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.plan));
+    }
   }
 
   getPhasesWithRanges() {
@@ -162,7 +228,7 @@ class TrainingTracker {
   }
 
   /**
-   * Obtiene el estado detallado de los 7 días de la semana actual
+   * Obtiene el estado detallado de los 7 días de la semana actual mapeados al ciclo rotativo
    */
   getWeekOverview(targetDate = new Date()) {
     const monday = getMondayOfDate(targetDate);
@@ -170,21 +236,35 @@ class TrainingTracker {
     const stats = gamification.getStats();
     const allWorkouts = stats.workouts || [];
 
-    const days = WEEK_DAYS_ROUTINES.map(dayMeta => {
+    const anchorDate = this.plan.cycleAnchorDate || '2026-10-29';
+    const anchorDay = this.plan.cycleAnchorDay || 1;
+
+    const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    const shortNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+
+    const days = [0, 1, 2, 3, 4, 5, 6].map(dayIndex => {
       const d = new Date(monday);
-      d.setDate(monday.getDate() + dayMeta.dayIndex);
+      d.setDate(monday.getDate() + dayIndex);
       const dateStr = formatDateISO(d);
 
-      // Buscar entrenamientos realizados en esa fecha exacta
+      const cycleMeta = getCycleDayForDate(dateStr, anchorDate, anchorDay);
       const dayWorkouts = allWorkouts.filter(w => w.date === dateStr);
       const isToday = (dateStr === todayStr);
       const isFuture = (dateStr > todayStr);
       const isCompleted = dayWorkouts.length > 0;
 
       return {
-        ...dayMeta,
+        dayIndex,
+        dayName: dayNames[dayIndex],
+        shortName: shortNames[dayIndex],
         date: dateStr,
         dayNumber: d.getDate(),
+        cycleDay: cycleMeta.cycleDay,
+        cycleName: cycleMeta.name,
+        routineId: cycleMeta.routineId,
+        expectedTitle: cycleMeta.name,
+        category: cycleMeta.category,
+        isRest: cycleMeta.isRest,
         isToday,
         isFuture,
         isCompleted,
@@ -194,16 +274,32 @@ class TrainingTracker {
       };
     });
 
-    const completedCount = days.filter(d => d.isCompleted && d.dayIndex !== 6).length; // Excluye domingo
+    const completedCount = days.filter(d => d.isCompleted && !d.isRest).length;
+    const activeDaysCount = days.filter(d => !d.isRest).length;
     const totalMinutesThisWeek = days.reduce((acc, d) => acc + d.totalDuration, 0);
+
+    const todayCycle = getCycleDayForDate(todayStr, anchorDate, anchorDay);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = formatDateISO(tomorrow);
+    const tomorrowCycle = getCycleDayForDate(tomorrowStr, anchorDate, anchorDay);
 
     return {
       mondayDate: formatDateISO(monday),
       days,
       completedDaysCount: completedCount,
-      targetDaysCount: 6, // Microciclo de 6 días
-      totalMinutesThisWeek
+      targetDaysCount: activeDaysCount,
+      totalMinutesThisWeek,
+      todayCycle,
+      tomorrowCycle
     };
+  }
+
+  setCycleAnchor(dateStr, cycleDay) {
+    this.plan.cycleAnchorDate = dateStr || formatDateISO(new Date());
+    this.plan.cycleAnchorDay = parseInt(cycleDay) || 1;
+    this.savePlan();
+    return this.getCurrentProgress();
   }
 
   /**

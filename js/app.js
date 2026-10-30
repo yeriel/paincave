@@ -8,7 +8,7 @@ import { gamification } from './gamification.js';
 import { workoutEngine } from './engine.js';
 import { ui, formatTime } from './ui.js';
 import { getRoutine, parseCSV, getZoneBpmRange } from './workouts.js';
-import { trainingTracker } from './trainingTracker.js';
+import { trainingTracker, formatDateISO } from './trainingTracker.js';
 
 class PainCaveApp {
   constructor() {
@@ -371,6 +371,15 @@ class PainCaveApp {
     ui.renderTrainingTrackerWidget();
     ui.renderTrackingTab();
     ui.updateMiniRank();
+  }
+
+  alignCycleDay(cycleDay) {
+    trainingTracker.setCycleAnchor(formatDateISO(new Date()), cycleDay);
+    ui.renderRoutinesPool(this.selectedLevel, this.activeCategory);
+    ui.updateMicrocycleBanner();
+    if (ui.activeStatsTab === 'tracking') {
+      ui.renderTrackingTab();
+    }
   }
 
   promptAddPhase() {

@@ -206,12 +206,26 @@
         </div>
       </div>
 
-      <!-- FILTROS DE CATEGORÍA SEMANAL -->
+      <!-- BANNER DE ESTADO DEL MICROCICLO ROTATIVO -->
+      <div id="microcycleStatusBanner" class="mb-3 p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+          <div class="truncate">
+            <span class="text-[10px] uppercase font-mono font-bold text-slate-400 block" id="microcycleBannerToday">Microciclo Rotativo 4D</span>
+            <span class="text-xs font-bold text-white truncate block" id="microcycleBannerNext">Mañana toca: Día 2 · Sweet Spot (158-170 BPM)</span>
+          </div>
+        </div>
+        <button type="button" onclick="window.painCaveApp.openStatsModal('tracking')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white transition-colors border border-blue-500/30 shrink-0 ml-2">
+          Ver Ciclo
+        </button>
+      </div>
+
+      <!-- FILTROS DE CATEGORÍA DEL MICROCICLO ROTATIVO -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1.5 mb-3 custom-scrollbar">
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Semana Completa</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Fondo Z2 (Lun/Jue/Sáb)</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">Calidad (Mar/Vie)</button>
-        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Recuperación (Mié)</button>
+        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Ciclo Completo (4D)</button>
+        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Día 1: Fondo Z2 (60m)</button>
+        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">Día 2: Sweet Spot</button>
+        <button class="cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Día 3: Recuperación</button>
       </div>
 
       <!-- GRID LIMPIO DEL POOL DE RUTINAS -->

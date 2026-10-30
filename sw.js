@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pain-cave-v11';
+const CACHE_NAME = 'pain-cave-v12';
 const urlsToCache = [
   './',
   './index.html',
@@ -20,30 +20,22 @@ const urlsToCache = [
   './js/engine.js',
   './js/ui.js',
   './js/app.js',
-  // Lunes: Fondo Aero Z2
-  './planes/lunes_fondo_aero/fase1.csv',
-  './planes/lunes_fondo_aero/fase2.csv',
-  './planes/lunes_fondo_aero/fase3.csv',
-  // Martes: Sweet Spot
-  './planes/martes_sweet_spot/fase1.csv',
-  './planes/martes_sweet_spot/fase2.csv',
-  './planes/martes_sweet_spot/fase3.csv',
-  // Miércoles: Recuperación Z1
-  './planes/miercoles_recuperacion/fase1.csv',
-  './planes/miercoles_recuperacion/fase2.csv',
-  './planes/miercoles_recuperacion/fase3.csv',
-  // Jueves: Fondo Z2 Continuo
-  './planes/jueves_fondo_z2/fase1.csv',
-  './planes/jueves_fondo_z2/fase2.csv',
-  './planes/jueves_fondo_z2/fase3.csv',
-  // Viernes: Intervalos Umbral Z4
-  './planes/viernes_umbral_z4/fase1.csv',
-  './planes/viernes_umbral_z4/fase2.csv',
-  './planes/viernes_umbral_z4/fase3.csv',
-  // Sábado: Fondo Aero Extendido
-  './planes/sabado_fondo_extendido/fase1.csv',
-  './planes/sabado_fondo_extendido/fase2.csv',
-  './planes/sabado_fondo_extendido/fase3.csv'
+  // Día 1: Fondo Z2 (60 min)
+  './planes/dia1_fondo_z2/fase1.csv',
+  './planes/dia1_fondo_z2/fase2.csv',
+  './planes/dia1_fondo_z2/fase3.csv',
+  // Día 2: Sweet Spot (158-170 BPM)
+  './planes/dia2_sweet_spot/fase1.csv',
+  './planes/dia2_sweet_spot/fase2.csv',
+  './planes/dia2_sweet_spot/fase3.csv',
+  // Día 3: Recuperación Activa Z1
+  './planes/dia3_recuperacion/fase1.csv',
+  './planes/dia3_recuperacion/fase2.csv',
+  './planes/dia3_recuperacion/fase3.csv',
+  // Calidad Opcional: Umbral FTP Z4
+  './planes/opcional_umbral_z4/fase1.csv',
+  './planes/opcional_umbral_z4/fase2.csv',
+  './planes/opcional_umbral_z4/fase3.csv'
 ];
 
 self.addEventListener('install', event => {

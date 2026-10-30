@@ -1,6 +1,7 @@
 /**
  * Catálogo, Gestor de Rutinas y Parser de Entrenamientos
- * Adaptado para Bicicleta de Spinning con sesiones de 45 a 60 minutos
+ * Adaptado para Bicicleta de Spinning con microciclo rotativo de 4 días
+ * Día 1: Fondo Z2 (60 min) -> Día 2: Sweet Spot (158-170 BPM) -> Día 3: Z1 (< 113 BPM) -> Día 4: Descanso Total
  */
 
 import { gamification } from './gamification.js';
@@ -24,7 +25,7 @@ export function getZoneBpmRange(zone, maxHr = null) {
     return `${Math.round(hr * 0.836)} - ${Math.round(hr * 0.90)}`; // 158 - 170 BPM
   }
   switch (parseInt(z)) {
-    case 1: return `< ${Math.round(hr * 0.60)}`; // < 113 BPM (< 60%)
+    case 1: return `<${Math.round(hr * 0.60)}`; // < 113 BPM (< 60%)
     case 2: return `${Math.round(hr * 0.60)} - ${Math.round(hr * 0.70)}`; // 113 - 132 BPM (60-70%)
     case 3: return `${Math.round(hr * 0.71)} - ${Math.round(hr * 0.80)}`; // 134 - 151 BPM (71-80%)
     case 4: return `${Math.round(hr * 0.81)} - ${Math.round(hr * 0.90)}`; // 153 - 170 BPM (81-90%)
@@ -150,23 +151,24 @@ export function parseCSV(content) {
     if (parts.length < 4) continue;
 
     const phase = parts[0];
-    const col2 = parseInt(parts[1]);
-    const rpe = parseFloat(parts[2].replace(',', '.'));
-    const dur = parseInt(parts[parts.length - 1]);
-    if (isNaN(dur)) continue;
-
-    let cadence = null;
-    let zone = null;
-    if (!isNaN(col2)) {
-      if (col2 >= 30) {
-        cadence = col2; // Cadencia en RPM
-      } else {
-        zone = col2; // Zona explícita
-        cadence = null;
-      }
-    }
+    const cadence = parseInt(parts[1]) || null;
+    const rpe = parseFloat(parts[2]) || null;
+    const dur = parseInt(parts[3]) || 60;
 
     const pLower = phase.toLowerCase();
+    let zone = null;
+    if (pLower.includes('sweet spot') || pLower.includes('sweetspot')) {
+      zone = 'SS';
+    } else if (pLower.includes('umbral') || pLower.includes('z4')) {
+      zone = 4;
+    } else if (pLower.includes('recuperaci') || pLower.includes('regenerativo') || pLower.includes('z1')) {
+      zone = 1;
+    } else if (pLower.includes('tempo') || pLower.includes('z3')) {
+      zone = 3;
+    } else if (pLower.includes('fondo') || pLower.includes('z2')) {
+      zone = 2;
+    }
+
     let posture = 'sentado';
     if (pLower.includes('aero')) posture = 'aero';
     else if (pLower.includes('de pie')) posture = 'de pie';
@@ -206,16 +208,16 @@ export function parseCSV(content) {
 }
 
 // ==============================================================================
-// POOL OFICIAL DE RUTINAS PARA SPINNING (45 - 60 MINUTOS)
+// POOL OFICIAL DE RUTINAS PARA SPINNING (MICROCICLO ROTATIVO 4D)
 // ==============================================================================
 
 export const ROUTINES_POOL = [
   {
-    "id": "lunes_fondo_aero",
-    "day": "Lunes",
+    "id": "dia1_fondo_z2",
+    "day": "Día 1",
     "category": "fondo",
-    "title": "Lunes · Fondo Aero Z2",
-    "subtitle": "Base Z2 (113-132 BPM) + adaptación aero (codos 90°)",
+    "title": "Día 1 · Fondo Z2 & Aero (60 min)",
+    "subtitle": "Resistencia base 113-132 BPM (60 min) + adaptación aero",
     "icon": "ti-wind",
     "colorClass": "cyan",
     "levels": {
@@ -224,7 +226,7 @@ export const ROUTINES_POOL = [
           "phase": "Calentamiento Z1->Z2",
           "cadence": 85,
           "rpe": 3,
-          "zone": 2,
+          "zone": 1,
           "posture": "sentado",
           "t": 360
         },
@@ -234,7 +236,7 @@ export const ROUTINES_POOL = [
           "rpe": 4.5,
           "zone": 2,
           "posture": "sentado",
-          "t": 600
+          "t": 840
         },
         {
           "phase": "Bloque Aero Z2 técnico",
@@ -242,10 +244,10 @@ export const ROUTINES_POOL = [
           "rpe": 5,
           "zone": 2,
           "posture": "aero",
-          "t": 240
+          "t": 300
         },
         {
-          "phase": "Alivio y apertura de cadera",
+          "phase": "Alivio articular de pie",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
@@ -258,7 +260,7 @@ export const ROUTINES_POOL = [
           "rpe": 4.5,
           "zone": 2,
           "posture": "sentado",
-          "t": 690
+          "t": 1110
         },
         {
           "phase": "Bloque Aero Z2 técnico",
@@ -266,23 +268,39 @@ export const ROUTINES_POOL = [
           "rpe": 5,
           "zone": 2,
           "posture": "aero",
-          "t": 300
+          "t": 360
         },
         {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
+          "phase": "Alivio articular de pie",
+          "cadence": 75,
+          "rpe": 4,
+          "zone": 2,
+          "posture": "de pie",
+          "t": 60
+        },
+        {
+          "phase": "Rodaje suave Z2",
+          "cadence": 88,
+          "rpe": 4,
+          "zone": 2,
+          "posture": "sentado",
+          "t": 240
+        },
+        {
+          "phase": "Enfriamiento Z1 regenerativo",
           "cadence": 82,
           "rpe": 2,
           "zone": 1,
           "posture": "sentado",
-          "t": 420
+          "t": 240
         }
       ],
       "fase2": [
         {
-          "phase": "Calentamiento Z1->Z2",
+          "phase": "Calentamiento activo Z1->Z2",
           "cadence": 86,
           "rpe": 3.5,
-          "zone": 2,
+          "zone": 1,
           "posture": "sentado",
           "t": 360
         },
@@ -300,23 +318,23 @@ export const ROUTINES_POOL = [
           "rpe": 5,
           "zone": 2,
           "posture": "aero",
-          "t": 360
+          "t": 480
         },
         {
-          "phase": "Alivio de pie articular",
+          "phase": "Alivio y apertura de cadera",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
-          "posture": "de pie",
-          "t": 120
+          "posture": "sentado",
+          "t": 90
         },
         {
-          "phase": "Fondo Z2 continuo",
-          "cadence": 90,
-          "rpe": 4.5,
+          "phase": "Rodaje crucero Z2 continuo",
+          "cadence": 92,
+          "rpe": 4.8,
           "zone": 2,
           "posture": "sentado",
-          "t": 720
+          "t": 870
         },
         {
           "phase": "Bloque Aero Z2 sostenido",
@@ -327,432 +345,7 @@ export const ROUTINES_POOL = [
           "t": 480
         },
         {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
-          "cadence": 82,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        }
-      ],
-      "fase3": [
-        {
-          "phase": "Calentamiento dinámico",
-          "cadence": 88,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Fondo Z2 sentado (113-132 BPM)",
-          "cadence": 92,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 540
-        },
-        {
-          "phase": "Crucero Aero Z2 de carrera",
-          "cadence": 92,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 600
-        },
-        {
-          "phase": "Alivio de pie articular",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 120
-        },
-        {
-          "phase": "Fondo Z2 sentado (113-132 BPM)",
-          "cadence": 92,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 540
-        },
-        {
-          "phase": "Crucero Aero Z2 de carrera",
-          "cadence": 92,
-          "rpe": 5.5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 600
-        },
-        {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
-          "cadence": 82,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        }
-      ]
-    }
-  },
-  {
-    "id": "martes_sweet_spot",
-    "day": "Martes",
-    "category": "calidad",
-    "title": "Martes · Sweet Spot 88-93%",
-    "subtitle": "Calidad 1 · Crucero potente en 158-170 BPM (¡no en Z3!)",
-    "icon": "ti-bolt",
-    "colorClass": "amber",
-    "levels": {
-      "fase1": [
-        {
-          "phase": "Calentamiento Z1->Z2",
-          "cadence": 85,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Bloque 1: Sweet Spot (158-170 BPM)",
-          "cadence": 88,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "sentado",
-          "t": 600
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Bloque 2: Sweet Spot Aero (158-170 BPM)",
-          "cadence": 90,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "aero",
-          "t": 600
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Enfriamiento regenerativo Z1",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 600
-        }
-      ],
-      "fase2": [
-        {
-          "phase": "Calentamiento Z1->Z2",
-          "cadence": 86,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Bloque 1: Sweet Spot sentado (158-170 BPM)",
-          "cadence": 88,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Bloque 1: Sweet Spot Aero (158-170 BPM)",
-          "cadence": 90,
-          "rpe": 8,
-          "zone": "SS",
-          "posture": "aero",
-          "t": 420
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Bloque 2: Sweet Spot sentado (158-170 BPM)",
-          "cadence": 88,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Bloque 2: Sweet Spot Aero (158-170 BPM)",
-          "cadence": 90,
-          "rpe": 8,
-          "zone": "SS",
-          "posture": "aero",
-          "t": 420
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Enfriamiento regenerativo Z1",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 420
-        }
-      ],
-      "fase3": [
-        {
-          "phase": "Calentamiento Z1->Z2",
-          "cadence": 88,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Bloque 1: Sweet Spot sentado (158-170 BPM)",
-          "cadence": 90,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Bloque 1: Sweet Spot Aero (158-170 BPM)",
-          "cadence": 92,
-          "rpe": 8,
-          "zone": "SS",
-          "posture": "aero",
-          "t": 720
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Bloque 2: Sweet Spot sentado (158-170 BPM)",
-          "cadence": 90,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Bloque 2: Sweet Spot Aero (158-170 BPM)",
-          "cadence": 92,
-          "rpe": 8,
-          "zone": "SS",
-          "posture": "aero",
-          "t": 720
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Enfriamiento regenerativo Z1",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 300
-        }
-      ]
-    }
-  },
-  {
-    "id": "miercoles_recuperacion",
-    "day": "Miércoles",
-    "category": "recuperacion",
-    "title": "Miércoles · Recuperación Z1",
-    "subtitle": "Día bisagra · Lavado suave bajo 113 BPM (< 60%)",
-    "icon": "ti-activity",
-    "colorClass": "teal",
-    "levels": {
-      "fase1": [
-        {
-          "phase": "Rodaje suave sentado",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 300
-        },
-        {
-          "phase": "Pedaleo regenerativo Z1 (< 113 BPM)",
-          "cadence": 85,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 600
-        },
-        {
-          "phase": "Alivio de pie articular",
-          "cadence": 65,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "de pie",
-          "t": 120
-        },
-        {
-          "phase": "Pedaleo regenerativo Z1 (< 113 BPM)",
-          "cadence": 85,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 600
-        },
-        {
-          "phase": "Enfriamiento y soltura",
-          "cadence": 80,
-          "rpe": 1.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 540
-        }
-      ],
-      "fase2": [
-        {
-          "phase": "Rodaje suave sentado",
-          "cadence": 82,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 300
-        },
-        {
-          "phase": "Pedaleo regenerativo Z1 (< 113 BPM)",
-          "cadence": 88,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 720
-        },
-        {
-          "phase": "Alivio de pie articular",
-          "cadence": 68,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "de pie",
-          "t": 180
-        },
-        {
-          "phase": "Pedaleo regenerativo Z1 (< 113 BPM)",
-          "cadence": 88,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 780
-        },
-        {
-          "phase": "Enfriamiento y soltura",
-          "cadence": 80,
-          "rpe": 1.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 420
-        }
-      ],
-      "fase3": [
-        {
-          "phase": "Rodaje suave sentado",
-          "cadence": 82,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 300
-        },
-        {
-          "phase": "Pedaleo regenerativo Z1 (< 113 BPM)",
-          "cadence": 88,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 840
-        },
-        {
-          "phase": "Alivio de pie articular",
-          "cadence": 70,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "de pie",
-          "t": 180
-        },
-        {
-          "phase": "Pedaleo regenerativo Z1 (< 113 BPM)",
-          "cadence": 88,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 840
-        },
-        {
-          "phase": "Enfriamiento y soltura",
-          "cadence": 80,
-          "rpe": 1.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        }
-      ]
-    }
-  },
-  {
-    "id": "jueves_fondo_z2",
-    "day": "Jueves",
-    "category": "fondo",
-    "title": "Jueves · Fondo Z2 Continuo",
-    "subtitle": "Cadencia firme 90 RPM · Ritmo base en 118-130 BPM",
-    "icon": "ti-leaf",
-    "colorClass": "emerald",
-    "levels": {
-      "fase1": [
-        {
-          "phase": "Calentamiento progresivo",
-          "cadence": 85,
-          "rpe": 3,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Fondo Z2 continuo (118-130 BPM)",
-          "cadence": 88,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 960
-        },
-        {
-          "phase": "Alivio de pie articular",
+          "phase": "Alivio articular de pie",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
@@ -760,58 +353,16 @@ export const ROUTINES_POOL = [
           "t": 90
         },
         {
-          "phase": "Fondo Z2 continuo (118-130 BPM)",
-          "cadence": 90,
-          "rpe": 4.5,
+          "phase": "Rodaje final Z2",
+          "cadence": 88,
+          "rpe": 4.2,
           "zone": 2,
           "posture": "sentado",
-          "t": 930
+          "t": 330
         },
         {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
-          "cadence": 82,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        }
-      ],
-      "fase2": [
-        {
-          "phase": "Calentamiento progresivo",
-          "cadence": 86,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Fondo Z2 continuo (118-130 BPM)",
-          "cadence": 90,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 1080
-        },
-        {
-          "phase": "Alivio de pie articular",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 120
-        },
-        {
-          "phase": "Fondo Z2 continuo (118-130 BPM)",
-          "cadence": 90,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 1080
-        },
-        {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
-          "cadence": 82,
+          "phase": "Enfriamiento Z1 regenerativo",
+          "cadence": 80,
           "rpe": 2,
           "zone": 1,
           "posture": "sentado",
@@ -820,40 +371,265 @@ export const ROUTINES_POOL = [
       ],
       "fase3": [
         {
-          "phase": "Calentamiento progresivo",
+          "phase": "Calentamiento Z1->Z2",
           "cadence": 88,
           "rpe": 3.5,
-          "zone": 2,
+          "zone": 1,
           "posture": "sentado",
-          "t": 360
+          "t": 300
         },
         {
-          "phase": "Fondo Z2 firme (120-132 BPM)",
+          "phase": "Rodaje de ritmo Z2 (113-132 BPM)",
           "cadence": 92,
-          "rpe": 4.5,
+          "rpe": 4.8,
           "zone": 2,
           "posture": "sentado",
-          "t": 1200
+          "t": 480
         },
         {
-          "phase": "Alivio de pie articular",
+          "phase": "Bloque Aero Z2 contrarreloj",
+          "cadence": 92,
+          "rpe": 5,
+          "zone": 2,
+          "posture": "aero",
+          "t": 540
+        },
+        {
+          "phase": "Alivio activo de pie",
           "cadence": 75,
           "rpe": 4,
           "zone": 2,
           "posture": "de pie",
+          "t": 90
+        },
+        {
+          "phase": "Rodaje base Z2 sostenido",
+          "cadence": 90,
+          "rpe": 4.8,
+          "zone": 2,
+          "posture": "sentado",
+          "t": 450
+        },
+        {
+          "phase": "Bloque Aero Z2 contrarreloj",
+          "cadence": 92,
+          "rpe": 5,
+          "zone": 2,
+          "posture": "aero",
+          "t": 600
+        },
+        {
+          "phase": "Alivio activo de pie",
+          "cadence": 75,
+          "rpe": 4,
+          "zone": 2,
+          "posture": "de pie",
+          "t": 90
+        },
+        {
+          "phase": "Bloque Aero Z2 final",
+          "cadence": 90,
+          "rpe": 5,
+          "zone": 2,
+          "posture": "aero",
+          "t": 480
+        },
+        {
+          "phase": "Rodaje suave Z2",
+          "cadence": 85,
+          "rpe": 3.8,
+          "zone": 2,
+          "posture": "sentado",
+          "t": 270
+        },
+        {
+          "phase": "Enfriamiento Z1 regenerativo",
+          "cadence": 80,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 300
+        }
+      ]
+    }
+  },
+  {
+    "id": "dia2_sweet_spot",
+    "day": "Día 2",
+    "category": "calidad",
+    "title": "Día 2 · Calidad Sweet Spot (158-170 BPM)",
+    "subtitle": "Intervalos submáximos 84-90% FC Máx · Esfuerzo cómodamente duro",
+    "icon": "ti-flame",
+    "colorClass": "amber",
+    "levels": {
+      "fase1": [
+        {
+          "phase": "Calentamiento Z1->Z2",
+          "cadence": 85,
+          "rpe": 3.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 420
+        },
+        {
+          "phase": "Activación neuromuscular Z3",
+          "cadence": 90,
+          "rpe": 6,
+          "zone": 3,
+          "posture": "sentado",
           "t": 120
         },
         {
-          "phase": "Fondo Z2 firme (120-132 BPM)",
-          "cadence": 92,
-          "rpe": 4.5,
-          "zone": 2,
+          "phase": "Recuperación pre-bloque Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
           "posture": "sentado",
-          "t": 1080
+          "t": 120
         },
         {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
-          "cadence": 82,
+          "phase": "Bloque 1: Sweet Spot (158-170 BPM)",
+          "cadence": 88,
+          "rpe": 7.8,
+          "zone": "SS",
+          "posture": "sentado",
+          "t": 720
+        },
+        {
+          "phase": "Recuperación activa Z1 (< 113 BPM)",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 240
+        },
+        {
+          "phase": "Bloque 2: Sweet Spot Aero (158-170 BPM)",
+          "cadence": 90,
+          "rpe": 7.8,
+          "zone": "SS",
+          "posture": "aero",
+          "t": 720
+        },
+        {
+          "phase": "Enfriamiento regenerativo Z1",
+          "cadence": 78,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 420
+        }
+      ],
+      "fase2": [
+        {
+          "phase": "Calentamiento Z1->Z2",
+          "cadence": 86,
+          "rpe": 3.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 420
+        },
+        {
+          "phase": "Activación piramidal Z3",
+          "cadence": 92,
+          "rpe": 6.2,
+          "zone": 3,
+          "posture": "sentado",
+          "t": 180
+        },
+        {
+          "phase": "Recuperación pre-bloque Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 120
+        },
+        {
+          "phase": "Bloque 1: Sweet Spot (158-170 BPM)",
+          "cadence": 90,
+          "rpe": 7.8,
+          "zone": "SS",
+          "posture": "sentado",
+          "t": 900
+        },
+        {
+          "phase": "Recuperación activa Z1 (< 113 BPM)",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 240
+        },
+        {
+          "phase": "Bloque 2: Sweet Spot Aero (158-170 BPM)",
+          "cadence": 90,
+          "rpe": 7.8,
+          "zone": "SS",
+          "posture": "aero",
+          "t": 900
+        },
+        {
+          "phase": "Enfriamiento regenerativo Z1",
+          "cadence": 78,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 360
+        }
+      ],
+      "fase3": [
+        {
+          "phase": "Calentamiento dinámico Z1->Z2",
+          "cadence": 88,
+          "rpe": 3.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 420
+        },
+        {
+          "phase": "Activación piramidal Z3",
+          "cadence": 92,
+          "rpe": 6.5,
+          "zone": 3,
+          "posture": "sentado",
+          "t": 180
+        },
+        {
+          "phase": "Recuperación pre-bloque Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 120
+        },
+        {
+          "phase": "Bloque 1: Sweet Spot Master (158-170 BPM)",
+          "cadence": 90,
+          "rpe": 7.8,
+          "zone": "SS",
+          "posture": "sentado",
+          "t": 1200
+        },
+        {
+          "phase": "Recuperación activa Z1 (< 113 BPM)",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 240
+        },
+        {
+          "phase": "Bloque 2: Sweet Spot Aero Master (158-170 BPM)",
+          "cadence": 90,
+          "rpe": 7.8,
+          "zone": "SS",
+          "posture": "aero",
+          "t": 1200
+        },
+        {
+          "phase": "Enfriamiento regenerativo Z1",
+          "cadence": 78,
           "rpe": 2,
           "zone": 1,
           "posture": "sentado",
@@ -863,12 +639,141 @@ export const ROUTINES_POOL = [
     }
   },
   {
-    "id": "viernes_umbral_z4",
-    "day": "Viernes",
+    "id": "dia3_recuperacion",
+    "day": "Día 3",
+    "category": "recuperacion",
+    "title": "Día 3 · Recuperación Activa Z1",
+    "subtitle": "Regenerativo suave (< 113 BPM) · Soltar piernas y disipar lactato",
+    "icon": "ti-heart-rate-monitor",
+    "colorClass": "emerald",
+    "levels": {
+      "fase1": [
+        {
+          "phase": "Calentamiento suave Z1",
+          "cadence": 78,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 300
+        },
+        {
+          "phase": "Rodaje ágil de cadencia Z1",
+          "cadence": 82,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 720
+        },
+        {
+          "phase": "Soltura de piernas suave Z1",
+          "cadence": 85,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "de pie",
+          "t": 720
+        },
+        {
+          "phase": "Enfriamiento y desaceleración Z1",
+          "cadence": 75,
+          "rpe": 1.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 360
+        }
+      ],
+      "fase2": [
+        {
+          "phase": "Calentamiento suave Z1",
+          "cadence": 80,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 360
+        },
+        {
+          "phase": "Rodaje regenerativo Z1",
+          "cadence": 84,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 840
+        },
+        {
+          "phase": "Z2 muy suave de activación capilar",
+          "cadence": 86,
+          "rpe": 3.5,
+          "zone": 2,
+          "posture": "sentado",
+          "t": 600
+        },
+        {
+          "phase": "Soltura regenerativa Z1",
+          "cadence": 82,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 360
+        },
+        {
+          "phase": "Enfriamiento final Z1",
+          "cadence": 75,
+          "rpe": 1.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 240
+        }
+      ],
+      "fase3": [
+        {
+          "phase": "Calentamiento suave Z1",
+          "cadence": 80,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 360
+        },
+        {
+          "phase": "Rodaje ágil sin carga Z1",
+          "cadence": 85,
+          "rpe": 2.2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 900
+        },
+        {
+          "phase": "Z2 muy suave de flujo sanguíneo",
+          "cadence": 88,
+          "rpe": 3.5,
+          "zone": 2,
+          "posture": "sentado",
+          "t": 600
+        },
+        {
+          "phase": "Desconexión regenerativa Z1",
+          "cadence": 80,
+          "rpe": 1.8,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 420
+        },
+        {
+          "phase": "Enfriamiento desacelerado Z1",
+          "cadence": 75,
+          "rpe": 1.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 240
+        }
+      ]
+    }
+  },
+  {
+    "id": "opcional_umbral_z4",
+    "day": "Calidad Opcional",
     "category": "calidad",
-    "title": "Viernes · Intervalos Umbral Z4",
-    "subtitle": "Calidad 2 · Tolerancia al lactato en 153-170 BPM",
-    "icon": "ti-flame",
+    "title": "Alternativa · Umbral FTP Z4 (153-170 BPM)",
+    "subtitle": "Intervalos de umbral de lactato sostenido (153-170 BPM)",
+    "icon": "ti-bolt",
     "colorClass": "rose",
     "levels": {
       "fase1": [
@@ -876,430 +781,205 @@ export const ROUTINES_POOL = [
           "phase": "Calentamiento Z1->Z2",
           "cadence": 85,
           "rpe": 3.5,
-          "zone": 2,
+          "zone": 1,
           "posture": "sentado",
-          "t": 480
+          "t": 420
         },
         {
-          "phase": "Serie 1: Umbral Z4 (153-170 BPM)",
+          "phase": "Activación Z3",
+          "cadence": 90,
+          "rpe": 6,
+          "zone": 3,
+          "posture": "sentado",
+          "t": 180
+        },
+        {
+          "phase": "Recuperación pre-bloque Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 120
+        },
+        {
+          "phase": "Serie 1 Umbral FTP Z4 (153-170 BPM)",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
           "posture": "sentado",
-          "t": 240
+          "t": 360
         },
         {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
+          "phase": "Recuperación activa Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
           "posture": "sentado",
-          "t": 150
+          "t": 180
         },
         {
-          "phase": "Serie 2: Umbral Z4 Aero (153-170 BPM)",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "aero",
-          "t": 240
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 150
-        },
-        {
-          "phase": "Serie 3: Umbral Z4 (153-170 BPM)",
+          "phase": "Serie 2 Umbral FTP Z4 (153-170 BPM)",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
           "posture": "sentado",
-          "t": 240
+          "t": 360
         },
         {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
+          "phase": "Recuperación activa Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
           "posture": "sentado",
-          "t": 150
+          "t": 180
         },
         {
-          "phase": "Serie 4: Umbral Z4 Aero (153-170 BPM)",
+          "phase": "Serie 3 Umbral FTP Z4 (153-170 BPM)",
           "cadence": 90,
           "rpe": 8.5,
           "zone": 4,
-          "posture": "aero",
-          "t": 240
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
           "posture": "sentado",
-          "t": 150
+          "t": 360
         },
         {
           "phase": "Enfriamiento regenerativo Z1",
-          "cadence": 80,
+          "cadence": 78,
           "rpe": 2,
           "zone": 1,
           "posture": "sentado",
-          "t": 660
+          "t": 540
         }
       ],
       "fase2": [
         {
           "phase": "Calentamiento Z1->Z2",
-          "cadence": 85,
+          "cadence": 86,
           "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 480
-        },
-        {
-          "phase": "Serie 1: Umbral Z4 (153-170 BPM)",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Serie 2: Umbral Z4 Aero (153-170 BPM)",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "aero",
-          "t": 240
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Serie 3: Umbral Z4 (153-170 BPM)",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Serie 4: Umbral Z4 Aero (153-170 BPM)",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "aero",
-          "t": 240
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Serie 5: Umbral Z4 Aero a tope",
-          "cadence": 92,
-          "rpe": 8.8,
-          "zone": 4,
-          "posture": "aero",
-          "t": 240
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Enfriamiento regenerativo Z1",
-          "cadence": 80,
-          "rpe": 2,
           "zone": 1,
-          "posture": "sentado",
-          "t": 720
-        }
-      ],
-      "fase3": [
-        {
-          "phase": "Calentamiento progresivo",
-          "cadence": 88,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 480
-        },
-        {
-          "phase": "Serie 1: Bloque Umbral Z4 (153-170 BPM)",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 480
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Serie 2: Bloque Umbral Z4 Aero (153-170 BPM)",
-          "cadence": 92,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "aero",
-          "t": 480
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Serie 3: Bloque Umbral Z4 Aero (153-170 BPM)",
-          "cadence": 92,
-          "rpe": 8.8,
-          "zone": 4,
-          "posture": "aero",
-          "t": 480
-        },
-        {
-          "phase": "Recuperación activa Z2 (113-132 BPM)",
-          "cadence": 85,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Enfriamiento regenerativo Z1",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 840
-        }
-      ]
-    }
-  },
-  {
-    "id": "sabado_fondo_extendido",
-    "day": "Sábado",
-    "category": "fondo",
-    "title": "Sábado · Fondo Aero Extendido",
-    "subtitle": "Volumen reina en 113-132 BPM + tramos aero prolongados",
-    "icon": "ti-trophy",
-    "colorClass": "blue",
-    "levels": {
-      "fase1": [
-        {
-          "phase": "Calentamiento progresivo",
-          "cadence": 85,
-          "rpe": 3,
-          "zone": 2,
           "posture": "sentado",
           "t": 420
         },
         {
-          "phase": "Fondo Z2 crucero (113-132 BPM)",
-          "cadence": 88,
-          "rpe": 4.5,
-          "zone": 2,
+          "phase": "Activación Z3",
+          "cadence": 92,
+          "rpe": 6.2,
+          "zone": 3,
           "posture": "sentado",
-          "t": 720
+          "t": 180
         },
         {
-          "phase": "Bloque Aero Z2 (125-132 BPM)",
+          "phase": "Recuperación pre-bloque Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 120
+        },
+        {
+          "phase": "Serie 1 Umbral FTP Z4 (153-170 BPM)",
           "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
+          "rpe": 8.5,
+          "zone": 4,
+          "posture": "sentado",
+          "t": 480
+        },
+        {
+          "phase": "Recuperación activa Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 180
+        },
+        {
+          "phase": "Serie 2 Umbral FTP Z4 (153-170 BPM)",
+          "cadence": 90,
+          "rpe": 8.5,
+          "zone": 4,
+          "posture": "sentado",
+          "t": 480
+        },
+        {
+          "phase": "Recuperación activa Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 180
+        },
+        {
+          "phase": "Serie 3 Umbral FTP Z4 (153-170 BPM)",
+          "cadence": 90,
+          "rpe": 8.5,
+          "zone": 4,
+          "posture": "sentado",
+          "t": 480
+        },
+        {
+          "phase": "Enfriamiento regenerativo Z1",
+          "cadence": 78,
+          "rpe": 2,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 480
+        }
+      ],
+      "fase3": [
+        {
+          "phase": "Calentamiento Z1->Z2",
+          "cadence": 88,
+          "rpe": 3.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 420
+        },
+        {
+          "phase": "Activación Z3",
+          "cadence": 92,
+          "rpe": 6.5,
+          "zone": 3,
+          "posture": "sentado",
+          "t": 180
+        },
+        {
+          "phase": "Recuperación pre-bloque Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
+          "t": 120
+        },
+        {
+          "phase": "Serie 1 Umbral FTP Z4 Sostenido (153-170 BPM)",
+          "cadence": 90,
+          "rpe": 8.5,
+          "zone": 4,
+          "posture": "sentado",
+          "t": 900
+        },
+        {
+          "phase": "Recuperación activa Z1",
+          "cadence": 80,
+          "rpe": 2.5,
+          "zone": 1,
+          "posture": "sentado",
           "t": 300
         },
         {
-          "phase": "Alivio de pie articular",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 120
-        },
-        {
-          "phase": "Fondo Z2 crucero (113-132 BPM)",
+          "phase": "Serie 2 Umbral FTP Z4 Sostenido (153-170 BPM)",
           "cadence": 90,
-          "rpe": 4.5,
-          "zone": 2,
+          "rpe": 8.5,
+          "zone": 4,
           "posture": "sentado",
-          "t": 720
+          "t": 900
         },
         {
-          "phase": "Bloque Aero Z2 (125-132 BPM)",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 360
-        },
-        {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
-          "cadence": 82,
+          "phase": "Enfriamiento regenerativo Z1",
+          "cadence": 78,
           "rpe": 2,
           "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        }
-      ],
-      "fase2": [
-        {
-          "phase": "Calentamiento progresivo",
-          "cadence": 86,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Fondo Z2 crucero (113-132 BPM)",
-          "cadence": 90,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 840
-        },
-        {
-          "phase": "Bloque Aero sostenido",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 480
-        },
-        {
-          "phase": "Alivio de pie articular",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 120
-        },
-        {
-          "phase": "Fondo Z2 crucero (113-132 BPM)",
-          "cadence": 90,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 840
-        },
-        {
-          "phase": "Bloque Aero sostenido",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 360
-        },
-        {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
-          "cadence": 82,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        }
-      ],
-      "fase3": [
-        {
-          "phase": "Calentamiento progresivo",
-          "cadence": 90,
-          "rpe": 4,
-          "zone": 2,
           "posture": "sentado",
           "t": 480
-        },
-        {
-          "phase": "Fondo Z2 continuo (113-132 BPM)",
-          "cadence": 92,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 960
-        },
-        {
-          "phase": "Bloque Aero de carrera",
-          "cadence": 92,
-          "rpe": 5.5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 600
-        },
-        {
-          "phase": "Alivio de pie articular",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 120
-        },
-        {
-          "phase": "Fondo Z2 continuo (113-132 BPM)",
-          "cadence": 92,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 840
-        },
-        {
-          "phase": "Bloque Aero de carrera",
-          "cadence": 94,
-          "rpe": 5.5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 360
-        },
-        {
-          "phase": "Enfriamiento Z1 (< 113 BPM)",
-          "cadence": 85,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
         }
       ]
     }
@@ -1307,7 +987,16 @@ export const ROUTINES_POOL = [
 ];
 
 export function getRoutine(id, level = 'fase1') {
-  const item = ROUTINES_POOL.find(r => r.id === id);
+  const aliasMap = {
+    'lunes_fondo_aero': 'dia1_fondo_z2',
+    'jueves_fondo_z2': 'dia1_fondo_z2',
+    'sabado_fondo_extendido': 'dia1_fondo_z2',
+    'martes_sweet_spot': 'dia2_sweet_spot',
+    'miercoles_recuperacion': 'dia3_recuperacion',
+    'viernes_umbral_z4': 'opcional_umbral_z4'
+  };
+  const targetId = aliasMap[id] || id;
+  const item = ROUTINES_POOL.find(r => r.id === targetId) || ROUTINES_POOL[0];
   if (!item) return null;
   const routine = item.levels[level] || item.levels.fase1 || Object.values(item.levels)[0];
   return {
@@ -1317,4 +1006,3 @@ export function getRoutine(id, level = 'fase1') {
     steps: routine.map(s => parseStep(s))
   };
 }
-// Safelist: border-emerald-600/30 bg-emerald-950/20 hover:bg-emerald-900/30 text-emerald-300 text-emerald-400 bg-emerald-600/20 border-emerald-600/40 border-amber-600/30 bg-amber-950/20 hover:bg-amber-900/30 text-amber-300 text-amber-400 bg-amber-600/20 border-amber-600/40 border-sky-600/30 bg-sky-950/20 hover:bg-sky-900/30 text-sky-300 text-sky-400 bg-sky-600/20 border-sky-600/40 border-blue-600/30 bg-blue-950/20 hover:bg-blue-900/30 text-blue-300 text-blue-400 bg-blue-600/20 border-blue-600/40 border-rose-600/30 bg-rose-950/20 hover:bg-rose-900/30 text-rose-300 text-rose-400 bg-rose-600/20 border-rose-600/40 border-teal-600/30 bg-teal-950/20 hover:bg-teal-900/30 text-teal-300 text-teal-400 bg-teal-600/20 border-teal-600/40 border-cyan-600/30 bg-cyan-950/20 hover:bg-cyan-900/30 text-cyan-300 text-cyan-400 bg-cyan-600/20 border-cyan-600/40 border-purple-600/30 bg-purple-950/20 hover:bg-purple-900/30 text-purple-300 text-purple-400 bg-purple-600/20 border-purple-600/40
