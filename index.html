@@ -26,22 +26,22 @@
         <span class="w-2.5 h-2.5 rounded-full bg-[#FC5200] shrink-0" id="liveDot"></span>
         <span class="text-xs sm:text-sm font-black tracking-wider text-white uppercase truncate" id="sessionLabel">PAIN CAVE</span>
       </div>
-      <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+      <div class="flex items-center gap-1.5 shrink-0">
         <!-- Modo Pantalla Completa (Manillar) -->
-        <button onclick="window.painCaveApp.toggleFullscreen()" id="btnFullscreen" class="text-zinc-400 hover:text-white transition-colors p-1.5 sm:p-2 bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Pantalla Completa">
+        <button onclick="window.painCaveApp.toggleFullscreen()" id="btnFullscreen" class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center text-zinc-400 hover:text-white transition-colors bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Pantalla Completa">
           <i class="ti ti-maximize text-base sm:text-lg"></i>
         </button>
         <!-- Conectar Pulsómetro Bluetooth -->
-        <button onclick="window.painCaveApp.toggleHRM()" id="btnBluetooth" class="text-zinc-400 hover:text-[#FC5200] transition-colors p-1.5 sm:p-2 bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Pulsómetro BLE">
+        <button onclick="window.painCaveApp.toggleHRM()" id="btnBluetooth" class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center text-zinc-400 hover:text-[#FC5200] transition-colors bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Pulsómetro BLE">
           <i class="ti ti-bluetooth text-base sm:text-lg"></i>
         </button>
         <!-- Seguimiento y Plan -->
-        <button onclick="window.painCaveApp.openTrackingModal('tracking')" id="btnHeaderTracker" class="flex items-center gap-1 text-[#FC5200] hover:text-[#FF7033] transition-colors px-2 py-1 sm:px-2.5 sm:py-1.5 bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Seguimiento">
+        <button onclick="window.painCaveApp.openTrackingModal('tracking')" id="btnHeaderTracker" class="h-8 sm:h-9 px-2 sm:px-2.5 flex items-center gap-1 text-[#FC5200] hover:text-[#FF7033] transition-colors bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Seguimiento">
           <i class="ti ti-calendar-stats text-sm sm:text-base"></i>
           <span id="headerTrackerPill" class="text-[10px] sm:text-[11px] font-mono font-bold">Sem 1</span>
         </button>
         <!-- Perfil y Gamificación (Rango) -->
-        <button onclick="window.painCaveApp.showStatsModal('profile')" id="btnHeaderRank" class="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors px-2 py-1 sm:px-2.5 sm:py-1.5 bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Rango">
+        <button onclick="window.painCaveApp.showStatsModal('profile')" id="btnHeaderRank" class="h-8 sm:h-9 px-2 sm:px-2.5 flex items-center gap-1 text-zinc-300 hover:text-white transition-colors bg-[#252525] hover:bg-[#2E2E2E] rounded-lg border border-[#333333] active:scale-95 shadow-sm" title="Perfil y Zonas">
           <span id="miniRankText" class="text-[9px] sm:text-[10px] uppercase font-bold text-amber-400">Novato</span>
           <i class="ti ti-shield-chevron text-sm sm:text-base"></i>
         </button>
@@ -72,11 +72,12 @@
         
         <!-- COLUMNA IZQUIERDA: TEMPORIZADOR CIRCULAR -->
         <div class="landscape:col-span-5 md:col-span-5 flex flex-col items-center justify-center text-center py-1">
-          <div class="relative w-[180px] h-[180px] sm:w-[200px] sm:h-[200px] mx-auto flex items-center justify-center cursor-pointer group active:scale-95 transition-transform" onclick="window.painCaveApp.togglePause()">
+          <div class="relative w-[180px] h-[180px] sm:w-[200px] sm:h-[200px] mx-auto flex items-center justify-center cursor-pointer group active:scale-95 transition-transform" onclick="window.painCaveApp.togglePause()" title="Tocar para pausar / reanudar">
             <svg class="absolute inset-0 -rotate-90 w-full h-full pointer-events-none" viewBox="0 0 200 200">
               <circle class="fill-none stroke-[#252525] stroke-[10px]" cx="100" cy="100" r="90"/>
               <circle class="fill-none stroke-[10px] transition-all duration-[900ms] ease-linear" stroke-linecap="round" id="timerRing" cx="100" cy="100" r="90" stroke="#FC5200" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
             </svg>
+            <div id="timerPauseBadge" class="hidden absolute top-6 sm:top-7 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-[#FC5200] text-white shadow-md z-20 pointer-events-none">PAUSA</div>
             <div class="text-5xl sm:text-6xl font-black font-mono tabular-nums text-white tracking-tight leading-none select-none z-10" id="timerDisplay">00:00</div>
           </div>
           
@@ -127,8 +128,9 @@
                 <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold mb-0.5 group-hover:text-[#FC5200] transition-colors">Pulso Real</div>
                 <div class="text-2xl md:text-3xl font-black text-white font-mono tabular-nums flex items-center justify-center gap-1">
                   <span id="bpmVal">—</span>
+                  <span id="bpmDeltaIcon" class="hidden text-xs font-bold font-sans"></span>
                 </div>
-                <div class="text-[9px] text-zinc-400 font-bold flex items-center justify-center gap-1">
+                <div class="text-[9px] text-zinc-400 font-bold flex items-center justify-center gap-1" id="bpmStatusBox">
                   <i class="ti ti-heart-filled text-rose-500 hidden text-xs" id="hrIcon"></i>
                   <span id="bpmLabel">Conectar</span>
                 </div>
@@ -168,11 +170,11 @@
                 +15s
               </button>
             </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button class="py-2.5 rounded-xl text-xs font-bold bg-[#252525] hover:bg-[#2E2E2E] text-zinc-300 border border-[#333333] flex items-center justify-center gap-1.5 active:scale-95 transition-all" onclick="window.painCaveApp.skipStep()">
+            <div class="grid grid-cols-2 gap-2.5">
+              <button class="py-3 rounded-xl text-xs font-bold bg-[#252525] hover:bg-[#2E2E2E] text-zinc-200 border border-[#333333] flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-sm" onclick="window.painCaveApp.skipStep()">
                 <i class="ti ti-player-track-next text-sm"></i> Saltar Fase
               </button>
-              <button class="py-2.5 rounded-xl text-xs font-bold bg-red-950/40 hover:bg-red-900/50 text-red-400 border border-red-800/40 flex items-center justify-center gap-1.5 active:scale-95 transition-all" onclick="window.painCaveApp.resetWorkout()">
+              <button class="py-3 rounded-xl text-xs font-bold bg-rose-950/40 hover:bg-rose-900/50 text-rose-400 border border-rose-800/40 flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-sm" onclick="window.painCaveApp.resetWorkout()">
                 <i class="ti ti-square text-sm"></i> Detener
               </button>
             </div>
@@ -207,10 +209,16 @@
 
       <!-- FILTROS DE CATEGORÍA DEL MICROCICLO ROTATIVO -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 mb-2.5 custom-scrollbar">
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-[#FC5200] text-white transition-colors shrink-0" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Todos</button>
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">Día 1: Z2 (60m)</button>
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">Día 2: Sweet Spot</button>
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">Día 3: Z1</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-[#FC5200] text-white transition-colors shrink-0 shadow-sm" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Todos</button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">
+          <span class="inline-flex items-center gap-1.5">Día 1: Z2 (60m)<span id="pillDotFondo" class="hidden w-1.5 h-1.5 rounded-full bg-[#FC5200]"></span></span>
+        </button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">
+          <span class="inline-flex items-center gap-1.5">Día 2: Sweet Spot<span id="pillDotCalidad" class="hidden w-1.5 h-1.5 rounded-full bg-[#FC5200]"></span></span>
+        </button>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">
+          <span class="inline-flex items-center gap-1.5">Día 3: Z1<span id="pillDotRecuperacion" class="hidden w-1.5 h-1.5 rounded-full bg-[#FC5200]"></span></span>
+        </button>
       </div>
 
       <!-- GRID LIMPIO DEL POOL DE RUTINAS -->
@@ -317,9 +325,9 @@
     </div>
 
     <!-- MODAL ESTADÍSTICAS & TRACKING -->
-    <div id="statsModal" class="hidden text-center bg-[#1E1E1E] border border-[#2D2D2D] p-4 sm:p-5 rounded-2xl w-full max-w-lg shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
-      <!-- SELECTOR DE PESTAÑAS -->
-      <div class="flex p-1 bg-[#161616] rounded-xl border border-[#2D2D2D] mb-3">
+    <div id="statsModal" class="hidden text-center bg-[#1E1E1E] border border-[#2D2D2D] p-4 sm:p-5 rounded-2xl w-full max-w-lg shadow-2xl h-[88vh] max-h-[640px] flex flex-col overflow-hidden">
+      <!-- SELECTOR DE PESTAÑAS (Fijo superior) -->
+      <div class="flex p-1 bg-[#161616] rounded-xl border border-[#2D2D2D] mb-3 shrink-0">
         <button id="modalTabTrackingBtn" onclick="window.painCaveApp.switchStatsTab('tracking')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-[#FC5200] text-white shadow-sm flex items-center justify-center gap-1.5">
           <i class="ti ti-chart-bar text-sm"></i> Seguimiento
         </button>
@@ -328,8 +336,10 @@
         </button>
       </div>
 
-      <!-- PESTAÑA 1: SEGUIMIENTO DEL PLAN -->
-      <div id="modalTabTrackingContent" class="space-y-2.5 text-left">
+      <!-- CONTENEDOR SCROLLEABLE ESTABLE (Mantiene altura y posición idénticas entre pestañas) -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar pr-0.5">
+        <!-- PESTAÑA 1: SEGUIMIENTO DEL PLAN -->
+        <div id="modalTabTrackingContent" class="space-y-2.5 text-left">
         <!-- 1. RESUMEN COMPACTO DEL PLAN -->
         <div class="bg-[#252525] rounded-xl p-3 border border-[#303030]">
           <div class="flex items-center justify-between mb-1.5">
@@ -477,9 +487,10 @@
           </label>
         </div>
       </div>
+      </div>
 
-      <!-- BOTÓN VOLVER -->
-      <button class="w-full mt-3 py-2.5 rounded-xl text-xs font-bold bg-[#2A2A2A] hover:bg-[#333333] text-zinc-200 border border-[#383838] transition-colors" onclick="window.painCaveApp.closeModals()">
+      <!-- BOTÓN VOLVER (Fijo inferior) -->
+      <button class="w-full mt-3 py-2.5 rounded-xl text-xs font-bold bg-[#2A2A2A] hover:bg-[#333333] text-zinc-200 border border-[#383838] transition-colors shrink-0" onclick="window.painCaveApp.closeModals()">
         Volver
       </button>
     </div>

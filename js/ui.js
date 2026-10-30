@@ -43,6 +43,7 @@ export class UIManager {
   constructor() {
     this.CIRC = CIRC;
     this.currentWorkoutSteps = [];
+    this.currentStep = null;
     this.lastCompletedSessionData = null;
     this.selectedCalendarDate = formatDateISO(new Date());
     this.calendarViewDate = new Date();
@@ -83,11 +84,19 @@ export class UIManager {
     const profile = document.getElementById('workoutProfileContainer');
     const controls = document.getElementById('inRideControls');
     const pauseBtn = document.getElementById('btnMainPause');
+    const pauseBadge = document.getElementById('timerPauseBadge');
 
     if (isRunning) {
       if (catalog) catalog.classList.add('hidden');
       if (profile) profile.classList.remove('hidden');
       if (controls) controls.classList.remove('hidden');
+      if (pauseBadge) {
+        if (isPaused) {
+          pauseBadge.classList.remove('hidden');
+        } else {
+          pauseBadge.classList.add('hidden');
+        }
+      }
       if (pauseBtn) {
         pauseBtn.innerHTML = isPaused ? '<i class="ti ti-player-play text-lg"></i> REANUDAR' : '<i class="ti ti-player-pause text-lg"></i> PAUSAR';
         pauseBtn.className = isPaused 
@@ -98,6 +107,7 @@ export class UIManager {
       if (catalog) catalog.classList.remove('hidden');
       if (profile) profile.classList.add('hidden');
       if (controls) controls.classList.add('hidden');
+      if (pauseBadge) pauseBadge.classList.add('hidden');
       this.updateTrackingHeader();
     }
   }
@@ -129,43 +139,87 @@ export class UIManager {
   updateInterfaceColors(currentBpm, fallbackRpe, isHRMConnected) {
     let color = '#FC5200';
     const card = document.getElementById('mainCard');
-    if (!card) return;
+    const bpmDeltaIcon = document.getElementById('bpmDeltaIcon');
+    const bpmLabel = document.getElementById('bpmLabel');
 
-    card.className = "bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl p-4 shadow-xl transition-all duration-500 relative";
+    if (card) {
+      card.className = "bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl p-4 shadow-xl transition-all duration-500 relative";
+    }
 
     if (isHRMConnected && currentBpm) {
       const maxHr = gamification.getMaxHR();
       const pct = (currentBpm / maxHr) * 100;
       if (pct < 60) {
         color = '#71717A';
-        card.classList.add('border-zinc-700');
+        if (card) card.classList.add('border-zinc-700');
       } else if (pct < 71) {
         color = '#10B981';
-        card.classList.add('bg-emerald-950/20', 'border-emerald-500/40');
+        if (card) card.classList.add('bg-emerald-950/20', 'border-emerald-500/40');
       } else if (pct < 81) {
         color = '#EAB308';
-        card.classList.add('bg-yellow-950/20', 'border-yellow-500/40');
+        if (card) card.classList.add('bg-yellow-950/20', 'border-yellow-500/40');
       } else if (pct < 91) {
         color = '#FC5200';
-        card.classList.add('bg-[#FC5200]/10', 'border-[#FC5200]/50');
+        if (card) card.classList.add('bg-[#FC5200]/10', 'border-[#FC5200]/50');
       } else {
         color = '#EF4444';
-        card.classList.add('bg-rose-950/20', 'border-rose-500/50');
+        if (card) card.classList.add('bg-rose-950/20', 'border-rose-500/50');
+      }
+
+      // Indicador periférico de zona objetivo en el manillar
+      if (this.currentStep && this.currentStep.zone) {
+        const zone = this.currentStep.zone;
+        let minBpm = 0, maxBpm = 999;
+        if (zone === 'SS' || zone === 'ss') {
+          minBpm = Math.round(maxHr * 0.83);
+          maxBpm = Math.round(maxHr * 0.88);
+        } else {
+          const zNum = parseInt(zone, 10);
+          if (zNum === 1) { minBpm = 0; maxBpm = Math.round(maxHr * 0.60) - 1; }
+          else if (zNum === 2) { minBpm = Math.round(maxHr * 0.60); maxBpm = Math.round(maxHr * 0.74); }
+          else if (zNum === 3) { minBpm = Math.round(maxHr * 0.75); maxBpm = Math.round(maxHr * 0.85); }
+          else if (zNum === 4) { minBpm = Math.round(maxHr * 0.85); maxBpm = Math.round(maxHr * 0.94); }
+          else if (zNum === 5) { minBpm = Math.round(maxHr * 0.94); maxBpm = maxHr; }
+        }
+
+        if (bpmDeltaIcon && bpmLabel) {
+          if (currentBpm < minBpm) {
+            bpmDeltaIcon.textContent = '↑';
+            bpmDeltaIcon.className = 'text-xs font-bold font-mono text-amber-400';
+            bpmLabel.textContent = 'Sube el ritmo';
+          } else if (currentBpm > maxBpm) {
+            bpmDeltaIcon.textContent = '↓';
+            bpmDeltaIcon.className = 'text-xs font-bold font-mono text-rose-400';
+            bpmLabel.textContent = 'Baja el ritmo';
+          } else {
+            bpmDeltaIcon.textContent = '✓';
+            bpmDeltaIcon.className = 'text-xs font-bold font-mono text-emerald-400';
+            bpmLabel.textContent = 'En zona';
+          }
+        }
+      } else if (bpmDeltaIcon && bpmLabel) {
+        bpmDeltaIcon.textContent = '';
+        bpmLabel.textContent = 'Pulsómetro BLE';
       }
     } else {
+      if (bpmDeltaIcon) bpmDeltaIcon.textContent = '';
+      if (bpmLabel) bpmLabel.textContent = 'Pulsómetro BLE';
+
       const rpe = fallbackRpe !== null && fallbackRpe !== undefined ? fallbackRpe : 4;
-      if (rpe <= 4) {
-        color = '#10B981';
-        card.classList.add('border-[#2D2D2D]');
-      } else if (rpe <= 6.5) {
-        color = '#EAB308';
-        card.classList.add('border-yellow-600/30');
-      } else if (rpe <= 8.5) {
-        color = '#FC5200';
-        card.classList.add('bg-[#FC5200]/10', 'border-[#FC5200]/40');
-      } else {
-        color = '#EF4444';
-        card.classList.add('bg-rose-950/20', 'border-rose-500/50');
+      if (card) {
+        if (rpe <= 4) {
+          color = '#10B981';
+          card.classList.add('border-[#2D2D2D]');
+        } else if (rpe <= 6.5) {
+          color = '#EAB308';
+          card.classList.add('border-yellow-600/30');
+        } else if (rpe <= 8.5) {
+          color = '#FC5200';
+          card.classList.add('bg-[#FC5200]/10', 'border-[#FC5200]/40');
+        } else {
+          color = '#EF4444';
+          card.classList.add('bg-rose-950/20', 'border-rose-500/50');
+        }
       }
     }
 
@@ -175,6 +229,7 @@ export class UIManager {
 
   // Renderiza el paso activo en la pantalla principal
   renderStep({ step, stepIndex, totalSteps, nextStep }, isHRMConnected, currentBpm) {
+    this.currentStep = step;
     document.getElementById('sessionLabel').textContent = step.phase;
     document.getElementById('exPhase').textContent = `FASE ${stepIndex + 1} / ${totalSteps}`;
     document.getElementById('exName').textContent = step.phase;
@@ -383,6 +438,14 @@ export class UIManager {
     const todayCycle = weekOverview.todayCycle;
     const tomorrowCycle = weekOverview.tomorrowCycle;
 
+    // Resaltar en píldoras de filtro el día actual del microciclo
+    const dotFondo = document.getElementById('pillDotFondo');
+    const dotCalidad = document.getElementById('pillDotCalidad');
+    const dotRecuperacion = document.getElementById('pillDotRecuperacion');
+    if (dotFondo) dotFondo.classList.toggle('hidden', todayCycle?.cycleDay !== 1);
+    if (dotCalidad) dotCalidad.classList.toggle('hidden', todayCycle?.cycleDay !== 2);
+    if (dotRecuperacion) dotRecuperacion.classList.toggle('hidden', todayCycle?.cycleDay !== 3);
+
     const filtered = ROUTINES_POOL.filter(r => {
       return activeCategory === 'todos' || r.category === activeCategory;
     });
@@ -503,7 +566,10 @@ export class UIManager {
   // Modales
   openModal(id) {
     const overlay = document.getElementById('modalOverlay');
-    overlay.classList.replace('hidden', 'flex');
+    if (overlay) {
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+    }
     ['preWorkoutModal', 'resumeModal', 'customModal', 'statsModal', 'exitModal', 'summaryModal'].forEach(m => {
       const el = document.getElementById(m);
       if (el) el.classList.add('hidden');
@@ -514,7 +580,10 @@ export class UIManager {
 
   closeModals() {
     const overlay = document.getElementById('modalOverlay');
-    overlay.classList.replace('flex', 'hidden');
+    if (overlay) {
+      overlay.classList.remove('flex');
+      overlay.classList.add('hidden');
+    }
   }
 
   // ==============================================================================
@@ -543,8 +612,8 @@ export class UIManager {
 
   showStatsModal(initialTab = 'tracking') {
     this.activeStatsTab = initialTab;
-    this.switchStatsTab(initialTab);
     this.openModal('statsModal');
+    this.switchStatsTab(initialTab);
   }
 
   switchStatsTab(tabName) {
@@ -653,18 +722,37 @@ export class UIManager {
   }
 
   renderProfileTab() {
-    const stats = gamification.getStats();
-    document.getElementById('statStreak').textContent = stats.streak || 0;
-    document.getElementById('statTotalTime').textContent = `${Math.floor(stats.totalMinutes / 60)}h ${stats.totalMinutes % 60}m`;
-    const rank = gamification.calculateRank(stats.totalXP || 0);
-    document.getElementById('rankTitle').textContent = rank.title;
-    document.getElementById('currentXpText').textContent = `${stats.totalXP || 0} XP`;
-    document.getElementById('nextRankXpText').textContent = rank.next === Infinity ? "MAX" : `${rank.next} XP`;
-    document.getElementById('rankProgressBar').style.width = `${rank.progress}%`;
-    const hr = gamification.getMaxHR();
-    document.getElementById('maxHrInput').value = hr;
-    this.updateProfileZonesDisplay(hr);
-    this.populateVoiceSelect();
+    try {
+      const stats = gamification.getStats() || {};
+      const streakEl = document.getElementById('statStreak');
+      if (streakEl) streakEl.textContent = stats.streak || 0;
+
+      const totalMins = stats.totalMinutes || 0;
+      const totalTimeEl = document.getElementById('statTotalTime');
+      if (totalTimeEl) totalTimeEl.textContent = `${Math.floor(totalMins / 60)}h ${totalMins % 60}m`;
+
+      const rank = gamification.calculateRank(stats.totalXP || 0);
+      const rankTitleEl = document.getElementById('rankTitle');
+      if (rankTitleEl) rankTitleEl.textContent = rank.title;
+
+      const currentXpEl = document.getElementById('currentXpText');
+      if (currentXpEl) currentXpEl.textContent = `${stats.totalXP || 0} XP`;
+
+      const nextRankEl = document.getElementById('nextRankXpText');
+      if (nextRankEl) nextRankEl.textContent = rank.next === Infinity ? "MAX" : `${rank.next} XP`;
+
+      const progressBar = document.getElementById('rankProgressBar');
+      if (progressBar) progressBar.style.width = `${rank.progress}%`;
+
+      const hr = gamification.getMaxHR();
+      const maxHrInput = document.getElementById('maxHrInput');
+      if (maxHrInput) maxHrInput.value = hr;
+
+      this.updateProfileZonesDisplay(hr);
+      this.populateVoiceSelect();
+    } catch (err) {
+      console.error('Error rendering profile tab:', err);
+    }
   }
 
   updateProfileZonesDisplay(maxHr = null) {
@@ -738,7 +826,7 @@ export class UIManager {
     let fDay = new Date(y, m, 1).getDay() - 1;
     if (fDay === -1) fDay = 6;
     for (let i = 0; i < fDay; i++) {
-      cal.innerHTML += `<div class="p-1 rounded bg-[#181818] h-8 border border-transparent"></div>`;
+      cal.innerHTML += `<div class="p-1 rounded bg-[#181818] h-9 sm:h-10 border border-transparent"></div>`;
     }
 
     const clr = { 'fase1': 'text-cyan-400', 'fase2': 'text-amber-400', 'fase3': 'text-rose-400', 'principiante': 'text-emerald-400', 'amateur': 'text-[#FC5200]', 'elite': 'text-orange-500', 'pro': 'text-rose-500' };
@@ -765,8 +853,8 @@ export class UIManager {
       }
 
       cal.innerHTML += `
-        <button type="button" onclick="window.painCaveApp.selectCalendarDate('${ds}')" class="flex flex-col items-center justify-center p-1 rounded h-8 border ${borderClasses} hover:border-[#FC5200]/50 transition-all cursor-pointer">
-          <span class="text-[9px] ${isSelected ? 'text-white font-black' : (isToday ? 'text-[#FC5200] font-bold' : 'text-zinc-400')} leading-none">${d}</span>
+        <button type="button" onclick="window.painCaveApp.selectCalendarDate('${ds}')" class="flex flex-col items-center justify-center p-1 rounded h-9 sm:h-10 border ${borderClasses} hover:border-[#FC5200]/50 transition-all cursor-pointer">
+          <span class="text-[9px] sm:text-[10px] ${isSelected ? 'text-white font-black' : (isToday ? 'text-[#FC5200] font-bold' : 'text-zinc-400')} leading-none">${d}</span>
           ${iconHtml}
         </button>
       `;
@@ -840,6 +928,7 @@ export class UIManager {
   }
 
   resetDisplay() {
+    this.currentStep = null;
     document.getElementById('sessionLabel').textContent = 'PAIN CAVE';
     document.getElementById('timerDisplay').textContent = '00:00';
     document.getElementById('globalTime').textContent = '00:00 / 00:00';
@@ -847,6 +936,14 @@ export class UIManager {
     document.getElementById('exPhase').textContent = 'LISTO';
     document.getElementById('exName').textContent = 'Selecciona una rutina';
     document.getElementById('exPostureBadge').classList.add('hidden');
+
+    const pauseBadge = document.getElementById('timerPauseBadge');
+    if (pauseBadge) pauseBadge.classList.add('hidden');
+
+    const bpmDeltaIcon = document.getElementById('bpmDeltaIcon');
+    if (bpmDeltaIcon) bpmDeltaIcon.textContent = '';
+    const bpmLabel = document.getElementById('bpmLabel');
+    if (bpmLabel) bpmLabel.textContent = 'Pulsómetro BLE';
 
     document.getElementById('cadenceVal').textContent = '—';
     document.getElementById('cadenceUnit').textContent = 'RPM';

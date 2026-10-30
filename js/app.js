@@ -49,13 +49,21 @@ class PainCaveApp {
         label.textContent = "BPM";
         icon.classList.remove('hidden');
         icon.classList.add('animate-heart-beat');
-        btn.classList.replace('text-slate-400', 'text-blue-500');
+        if (btn) {
+          btn.classList.remove('text-zinc-400');
+          btn.classList.add('text-[#FC5200]', 'border-[#FC5200]/40');
+        }
       } else {
         label.textContent = "Conectar";
         icon.classList.add('hidden');
         icon.classList.remove('animate-heart-beat');
-        btn.classList.replace('text-blue-500', 'text-slate-400');
+        if (btn) {
+          btn.classList.remove('text-[#FC5200]', 'border-[#FC5200]/40');
+          btn.classList.add('text-zinc-400');
+        }
         document.getElementById('bpmVal').textContent = "—";
+        const delta = document.getElementById('bpmDeltaIcon');
+        if (delta) delta.classList.add('hidden');
       }
     };
 
@@ -69,13 +77,22 @@ class PainCaveApp {
     // Conectar callbacks del motor de entrenamiento
     workoutEngine.onStepChange = (data) => {
       ui.renderStep(data, bluetoothManager.isConnected, bluetoothManager.currentBpm);
+      if ('vibrate' in navigator) {
+        try { navigator.vibrate([120, 60, 120]); } catch (e) {}
+      }
     };
 
     workoutEngine.onTick = (tickData) => {
       ui.renderTick(tickData);
+      if (tickData.timeLeft >= 1 && tickData.timeLeft <= 3 && 'vibrate' in navigator) {
+        try { navigator.vibrate(60); } catch (e) {}
+      }
     };
 
     workoutEngine.onWorkoutComplete = (summaryData) => {
+      if ('vibrate' in navigator) {
+        try { navigator.vibrate([200, 100, 200, 100, 300]); } catch (e) {}
+      }
       ui.showWorkoutSummaryModal(summaryData);
       ui.resetDisplay();
       ui.renderTrainingTrackerWidget();
@@ -84,18 +101,34 @@ class PainCaveApp {
 
     workoutEngine.onStatusChange = ({ isRunning, isPaused }) => {
       const display = document.getElementById('timerDisplay');
+      const pauseBadge = document.getElementById('timerPauseBadge');
       if (!isRunning) {
-        display.classList.remove('opacity-50', 'animate-pulse');
+        if (display) display.classList.remove('opacity-50', 'animate-pulse');
+        if (pauseBadge) pauseBadge.classList.add('hidden');
       } else {
-        display.classList.toggle('opacity-50', isPaused);
-        display.classList.toggle('animate-pulse', isPaused);
+        if (display) {
+          display.classList.toggle('opacity-50', isPaused);
+          display.classList.toggle('animate-pulse', isPaused);
+        }
+        if (pauseBadge) pauseBadge.classList.toggle('hidden', !isPaused);
       }
       ui.setRideMode(isRunning, isPaused);
     };
 
     // Verificar si hay sesión pendiente para reanudar
-    if (workoutEngine.getSavedState()) {
-      ui.openModal('resumeModal');
+    const savedState = workoutEngine.getSavedState();
+    if (savedState && savedState.workout && savedState.workout.length > 0) {
+      const savedAt = savedState.savedAt || 0;
+      const ageMinutes = (Date.now() - savedAt) / (1000 * 60);
+
+      // Si la sesión se guardó recientemente (menos de 90 min, ej. cambio a WhatsApp / Spotify o recarga)
+      if (savedAt > 0 && ageMinutes < 90) {
+        // Restaurar directamente en el cockpit de entrenamiento sin interrumpir con modal
+        this.resumeSavedState();
+      } else {
+        // Sesión más antigua: mostrar diálogo de confirmación
+        ui.openModal('resumeModal');
+      }
     }
 
     // Renderizar Pool de Rutinas
@@ -127,12 +160,12 @@ class PainCaveApp {
 
   setCategoryFilter(category) {
     this.activeCategory = category;
-    // Actualizar botones de categoría
+    // Actualizar botones de categoría con paleta Strava Dark
     document.querySelectorAll('.cat-pill').forEach(btn => {
       if (btn.dataset.category === category) {
-        btn.className = "cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white transition-colors shrink-0";
+        btn.className = "cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-[#FC5200] text-white transition-colors shrink-0 shadow-sm";
       } else {
-        btn.className = "cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-colors border border-slate-700 shrink-0";
+        btn.className = "cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0";
       }
     });
     ui.renderRoutinesPool(this.selectedLevel, this.activeCategory);
@@ -165,25 +198,25 @@ class PainCaveApp {
     const badgeEl = document.getElementById('preWorkoutDurationBadge');
     if (badgeEl) badgeEl.textContent = `${Math.round(totalSec / 60)} min · ${routine.steps.length} bloques`;
 
-    // Generar lista de fases limpia y concisa
+    // Generar lista de fases limpia y concisa con paleta Strava
     const listEl = document.getElementById('preWorkoutStepsList');
     listEl.innerHTML = '';
     routine.steps.forEach((st, idx) => {
       const item = document.createElement('div');
-      item.className = 'flex items-center justify-between py-1.5 border-b border-slate-800 last:border-b-0 text-xs';
+      item.className = 'flex items-center justify-between py-2 border-b border-[#2D2D2D] last:border-b-0 text-xs';
       
       const tags = [];
       if (st.cadence) tags.push(`${st.cadence} RPM`);
       if (st.zone) tags.push(`${getZoneBpmRange(st.zone)} BPM`);
-      if (st.posture === 'aero') tags.push('Aero');
-      else if (st.posture === 'de pie') tags.push('De pie');
+      if (st.posture === 'aero') tags.push('🚴 Aero');
+      else if (st.posture === 'de pie') tags.push('⚡ De pie');
 
       item.innerHTML = `
         <div class="truncate mr-2">
-          <span class="font-bold text-slate-200">${idx + 1}. ${st.phase}</span>
-          <span class="text-[10px] sm:text-[11px] text-slate-400 block font-mono">${tags.join(' · ')}</span>
+          <span class="font-bold text-white text-xs">${idx + 1}. ${st.phase}</span>
+          <span class="text-[10px] sm:text-[11px] text-zinc-400 block font-mono">${tags.join(' · ')}</span>
         </div>
-        <span class="font-mono text-slate-300 shrink-0 font-semibold text-xs">${formatTime(st.t)}</span>
+        <span class="font-mono text-zinc-300 shrink-0 font-bold text-xs">${formatTime(st.t)}</span>
       `;
       listEl.appendChild(item);
     });
@@ -259,10 +292,11 @@ class PainCaveApp {
       if (diffSelect) diffSelect.value = this.selectedLevel;
       ui.closeModals();
       ui.buildDots(workoutEngine.workout.length);
+      ui.updateDots(workoutEngine.currentStep, workoutEngine.workout.length);
       ui.renderWorkoutProfileBar(workoutEngine.workout);
+      ui.highlightProfileStep(workoutEngine.currentStep);
       const profileContainer = document.getElementById('workoutProfileContainer');
       if (profileContainer) profileContainer.classList.remove('hidden');
-      workoutEngine.togglePause();
     }
   }
 
@@ -320,13 +354,13 @@ class PainCaveApp {
       listEl.innerHTML = '';
       steps.forEach((st, idx) => {
         const item = document.createElement('div');
-        item.className = 'flex items-center justify-between py-1.5 border-b border-slate-800 last:border-b-0 text-xs';
+        item.className = 'flex items-center justify-between py-1.5 border-b border-[#2D2D2D] last:border-b-0 text-xs';
         item.innerHTML = `
           <div class="truncate mr-2">
-            <span class="font-bold text-slate-300">${idx + 1}. ${st.phase}</span>
-            <span class="text-[10px] text-slate-500 block">${st.posture === 'aero' ? '🚴 Aero' : (st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado')} · ${st.cadence ? st.cadence + ' RPM · ' : ''}RPE ${st.rpe || '—'}</span>
+            <span class="font-bold text-white">${idx + 1}. ${st.phase}</span>
+            <span class="text-[10px] text-zinc-400 block">${st.posture === 'aero' ? '🚴 Aero' : (st.posture === 'de pie' ? '⚡ De pie' : '🪑 Sentado')} · ${st.cadence ? st.cadence + ' RPM · ' : ''}RPE ${st.rpe || '—'}</span>
           </div>
-          <span class="font-mono text-slate-400 shrink-0 font-semibold">${formatTime(st.t)}</span>
+          <span class="font-mono text-zinc-300 shrink-0 font-semibold">${formatTime(st.t)}</span>
         `;
         listEl.appendChild(item);
       });
