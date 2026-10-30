@@ -174,10 +174,7 @@ class PainCaveApp {
       
       const tags = [];
       if (st.cadence) tags.push(`${st.cadence} RPM`);
-      if (st.zone === 'SS') tags.push('158-170 BPM');
-      else if (st.zone === 2) tags.push('113-132 BPM');
-      else if (st.zone === 1) tags.push('<113 BPM');
-      else if (st.zone === 4) tags.push('153-170 BPM');
+      if (st.zone) tags.push(`${getZoneBpmRange(st.zone)} BPM`);
       if (st.posture === 'aero') tags.push('Aero');
       else if (st.posture === 'de pie') tags.push('De pie');
 
@@ -367,6 +364,7 @@ class PainCaveApp {
   saveMaxHR(val) {
     try {
       gamification.setMaxHR(val);
+      ui.updateProfileZonesDisplay(gamification.getMaxHR());
       if (workoutEngine.workout.length > 0) {
         const current = workoutEngine.workout[workoutEngine.currentStep];
         document.getElementById('zoneBpmTarget').textContent = current.zone ? getZoneBpmRange(current.zone) + ' BPM' : 'BPM';

@@ -20,7 +20,7 @@ export const DEFAULT_PLAN_CONFIG = {
       name: 'Fase 1',
       subtitle: 'Cimientos y Sweet Spot (S1-4)',
       weeks: 4,
-      description: 'Fondo Z2 de 60 min (113-132 BPM), adaptación postural aero y Sweet Spot 2x12 min (158-170 BPM).',
+      description: 'Fondo Z2 de 60 min (113-140 BPM), adaptación postural aero y Sweet Spot 2x12 min (157-166 BPM).',
       colorClass: 'blue'
     },
     {
@@ -28,7 +28,7 @@ export const DEFAULT_PLAN_CONFIG = {
       name: 'Fase 2',
       subtitle: 'Densidad y Extensión Sweet Spot (S5-8)',
       weeks: 4,
-      description: 'Z2 de 60 min con bloques aero sostenidos y Sweet Spot 2x15 min con alta cadencia.',
+      description: 'Z2 de 60 min con bloques aero sostenidos y Sweet Spot 2x15 min (157-166 BPM).',
       colorClass: 'amber'
     },
     {
@@ -36,7 +36,7 @@ export const DEFAULT_PLAN_CONFIG = {
       name: 'Fase 3',
       subtitle: 'Dominio Aero y Sweet Spot 2x20 (S9-12)',
       weeks: 4,
-      description: 'Z2 de 60 min con triple bloque aero y Sweet Spot 2x20 min (60 min totales de calidad).',
+      description: 'Z2 de 60 min con triple bloque aero y Sweet Spot 2x20 min (157-166 BPM).',
       colorClass: 'rose'
     }
   ]
@@ -50,17 +50,17 @@ export const ROTATING_CYCLE_DAYS = [
     name: 'Día 1 · Fondo Z2 & Aero (60 min)',
     shortName: 'Día 1: Fondo Z2',
     category: 'fondo',
-    description: 'Resistencia base 113-132 BPM (60 min) con bloques aero',
+    description: 'Resistencia base 113-140 BPM (60 min) con bloques aero',
     isRest: false
   },
   {
     cycleDay: 2,
     cycleIndex: 1,
     routineId: 'dia2_sweet_spot',
-    name: 'Día 2 · Calidad Sweet Spot (158-170 BPM)',
+    name: 'Día 2 · Calidad Sweet Spot (157-166 BPM)',
     shortName: 'Día 2: Sweet Spot',
     category: 'calidad',
-    description: 'Intervalos submáximos 84-90% FC Máx (158-170 BPM)',
+    description: 'Intervalos submáximos 83-88% FC Máx (157-166 BPM)',
     isRest: false
   },
   {
@@ -149,8 +149,8 @@ class TrainingTracker {
         parsed.cycleAnchorDate = DEFAULT_PLAN_CONFIG.cycleAnchorDate;
         parsed.cycleAnchorDay = DEFAULT_PLAN_CONFIG.cycleAnchorDay;
       }
-      // Actualizar a microciclo rotativo de 4 días si el plan tenía formato antiguo
-      if (parsed.phases && parsed.phases[0] && !parsed.phases[0].description.includes('60 min')) {
+      // Actualizar a nuevas zonas y microciclo si el plan tenía formato antiguo
+      if (parsed.phases && parsed.phases[0] && (!parsed.phases[0].description.includes('157-166') || !parsed.phases[0].description.includes('60 min'))) {
         parsed.phases = JSON.parse(JSON.stringify(DEFAULT_PLAN_CONFIG.phases));
         parsed.name = DEFAULT_PLAN_CONFIG.name;
         this.savePlan(parsed);

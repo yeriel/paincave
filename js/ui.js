@@ -662,8 +662,24 @@ export class UIManager {
     document.getElementById('currentXpText').textContent = `${stats.totalXP || 0} XP`;
     document.getElementById('nextRankXpText').textContent = rank.next === Infinity ? "MAX" : `${rank.next} XP`;
     document.getElementById('rankProgressBar').style.width = `${rank.progress}%`;
-    document.getElementById('maxHrInput').value = gamification.getMaxHR();
+    const hr = gamification.getMaxHR();
+    document.getElementById('maxHrInput').value = hr;
+    this.updateProfileZonesDisplay(hr);
     this.populateVoiceSelect();
+  }
+
+  updateProfileZonesDisplay(maxHr = null) {
+    const hr = maxHr || gamification.getMaxHR();
+    const container = document.getElementById('profileZonesGrid');
+    if (!container) return;
+    container.innerHTML = `
+      <div class="text-blue-400">Z1 (&lt; 60%): &lt; ${Math.round(hr * 0.60)} BPM</div>
+      <div class="text-emerald-400">Z2 (60-74%): ${Math.round(hr * 0.60)}-${Math.round(hr * 0.74)} BPM</div>
+      <div class="text-yellow-400">Z3 (75-85%): ${Math.round(hr * 0.75)}-${Math.round(hr * 0.85)} BPM</div>
+      <div class="text-amber-400 font-bold">SS (83-88%): ${Math.round(hr * 0.83)}-${Math.round(hr * 0.88)} BPM</div>
+      <div class="text-orange-400">Z4 (88-94%): ${Math.round(hr * 0.88)}-${Math.round(hr * 0.94)} BPM</div>
+      <div class="text-red-400 font-bold">Z5 (94-100%): ${Math.round(hr * 0.94)}-${hr} BPM</div>
+    `;
   }
 
   selectCalendarDate(dateStr) {

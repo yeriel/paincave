@@ -29,10 +29,10 @@ export const LEVEL_NAMES = {
 
 export const ZONE_COLORS = {
   1: "#3b82f6", // Azul (Z1 Recuperación < 113)
-  2: "#10b981", // Verde (Z2 Fondo 113-132)
-  3: "#eab308", // Amarillo (Z3 Tempo 134-151)
-  'SS': "#f59e0b", // Ámbar (Sweet Spot 158-170)
+  2: "#10b981", // Verde (Z2 Fondo 113-140)
+  3: "#eab308", // Amarillo (Z3 Tempo 142-161)
+  'SS': "#f59e0b", // Ámbar (Sweet Spot 157-166)
   'ss': "#f59e0b",
-  4: "#f97316", // Naranja (Z4 Umbral 153-170)
-  5: "#ef4444"  // Rojo (Z5 VO2 Max 172-189)
+  4: "#f97316", // Naranja (Z4 Umbral 166-178)
+  5: "#ef4444"  // Rojo (Z5 VO2 Max 178-189)
 };

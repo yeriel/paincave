@@ -182,9 +182,9 @@ class SoundEngine {
       cue = 'Enfriamiento, soltar piernas';
     } else if (pLower.includes('sweet spot') || pLower.includes('sweetspot') || step.zone === 'SS') {
       const aero = step.posture === 'aero' ? ' aero' : '';
-      cue = `Sweet Spot${aero}, 158 a 170 pulsaciones`;
+      cue = `Sweet Spot${aero}, 157 a 166 pulsaciones`;
     } else if (pLower.includes('umbral') || step.zone === 4) {
-      cue = 'Umbral, 153 a 170 pulsaciones';
+      cue = 'Umbral, 166 a 178 pulsaciones';
     } else if (step.posture === 'de pie' || pLower.includes('de pie')) {
       cue = `De pie, cadencia ${step.cadence || 75}`;
     } else if (step.posture === 'aero' || pLower.includes('aero')) {
