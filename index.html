@@ -207,17 +207,14 @@
         </div>
       </div>
 
-      <!-- FILTROS DE CATEGORÍA DEL MICROCICLO ROTATIVO -->
+      <!-- FILTROS DE CATEGORÍA DEL MICROCICLO ROTATIVO (SS -> Z2 -> Z2 -> OFF) -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 mb-2.5 custom-scrollbar">
         <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-[#FC5200] text-white transition-colors shrink-0 shadow-sm" data-category="todos" onclick="window.painCaveApp.setCategoryFilter('todos')">Todos</button>
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">
-          <span class="inline-flex items-center gap-1.5">Día 1: Z2 (60m)<span id="pillDotFondo" class="hidden w-1.5 h-1.5 rounded-full bg-[#FC5200]"></span></span>
-        </button>
         <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="calidad" onclick="window.painCaveApp.setCategoryFilter('calidad')">
-          <span class="inline-flex items-center gap-1.5">Día 2: Sweet Spot<span id="pillDotCalidad" class="hidden w-1.5 h-1.5 rounded-full bg-[#FC5200]"></span></span>
+          <span class="inline-flex items-center gap-1.5">Día 1: Sweet Spot<span id="pillDotCalidad" class="hidden w-1.5 h-1.5 rounded-full bg-[#FC5200]"></span></span>
         </button>
-        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="recuperacion" onclick="window.painCaveApp.setCategoryFilter('recuperacion')">
-          <span class="inline-flex items-center gap-1.5">Día 3: Z1<span id="pillDotRecuperacion" class="hidden w-1.5 h-1.5 rounded-full bg-[#FC5200]"></span></span>
+        <button class="cat-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#252525] text-zinc-300 hover:text-white transition-colors border border-[#333333] shrink-0" data-category="fondo" onclick="window.painCaveApp.setCategoryFilter('fondo')">
+          <span class="inline-flex items-center gap-1.5">Días 2-3: Fondo Z2<span id="pillDotFondo" class="hidden w-1.5 h-1.5 rounded-full bg-[#FC5200]"></span></span>
         </button>
       </div>
 
@@ -348,8 +345,28 @@
               <span id="modalTrackPhaseSub" class="text-[10px] text-zinc-400 block">Semanas 1 a 4</span>
             </div>
             <div class="text-right">
-              <span id="modalTrackTotalWeeksTitle" class="text-xs font-black text-[#FC5200] block">Semana 1 de 12</span>
-              <span id="modalTrackOverallPct" class="text-[10px] font-mono text-zinc-400">8%</span>
+              <div class="flex items-center gap-1 justify-end">
+                <button type="button" onclick="window.painCaveApp.stepPlanWeek(-1)" class="w-5 h-5 rounded bg-[#181818] hover:bg-[#303030] text-zinc-300 hover:text-white flex items-center justify-center text-xs font-bold transition-all border border-[#333333]" title="Semana anterior">‹</button>
+                <select id="modalTrackWeekSelect" onchange="window.painCaveApp.changePlanWeek(this.value)" class="bg-[#181818] text-[#FC5200] font-black text-xs px-1.5 py-0.5 rounded border border-[#333333] cursor-pointer focus:outline-none focus:border-[#FC5200]">
+                  <option value="1">Semana 1 de 12</option>
+                  <option value="2">Semana 2 de 12</option>
+                  <option value="3">Semana 3 de 12</option>
+                  <option value="4">Semana 4 de 12</option>
+                  <option value="5">Semana 5 de 12</option>
+                  <option value="6">Semana 6 de 12</option>
+                  <option value="7">Semana 7 de 12</option>
+                  <option value="8">Semana 8 de 12</option>
+                  <option value="9">Semana 9 de 12</option>
+                  <option value="10">Semana 10 de 12</option>
+                  <option value="11">Semana 11 de 12</option>
+                  <option value="12">Semana 12 de 12</option>
+                </select>
+                <button type="button" onclick="window.painCaveApp.stepPlanWeek(1)" class="w-5 h-5 rounded bg-[#181818] hover:bg-[#303030] text-zinc-300 hover:text-white flex items-center justify-center text-xs font-bold transition-all border border-[#333333]" title="Semana siguiente">›</button>
+              </div>
+              <div class="flex items-center justify-end gap-1.5 mt-0.5">
+                <span id="modalTrackOverallPct" class="text-[10px] font-mono text-zinc-400">8%</span>
+                <button type="button" onclick="window.painCaveApp.resetPlanToWeek1()" class="text-[9px] text-zinc-400 hover:text-[#FC5200] underline transition-colors cursor-pointer" title="Reiniciar a Semana 1">Reiniciar a S1</button>
+              </div>
             </div>
           </div>
           <div class="h-1.5 w-full bg-[#181818] rounded-full overflow-hidden mb-2 border border-[#333333]">

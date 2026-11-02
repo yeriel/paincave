@@ -399,6 +399,32 @@ class PainCaveApp {
     }
   }
 
+  changePlanWeek(weekNumber) {
+    const valid = parseInt(weekNumber) || 1;
+    trainingTracker.setCurrentWeek(valid);
+    this.selectedLevel = trainingTracker.plan.currentPhaseId;
+    ui.renderTrainingTrackerWidget();
+    if (ui.activeStatsTab === 'tracking') {
+      ui.renderTrackingTab();
+    }
+    ui.renderRoutinesPool(this.selectedLevel, this.activeCategory);
+  }
+
+  stepPlanWeek(delta) {
+    const current = trainingTracker.plan.currentWeek || 1;
+    this.changePlanWeek(current + delta);
+  }
+
+  resetPlanToWeek1() {
+    trainingTracker.resetProgress();
+    this.selectedLevel = 'fase1';
+    ui.renderTrainingTrackerWidget();
+    if (ui.activeStatsTab === 'tracking') {
+      ui.renderTrackingTab();
+    }
+    ui.renderRoutinesPool('fase1', this.activeCategory);
+  }
+
   saveMaxHR(val) {
     try {
       gamification.setMaxHR(val);

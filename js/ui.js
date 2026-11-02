@@ -440,13 +440,13 @@ export class UIManager {
     const todayCycle = weekOverview.todayCycle;
     const tomorrowCycle = weekOverview.tomorrowCycle;
 
-    // Resaltar en píldoras de filtro el día actual del microciclo
-    const dotFondo = document.getElementById('pillDotFondo');
+    // Resaltar en píldoras de filtro el día actual del microciclo (Día 1 Calidad / Día 2 Fondo / Día 3 Fondo)
     const dotCalidad = document.getElementById('pillDotCalidad');
+    const dotFondo = document.getElementById('pillDotFondo');
     const dotRecuperacion = document.getElementById('pillDotRecuperacion');
-    if (dotFondo) dotFondo.classList.toggle('hidden', todayCycle?.cycleDay !== 1);
-    if (dotCalidad) dotCalidad.classList.toggle('hidden', todayCycle?.cycleDay !== 2);
-    if (dotRecuperacion) dotRecuperacion.classList.toggle('hidden', todayCycle?.cycleDay !== 3);
+    if (dotCalidad) dotCalidad.classList.toggle('hidden', todayCycle?.cycleDay !== 1);
+    if (dotFondo) dotFondo.classList.toggle('hidden', todayCycle?.cycleDay !== 2 && todayCycle?.cycleDay !== 3);
+    if (dotRecuperacion) dotRecuperacion.classList.add('hidden');
 
     const filtered = ROUTINES_POOL.filter(r => {
       return activeCategory === 'todos' || r.category === activeCategory;
@@ -661,6 +661,9 @@ export class UIManager {
 
     const totalWeeksTitle = document.getElementById('modalTrackTotalWeeksTitle');
     if (totalWeeksTitle) totalWeeksTitle.textContent = `Semana ${prog.currentWeek} de ${prog.totalWeeks}`;
+
+    const weekSelect = document.getElementById('modalTrackWeekSelect');
+    if (weekSelect) weekSelect.value = String(prog.currentWeek);
 
     const overallPct = document.getElementById('modalTrackOverallPct');
     if (overallPct) overallPct.textContent = `${prog.overallProgressPct}%`;

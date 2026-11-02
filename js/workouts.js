@@ -211,565 +211,141 @@ export function parseCSV(content) {
 }
 
 // ==============================================================================
-// POOL OFICIAL DE RUTINAS PARA SPINNING (MICROCICLO ROTATIVO 4D)
+// POOL OFICIAL DE RUTINAS PARA SPINNING (MICROCICLO ROTATIVO 4D: SS -> Z2 -> Z2 -> OFF)
 // ==============================================================================
 
 export const ROUTINES_POOL = [
   {
-    "id": "dia1_fondo_z2",
+    "id": "dia1_sweet_spot",
     "day": "Día 1",
-    "category": "fondo",
-    "title": "Día 1 · Fondo Z2",
-    "subtitle": "Base aeróbica (113-140 BPM) con volumen progresivo",
-    "icon": "ti-wind",
-    "colorClass": "cyan",
-    "levels": {
-      // Fase 1 (Semanas 1 a 4): 60 minutos (3.600 segundos) - Adaptación y base inicial
-      "fase1": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 85,
-          "rpe": 3,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Fondo Z2",
-          "cadence": 88,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 840
-        },
-        {
-          "phase": "Aero Z2",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 300
-        },
-        {
-          "phase": "De pie (Alivio)",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 90
-        },
-        {
-          "phase": "Fondo Z2",
-          "cadence": 90,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 1110
-        },
-        {
-          "phase": "Aero Z2",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 360
-        },
-        {
-          "phase": "De pie (Alivio)",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 60
-        },
-        {
-          "phase": "Fondo Z2 suave",
-          "cadence": 88,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 82,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        }
-      ],
-      // Fase 2 (Semanas 5 a 8): 75 minutos (4.500 segundos) - Progresión de volumen y resistencia aeróbica
-      "fase2": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 86,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Fondo Z2",
-          "cadence": 90,
-          "rpe": 4.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 780
-        },
-        {
-          "phase": "Aero Z2 sostenido",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 600
-        },
-        {
-          "phase": "De pie (Alivio)",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 90
-        },
-        {
-          "phase": "Fondo Z2 continuo",
-          "cadence": 92,
-          "rpe": 4.8,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 1020
-        },
-        {
-          "phase": "Aero Z2 sostenido",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 660
-        },
-        {
-          "phase": "De pie (Alivio)",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 90
-        },
-        {
-          "phase": "Fondo Z2 suave",
-          "cadence": 88,
-          "rpe": 4.2,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 480
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        }
-      ],
-      // Fase 3 (Semanas 9 a 12): 85 minutos (5.100 segundos) - Sobrecarga de volumen y saturación aeróbica
-      "fase3": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 88,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Fondo Z2 ritmo",
-          "cadence": 92,
-          "rpe": 4.8,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 720
-        },
-        {
-          "phase": "Aero Z2 contrarreloj",
-          "cadence": 92,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 720
-        },
-        {
-          "phase": "De pie (Alivio)",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 90
-        },
-        {
-          "phase": "Fondo Z2 continuo",
-          "cadence": 90,
-          "rpe": 4.8,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 840
-        },
-        {
-          "phase": "Aero Z2 contrarreloj",
-          "cadence": 92,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 780
-        },
-        {
-          "phase": "De pie (Alivio)",
-          "cadence": 75,
-          "rpe": 4,
-          "zone": 2,
-          "posture": "de pie",
-          "t": 90
-        },
-        {
-          "phase": "Aero Z2 final",
-          "cadence": 90,
-          "rpe": 5,
-          "zone": 2,
-          "posture": "aero",
-          "t": 660
-        },
-        {
-          "phase": "Fondo Z2 suave",
-          "cadence": 85,
-          "rpe": 3.8,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 480
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        }
-      ]
-    }
-  },
-  {
-    "id": "dia2_sweet_spot",
-    "day": "Día 2",
     "category": "calidad",
-    "title": "Día 2 · Sweet Spot",
-    "subtitle": "Intervalos de calidad sostenida (157-166 BPM)",
+    "title": "Día 1 · Sweet Spot (3x10m)",
+    "subtitle": "Frescura total tras descanso · 30m netos (157-166 BPM) @ 92-95 RPM",
     "icon": "ti-flame",
     "colorClass": "amber",
     "levels": {
+      // Fase 1 (S1-S4): 60 min (3600s) · 3x10 min Sweet Spot (máx 6 min aero continuo)
       "fase1": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 85,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Activación Z3",
-          "cadence": 90,
-          "rpe": 6,
-          "zone": 3,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Sweet Spot",
-          "cadence": 88,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "sentado",
-          "t": 720
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Sweet Spot Aero",
-          "cadence": 90,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "aero",
-          "t": 720
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 78,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 420
-        }
+        { "phase": "Calentamiento", "cadence": 88, "rpe": 3.5, "zone": 2, "posture": "sentado", "t": 420 },
+        { "phase": "Activación Z3", "cadence": 92, "rpe": 6, "zone": 3, "posture": "sentado", "t": 180 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 120 },
+        { "phase": "Sweet Spot", "cadence": 92, "rpe": 7.5, "zone": "SS", "posture": "sentado", "t": 600 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 240 },
+        { "phase": "Sweet Spot Aero", "cadence": 94, "rpe": 7.8, "zone": "SS", "posture": "aero", "t": 360 },
+        { "phase": "Sweet Spot", "cadence": 92, "rpe": 7.5, "zone": "SS", "posture": "sentado", "t": 240 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 240 },
+        { "phase": "Sweet Spot", "cadence": 94, "rpe": 8.0, "zone": "SS", "posture": "sentado", "t": 600 },
+        { "phase": "Enfriamiento", "cadence": 78, "rpe": 2, "zone": 1, "posture": "sentado", "t": 600 }
       ],
+      // Fase 2 (S5-S8): 65 min (3900s) · 3x12 min Sweet Spot (máx 7 min aero continuo)
       "fase2": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 86,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Activación Z3",
-          "cadence": 92,
-          "rpe": 6.2,
-          "zone": 3,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Sweet Spot",
-          "cadence": 90,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "sentado",
-          "t": 900
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Sweet Spot Aero",
-          "cadence": 90,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "aero",
-          "t": 900
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 78,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        }
+        { "phase": "Calentamiento", "cadence": 88, "rpe": 3.5, "zone": 2, "posture": "sentado", "t": 420 },
+        { "phase": "Activación Z3", "cadence": 92, "rpe": 6.2, "zone": 3, "posture": "sentado", "t": 180 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 120 },
+        { "phase": "Sweet Spot", "cadence": 92, "rpe": 7.5, "zone": "SS", "posture": "sentado", "t": 720 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 240 },
+        { "phase": "Sweet Spot Aero", "cadence": 94, "rpe": 7.8, "zone": "SS", "posture": "aero", "t": 420 },
+        { "phase": "Sweet Spot", "cadence": 92, "rpe": 7.5, "zone": "SS", "posture": "sentado", "t": 300 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 240 },
+        { "phase": "Sweet Spot", "cadence": 94, "rpe": 8.0, "zone": "SS", "posture": "sentado", "t": 720 },
+        { "phase": "Enfriamiento", "cadence": 78, "rpe": 2, "zone": 1, "posture": "sentado", "t": 540 }
       ],
+      // Fase 3 (S9-S12): 70 min (4200s) · 3x14 min Sweet Spot (máx 8 min aero continuo)
       "fase3": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 88,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Activación Z3",
-          "cadence": 92,
-          "rpe": 6.5,
-          "zone": 3,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Sweet Spot",
-          "cadence": 90,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "sentado",
-          "t": 1200
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        },
-        {
-          "phase": "Sweet Spot Aero",
-          "cadence": 90,
-          "rpe": 7.8,
-          "zone": "SS",
-          "posture": "aero",
-          "t": 1200
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 78,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        }
+        { "phase": "Calentamiento", "cadence": 88, "rpe": 3.5, "zone": 2, "posture": "sentado", "t": 420 },
+        { "phase": "Activación Z3", "cadence": 92, "rpe": 6.5, "zone": 3, "posture": "sentado", "t": 180 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 120 },
+        { "phase": "Sweet Spot", "cadence": 92, "rpe": 7.5, "zone": "SS", "posture": "sentado", "t": 840 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 240 },
+        { "phase": "Sweet Spot Aero", "cadence": 94, "rpe": 7.8, "zone": "SS", "posture": "aero", "t": 480 },
+        { "phase": "Sweet Spot", "cadence": 92, "rpe": 7.5, "zone": "SS", "posture": "sentado", "t": 360 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 240 },
+        { "phase": "Sweet Spot", "cadence": 94, "rpe": 8.0, "zone": "SS", "posture": "sentado", "t": 840 },
+        { "phase": "Enfriamiento", "cadence": 78, "rpe": 2, "zone": 1, "posture": "sentado", "t": 480 }
       ]
     }
   },
   {
-    "id": "dia3_recuperacion",
-    "day": "Día 3",
-    "category": "recuperacion",
-    "title": "Día 3 · Recuperación",
-    "subtitle": "Regenerativo suave (< 113 BPM) para soltar piernas",
-    "icon": "ti-heart-rate-monitor",
-    "colorClass": "emerald",
+    "id": "dia2_fondo_z2_largo",
+    "day": "Día 2",
+    "category": "fondo",
+    "title": "Día 2 · Fondo Z2 Extendido",
+    "subtitle": "Volumen 60m-80m (113-140 BPM) · Cadencia 90+ RPM con bloques aero",
+    "icon": "ti-wind",
+    "colorClass": "cyan",
     "levels": {
+      // Fase 1 (S1-S4): 60 min (3600s) · Bloques aero 5 min
       "fase1": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 78,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 300
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 82,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 720
-        },
-        {
-          "phase": "Soltura de piernas",
-          "cadence": 85,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "de pie",
-          "t": 720
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 75,
-          "rpe": 1.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        }
+        { "phase": "Calentamiento", "cadence": 88, "rpe": 3, "zone": 1, "posture": "sentado", "t": 360 },
+        { "phase": "Fondo Z2", "cadence": 90, "rpe": 4.2, "zone": 2, "posture": "sentado", "t": 660 },
+        { "phase": "Aero Z2", "cadence": 92, "rpe": 4.8, "zone": 2, "posture": "aero", "t": 300 },
+        { "phase": "De pie", "cadence": 75, "rpe": 4, "zone": 2, "posture": "de pie", "t": 60 },
+        { "phase": "Fondo Z2", "cadence": 90, "rpe": 4.5, "zone": 2, "posture": "sentado", "t": 840 },
+        { "phase": "Aero Z2", "cadence": 92, "rpe": 4.8, "zone": 2, "posture": "aero", "t": 300 },
+        { "phase": "De pie", "cadence": 75, "rpe": 4, "zone": 2, "posture": "de pie", "t": 60 },
+        { "phase": "Fondo Z2", "cadence": 92, "rpe": 4.5, "zone": 2, "posture": "sentado", "t": 660 },
+        { "phase": "Enfriamiento", "cadence": 80, "rpe": 2, "zone": 1, "posture": "sentado", "t": 360 }
       ],
+      // Fase 2 (S5-S8): 70 min (4200s) · Bloques aero 6 min
       "fase2": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 84,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 840
-        },
-        {
-          "phase": "Z2 muy suave",
-          "cadence": 86,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 600
-        },
-        {
-          "phase": "Soltura de piernas",
-          "cadence": 82,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "de pie",
-          "t": 360
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 75,
-          "rpe": 1.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        }
+        { "phase": "Calentamiento", "cadence": 88, "rpe": 3, "zone": 1, "posture": "sentado", "t": 360 },
+        { "phase": "Fondo Z2", "cadence": 90, "rpe": 4.2, "zone": 2, "posture": "sentado", "t": 660 },
+        { "phase": "Aero Z2", "cadence": 92, "rpe": 4.8, "zone": 2, "posture": "aero", "t": 360 },
+        { "phase": "De pie", "cadence": 75, "rpe": 4, "zone": 2, "posture": "de pie", "t": 60 },
+        { "phase": "Fondo Z2", "cadence": 90, "rpe": 4.5, "zone": 2, "posture": "sentado", "t": 840 },
+        { "phase": "Aero Z2", "cadence": 92, "rpe": 4.8, "zone": 2, "posture": "aero", "t": 360 },
+        { "phase": "De pie", "cadence": 75, "rpe": 4, "zone": 2, "posture": "de pie", "t": 60 },
+        { "phase": "Fondo Z2", "cadence": 92, "rpe": 4.5, "zone": 2, "posture": "sentado", "t": 840 },
+        { "phase": "Aero Z2", "cadence": 92, "rpe": 4.8, "zone": 2, "posture": "aero", "t": 240 },
+        { "phase": "Enfriamiento", "cadence": 80, "rpe": 2, "zone": 1, "posture": "sentado", "t": 420 }
       ],
+      // Fase 3 (S9-S12): 80 min (4800s) · Bloques aero 7 min (máx 7 min para proteger cuello)
       "fase3": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 80,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 85,
-          "rpe": 2.2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 900
-        },
-        {
-          "phase": "Z2 muy suave",
-          "cadence": 88,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 600
-        },
-        {
-          "phase": "Soltura de piernas",
-          "cadence": 80,
-          "rpe": 1.8,
-          "zone": 1,
-          "posture": "de pie",
-          "t": 420
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 75,
-          "rpe": 1.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 240
-        }
+        { "phase": "Calentamiento", "cadence": 88, "rpe": 3, "zone": 1, "posture": "sentado", "t": 360 },
+        { "phase": "Fondo Z2", "cadence": 90, "rpe": 4.5, "zone": 2, "posture": "sentado", "t": 720 },
+        { "phase": "Aero Z2", "cadence": 92, "rpe": 5, "zone": 2, "posture": "aero", "t": 420 },
+        { "phase": "De pie", "cadence": 75, "rpe": 4, "zone": 2, "posture": "de pie", "t": 60 },
+        { "phase": "Fondo Z2", "cadence": 92, "rpe": 4.8, "zone": 2, "posture": "sentado", "t": 960 },
+        { "phase": "Aero Z2", "cadence": 92, "rpe": 5, "zone": 2, "posture": "aero", "t": 420 },
+        { "phase": "De pie", "cadence": 75, "rpe": 4, "zone": 2, "posture": "de pie", "t": 60 },
+        { "phase": "Fondo Z2", "cadence": 92, "rpe": 4.8, "zone": 2, "posture": "sentado", "t": 1080 },
+        { "phase": "Aero Z2", "cadence": 92, "rpe": 5, "zone": 2, "posture": "aero", "t": 360 },
+        { "phase": "Enfriamiento", "cadence": 80, "rpe": 2, "zone": 1, "posture": "sentado", "t": 360 }
+      ]
+    }
+  },
+  {
+    "id": "dia3_fondo_z2_tecnico",
+    "day": "Día 3",
+    "category": "fondo",
+    "title": "Día 3 · Z2 Técnico y Descarga Postural",
+    "subtitle": "45m-55m (113-132 BPM) · Cadencia alta 92-95 RPM sentado (Cero tensión cervical)",
+    "icon": "ti-activity",
+    "colorClass": "teal",
+    "levels": {
+      // Fase 1 (S1-S4): 45 min (2700s) · Descarga cervical, pedaleo erguido
+      "fase1": [
+        { "phase": "Calentamiento", "cadence": 90, "rpe": 3, "zone": 1, "posture": "sentado", "t": 300 },
+        { "phase": "Fondo Z2", "cadence": 92, "rpe": 4, "zone": 2, "posture": "sentado", "t": 900 },
+        { "phase": "De pie", "cadence": 75, "rpe": 3.5, "zone": 2, "posture": "de pie", "t": 120 },
+        { "phase": "Fondo Z2", "cadence": 95, "rpe": 4, "zone": 2, "posture": "sentado", "t": 1080 },
+        { "phase": "Enfriamiento", "cadence": 80, "rpe": 2, "zone": 1, "posture": "sentado", "t": 300 }
+      ],
+      // Fase 2 (S5-S8): 50 min (3000s) · Cadencia ágil sin carga cervical
+      "fase2": [
+        { "phase": "Calentamiento", "cadence": 90, "rpe": 3, "zone": 1, "posture": "sentado", "t": 300 },
+        { "phase": "Fondo Z2", "cadence": 92, "rpe": 4, "zone": 2, "posture": "sentado", "t": 1020 },
+        { "phase": "De pie", "cadence": 75, "rpe": 3.5, "zone": 2, "posture": "de pie", "t": 120 },
+        { "phase": "Fondo Z2", "cadence": 95, "rpe": 4.2, "zone": 2, "posture": "sentado", "t": 1260 },
+        { "phase": "Enfriamiento", "cadence": 80, "rpe": 2, "zone": 1, "posture": "sentado", "t": 300 }
+      ],
+      // Fase 3 (S9-S12): 55 min (3300s) · Cadencia sostenida 95 RPM
+      "fase3": [
+        { "phase": "Calentamiento", "cadence": 90, "rpe": 3, "zone": 1, "posture": "sentado", "t": 300 },
+        { "phase": "Fondo Z2", "cadence": 92, "rpe": 4, "zone": 2, "posture": "sentado", "t": 1140 },
+        { "phase": "De pie", "cadence": 75, "rpe": 3.5, "zone": 2, "posture": "de pie", "t": 120 },
+        { "phase": "Fondo Z2", "cadence": 95, "rpe": 4.2, "zone": 2, "posture": "sentado", "t": 1440 },
+        { "phase": "Enfriamiento", "cadence": 80, "rpe": 2, "zone": 1, "posture": "sentado", "t": 300 }
       ]
     }
   },
@@ -783,210 +359,35 @@ export const ROUTINES_POOL = [
     "colorClass": "rose",
     "levels": {
       "fase1": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 85,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Activación Z3",
-          "cadence": 90,
-          "rpe": 6,
-          "zone": 3,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Umbral FTP Z4",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Umbral FTP Z4",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Umbral FTP Z4",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 360
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 78,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 540
-        }
+        { "phase": "Calentamiento", "cadence": 85, "rpe": 3.5, "zone": 2, "posture": "sentado", "t": 420 },
+        { "phase": "Activación Z3", "cadence": 90, "rpe": 6, "zone": 3, "posture": "sentado", "t": 180 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 120 },
+        { "phase": "Umbral Z4", "cadence": 90, "rpe": 8.5, "zone": 4, "posture": "sentado", "t": 360 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 180 },
+        { "phase": "Umbral Z4", "cadence": 90, "rpe": 8.5, "zone": 4, "posture": "sentado", "t": 360 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 180 },
+        { "phase": "Umbral Z4", "cadence": 90, "rpe": 8.5, "zone": 4, "posture": "sentado", "t": 360 },
+        { "phase": "Enfriamiento", "cadence": 78, "rpe": 2, "zone": 1, "posture": "sentado", "t": 540 }
       ],
       "fase2": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 86,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Activación Z3",
-          "cadence": 92,
-          "rpe": 6.2,
-          "zone": 3,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Umbral FTP Z4",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 480
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Umbral FTP Z4",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 480
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Umbral FTP Z4",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 480
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 78,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 480
-        }
+        { "phase": "Calentamiento", "cadence": 86, "rpe": 3.5, "zone": 2, "posture": "sentado", "t": 420 },
+        { "phase": "Activación Z3", "cadence": 92, "rpe": 6.2, "zone": 3, "posture": "sentado", "t": 180 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 120 },
+        { "phase": "Umbral Z4", "cadence": 90, "rpe": 8.5, "zone": 4, "posture": "sentado", "t": 480 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 180 },
+        { "phase": "Umbral Z4", "cadence": 90, "rpe": 8.5, "zone": 4, "posture": "sentado", "t": 480 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 180 },
+        { "phase": "Umbral Z4", "cadence": 90, "rpe": 8.5, "zone": 4, "posture": "sentado", "t": 480 },
+        { "phase": "Enfriamiento", "cadence": 78, "rpe": 2, "zone": 1, "posture": "sentado", "t": 480 }
       ],
       "fase3": [
-        {
-          "phase": "Calentamiento",
-          "cadence": 88,
-          "rpe": 3.5,
-          "zone": 2,
-          "posture": "sentado",
-          "t": 420
-        },
-        {
-          "phase": "Activación Z3",
-          "cadence": 92,
-          "rpe": 6.5,
-          "zone": 3,
-          "posture": "sentado",
-          "t": 180
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 120
-        },
-        {
-          "phase": "Umbral FTP Z4",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 900
-        },
-        {
-          "phase": "Recuperación Z1",
-          "cadence": 80,
-          "rpe": 2.5,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 300
-        },
-        {
-          "phase": "Umbral FTP Z4",
-          "cadence": 90,
-          "rpe": 8.5,
-          "zone": 4,
-          "posture": "sentado",
-          "t": 900
-        },
-        {
-          "phase": "Enfriamiento",
-          "cadence": 78,
-          "rpe": 2,
-          "zone": 1,
-          "posture": "sentado",
-          "t": 480
-        }
+        { "phase": "Calentamiento", "cadence": 88, "rpe": 3.5, "zone": 2, "posture": "sentado", "t": 420 },
+        { "phase": "Activación Z3", "cadence": 92, "rpe": 6.5, "zone": 3, "posture": "sentado", "t": 180 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 120 },
+        { "phase": "Umbral Z4", "cadence": 90, "rpe": 8.5, "zone": 4, "posture": "sentado", "t": 900 },
+        { "phase": "Recuperación", "cadence": 80, "rpe": 2.5, "zone": 1, "posture": "sentado", "t": 300 },
+        { "phase": "Umbral Z4", "cadence": 90, "rpe": 8.5, "zone": 4, "posture": "sentado", "t": 900 },
+        { "phase": "Enfriamiento", "cadence": 78, "rpe": 2, "zone": 1, "posture": "sentado", "t": 480 }
       ]
     }
   }
@@ -994,11 +395,16 @@ export const ROUTINES_POOL = [
 
 export function getRoutine(id, level = 'fase1') {
   const aliasMap = {
-    'lunes_fondo_aero': 'dia1_fondo_z2',
-    'jueves_fondo_z2': 'dia1_fondo_z2',
-    'sabado_fondo_extendido': 'dia1_fondo_z2',
-    'martes_sweet_spot': 'dia2_sweet_spot',
-    'miercoles_recuperacion': 'dia3_recuperacion',
+    // Aliases ciclo anterior
+    'dia1_fondo_z2': 'dia2_fondo_z2_largo',
+    'dia2_sweet_spot': 'dia1_sweet_spot',
+    'dia3_recuperacion': 'dia3_fondo_z2_tecnico',
+    // Aliases historicos
+    'lunes_fondo_aero': 'dia2_fondo_z2_largo',
+    'jueves_fondo_z2': 'dia2_fondo_z2_largo',
+    'sabado_fondo_extendido': 'dia2_fondo_z2_largo',
+    'martes_sweet_spot': 'dia1_sweet_spot',
+    'miercoles_recuperacion': 'dia3_fondo_z2_tecnico',
     'viernes_umbral_z4': 'opcional_umbral_z4'
   };
   const targetId = aliasMap[id] || id;

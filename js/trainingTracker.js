@@ -7,36 +7,36 @@ import { gamification } from './gamification.js';
 
 export const DEFAULT_PLAN_CONFIG = {
   id: 'plan_spinning_rotativo_4d',
-  name: 'Plan Rotativo 4D Spinning',
+  name: 'Plan Rotativo 4D Spinning (SS -> Z2 -> Z2 -> OFF)',
   startDate: null,
   cycleAnchorDate: '2026-10-29',
-  cycleAnchorDay: 1, // 2026-10-29 fue Día 1 (Fondo Z2), por lo que mañana 2026-10-30 es Día 2 (Sweet Spot)
-  currentWeek: 1,
+  cycleAnchorDay: 1,
+  currentWeek: 1, // Iniciar por defecto en semana 1
   currentPhaseId: 'fase1',
   cycleNumber: 1,
   phases: [
     {
       id: 'fase1',
       name: 'Fase 1',
-      subtitle: 'Cimientos y Sweet Spot (S1-4)',
+      subtitle: 'Adaptación y Frescura SS (S1-4)',
       weeks: 4,
-      description: 'Fondo Z2 de 60 min (113-140 BPM), adaptación postural aero y Sweet Spot 2x12 min (157-166 BPM).',
+      description: 'Día 1: SS 3x10m (60m). Día 2: Z2 Largo 60m. Día 3: Z2 Técnico 45m. Día 4: Descanso.',
       colorClass: 'blue'
     },
     {
       id: 'fase2',
       name: 'Fase 2',
-      subtitle: 'Densidad y Extensión Sweet Spot (S5-8)',
+      subtitle: 'Densidad y Progresión Aero (S5-8)',
       weeks: 4,
-      description: 'Z2 de 60 min con bloques aero sostenidos y Sweet Spot 2x15 min (157-166 BPM).',
+      description: 'Día 1: SS 3x12m (65m). Día 2: Z2 Largo 70m. Día 3: Z2 Técnico 50m. Día 4: Descanso.',
       colorClass: 'amber'
     },
     {
       id: 'fase3',
       name: 'Fase 3',
-      subtitle: 'Dominio Aero y Sweet Spot 2x20 (S9-12)',
+      subtitle: 'Saturación y Fondo 80m (S9-12)',
       weeks: 4,
-      description: 'Z2 de 60 min con triple bloque aero y Sweet Spot 2x20 min (157-166 BPM).',
+      description: 'Día 1: SS 3x14m (70m). Día 2: Z2 Largo 80m. Día 3: Z2 Técnico 55m. Día 4: Descanso.',
       colorClass: 'rose'
     }
   ]
@@ -46,31 +46,31 @@ export const ROTATING_CYCLE_DAYS = [
   {
     cycleDay: 1,
     cycleIndex: 0,
-    routineId: 'dia1_fondo_z2',
-    name: 'Día 1 · Fondo Z2 & Aero (60 min)',
-    shortName: 'Día 1: Fondo Z2',
-    category: 'fondo',
-    description: 'Resistencia base 113-140 BPM (60 min) con bloques aero',
+    routineId: 'dia1_sweet_spot',
+    name: 'Día 1 · Sweet Spot (3x10m)',
+    shortName: 'Día 1: Sweet Spot',
+    category: 'calidad',
+    description: 'Frescura total tras descanso · 30m netos (157-166 BPM) @ 92-95 RPM',
     isRest: false
   },
   {
     cycleDay: 2,
     cycleIndex: 1,
-    routineId: 'dia2_sweet_spot',
-    name: 'Día 2 · Calidad Sweet Spot (157-166 BPM)',
-    shortName: 'Día 2: Sweet Spot',
-    category: 'calidad',
-    description: 'Intervalos submáximos 83-88% FC Máx (157-166 BPM)',
+    routineId: 'dia2_fondo_z2_largo',
+    name: 'Día 2 · Fondo Z2 Extendido',
+    shortName: 'Día 2: Fondo Z2',
+    category: 'fondo',
+    description: 'Volumen 60m-80m (113-140 BPM) · Cadencia 90+ RPM con bloques aero',
     isRest: false
   },
   {
     cycleDay: 3,
     cycleIndex: 2,
-    routineId: 'dia3_recuperacion',
-    name: 'Día 3 · Recuperación Activa Z1',
-    shortName: 'Día 3: Recuperación',
-    category: 'recuperacion',
-    description: 'Regenerativo suave < 113 BPM para soltar piernas',
+    routineId: 'dia3_fondo_z2_tecnico',
+    name: 'Día 3 · Z2 Técnico y Descarga',
+    shortName: 'Día 3: Z2 Técnico',
+    category: 'fondo',
+    description: '45m-55m (113-132 BPM) · Cadencia alta 92-95 RPM (Cero tensión cervical)',
     isRest: false
   },
   {
